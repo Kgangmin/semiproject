@@ -17,10 +17,10 @@ public class Login extends AbstractController {
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/login.jsp");
 		}
-		else {
-			String message = "비정상적인 경로로 들어왔습니다.";
-		}
 		
+		else {
+			System.out.println("비정상적인 경로로 들어왔습니다.");
+		}
 
 	}
 
