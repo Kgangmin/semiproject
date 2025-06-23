@@ -1,3 +1,11 @@
+let b_emailcheck_click = false;
+// "이메일중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도
+
+let b_email_change = false;
+// 이메일값을 변경했는지 여부를 알아오기 위한 용도
+
+
+
 $(function(){   
    
    $("span.error").hide();
@@ -28,6 +36,52 @@ $(function(){
        
     });// 아이디가 email 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
     
+	
+	
+	
+	
+	// "이메일중복확인" 을 클릭했을 때 이벤트 처리하기
+	$("span#emailcheck").click(function(){
+
+	    b_emailcheck_click = true;
+
+	    $.ajax({
+	        url: "emailDuplicateCheck2.hb",
+	        type: "POST",
+	        data: {
+	            email: $("input#newEmail").val(),
+	            userid: $("input:hidden[name='userid']").val()
+	        },
+	        dataType: "json",
+	        success: function(json) {
+	            if(json.isExists) {
+	                $("span#emailCheckResult").html($("input#newEmail").val() + " 은 현재 다른 사용자가 사용 중입니다.").css({"color":"red"});
+	                $("input#newEmail").val("");
+					console.log(json.isExists);
+	            } else {
+	                $("span#emailCheckResult").html($("input#newEmail").val() + " 은 사용 가능합니다.").css({"color":"navy"});
+					console.log(json.isExists);
+	            }
+	        },
+	        error: function(request, status, error) {
+	            alert("code: " + request.status + "\nmessage: " + request.responseText + "\nerror: " + error);
+	        }
+	    });
+
+	});
+	
+	   // 이메일값이 변경되면 수정하기 버튼을 클릭시 "이메일중복확인" 을 클릭했는지 클릭안했는지를 알아보기위한 용도 초기화 시키기  
+	   $("input#email").bind("change", function(){
+	      
+	      b_emailcheck_click = false;
+	      // "이메일중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도  
+	      
+	      b_email_change = true;
+	        // 이메일값을 변경했는지 여부를 알아오기 위한 용도
+	   });
+	
+	
+	
    });   // end $(function(){
    
    
@@ -49,8 +103,10 @@ $(function(){
            return;
              
        }
-      
-      
+	   
+	   
+	   
+	   
       // *** 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭했는지 검사하기 시작 *** //
       if(b_email_change && !b_emailcheck_click) {
          // 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭 안 했을 경우
@@ -59,6 +115,7 @@ $(function(){
       }
       // *** 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭했는지 검사하기 끝 *** //
       
-
+		
+		
       
    }// end of function goEdit()-----------------------/**

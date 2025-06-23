@@ -4,6 +4,7 @@
 <%
     String ctxPath = request.getContextPath();
 %>
+
 <!DOCTYPE html>
 <html>
 <head>

@@ -5,6 +5,7 @@
 <% String ctx_Path = request.getContextPath(); %>
 
 <jsp:include page="../header1.jsp" />
+
 <script type="text/javascript" src="<%= ctx_Path%>/js/member/member.js"></script>
 
     <style>
@@ -21,8 +22,56 @@
         .reservation-list { border: 1px solid #ccc; min-height: 150px; padding: 20px; }
         .reservation-item { padding: 10px; border-bottom: 1px solid #f0f0f0; }
         .reservation-item:last-child { border-bottom: none; }
+        
+        
+    .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;  /* 기존 user-info의 margin 유지 */
+	}
+	
+	.user-name {
+	    margin: 0;
+	    font-weight: normal;
+	}
+	
+	.user-points {
+	    font-weight: bold;
+	    font-size: 16px;
+	    color: #007BFF;
+	}
+	
+	.user-links {
+	    margin-top: 10px;
+	}
+	
+	.user-links a {
+	    margin-left: 15px;
+	    color: #555;
+	    text-decoration: none;
+	    font-size: 14px;
+	}
+	
+	.user-links a:first-child {
+	    margin-left: 0;
+	}
     </style>
+    
+    
 </head>
+
+<c:choose>
+    <c:when test="${empty loginuser}">
+        <p style="color:red;">로그인이 필요합니다.
+            <a href="${pageContext.request.contextPath}/testLogin.hb">[임시 로그인]</a>
+        </p>
+    </c:when>
+
+<c:otherwise>
+
+
+
 <body>
 
     <div class="container">
@@ -39,12 +88,18 @@
             UserDTO user = new UserDTO("홍길동", 0);
             request.setAttribute("user", user);
         --%>
-        <div class="user-info">
-            <h3>${requestScope.userid}님</h3>
-            <a href="javascript:goEmailChange('<%= ctx_Path%>')">이메일 변경</a>
-             
-            <a href="/changePassword">비밀번호 변경</a>
-        </div>
+	    <div class="user-info">
+	    	<h3 class="user-name">${loginuser.user_name} 님</h3>
+	    	<div class="user-points">
+	        	포인트: ${loginuser.point}
+	    	</div>
+		</div>
+		
+		<div class="user-links">
+		    <a href="javascript:goEmailChange('<%= ctx_Path%>')">이메일 변경</a>
+		    &nbsp;
+		    <a href="/changePassword">비밀번호 변경</a>
+		</div>
 
         <div class="points-reviews">
             <div class="item">
@@ -84,4 +139,6 @@
         </div>
 
     </div>
+        </c:otherwise>
+</c:choose>
 <jsp:include page="../footer1.jsp" />

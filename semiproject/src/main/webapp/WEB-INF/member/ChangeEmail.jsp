@@ -16,7 +16,7 @@
   <%-- jQueryUI CSS 및 JS --%>
   <link rel="stylesheet" type="text/css" href="<%= ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.css" />
   <script src="<%=ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
-<script type="text/javascript" src="<%= ctxPath%>/js/member/ChangeEmail.js"></script>
+  <script type="text/javascript" src="<%= ctxPath%>/js/member/ChangeEmail.js"></script>
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -93,15 +93,16 @@
 		    display: inline-block; /* 이 줄 추가 */
 		    margin-top: 10px;
 		    padding: 8px 10px;
-		    border: solid 1px gray;
+		    border: solid 1.5px gray;
 		    border-radius: 6px;
 		    cursor: pointer;
 		    font-size: 8pt;
-		   	background-color: 
+		    font-weight : bold;
+		   	
 		}
 		.error {
 			color: red;
-		
+			
 		}
       
     </style>
@@ -111,15 +112,15 @@
 <div class="container">
     <h2>이메일 변경</h2>
     <form action="#" method="post" onsubmit="return validateForm()">
+    	<input type="hidden" name="userid" value="${sessionScope.loginuser.user_id}" />
         <label for="currentEmail">현재 이메일</label>
-        <input type="text" id="currentEmail" name="currentEmail" value="${sessionScope.loginUser.email}" readonly />
+        <input type="text" id="currentEmail" name="currentEmail" value="${sessionScope.loginUser.user_email}" readonly />
 
         <label for="newEmail">새 이메일</label>
        	<input type="text" id="newEmail" name="newEmail" />
 		<span id="emailcheck">이메일중복확인</span>
-				
-        <br>
-      	<span class="error">이메일 형식에 맞지 않습니다.</span>
+		<span id="emailCheckResult" style="display:block; margin-top:8px;"></span>
+		<span class="error">이메일 형식에 맞지 않습니다.</span>
         <label for="password">비밀번호 확인</label>
         <input type="password" id="password" name="password"/>
 
