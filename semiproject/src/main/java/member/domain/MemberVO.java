@@ -7,228 +7,107 @@ import java.util.Date;
 public class MemberVO {
 
 	// insert + select 용 
-	private String userid;             // 회원아이디
-	private String pwd;                // 비밀번호 (SHA-256 암호화 대상)
-	private String name;               // 회원명
+	private String user_id;             // 회원아이디
+	private String user_pwd;                // 비밀번호 (SHA-256 암호화 대상)
+	private String user_name;               // 회원명
 	private String email;              // 이메일 (AES-256 암호화/복호화 대상)
 	private String mobile;             // 연락처 (AES-256 암호화/복호화 대상) 
-	private String postcode;           // 우편번호
-	private String address;            // 주소
-	private String detailaddress;      // 상세주소
-	private String extraaddress;       // 참고항목
-	private String gender;             // 성별   남자:1  / 여자:2
 	private String birthday;           // 생년월일   
-	private int coin;                  // 코인액
-	private int point;                 // 포인트 
-	private String registerday;        // 가입일자 
-	private String lastpwdchangedate;  // 마지막으로 암호를 변경한 날짜  
-	private int status;                // 회원탈퇴유무   1: 사용가능(가입중) / 0:사용불능(탈퇴) 
-	private int idle;                  // 휴면유무      0 : 활동중  /  1 : 휴면중	
-	
-	// only select 용 
-	private boolean requirePwdChange = false;
-	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 true
-	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지나지 않았으면 false
+	private int total_payment;		   // 누적결제금액
+	private String fk_grade_no;		   // 회원등급번호
+	private int point;                 // 포인트
+	private String register_date;	   // 가입일자
+	private String last_pwd_update;	   // 마지막암호변경날짜시각
+	private String is_withdrawn;	   // 회원탈퇴유무
+	private String is_active;          // 휴면유무    
+	private String access_level;       // 접근권한      
 	
 	
-	public String getUserid() {
-		return userid;
+	
+	public String getUser_id() {
+		return user_id;
 	}
-	
-	public void setUserid(String userid) {
-		this.userid = userid;
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
 	}
-	
-	public String getPwd() {
-		return pwd;
+	public String getUser_pwd() {
+		return user_pwd;
 	}
-	
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
+	public void setUser_pwd(String user_pwd) {
+		this.user_pwd = user_pwd;
 	}
-	
-	public String getName() {
-		return name;
+	public String getUser_name() {
+		return user_name;
 	}
-	
-	public void setName(String name) {
-		this.name = name;
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
 	}
-	
 	public String getEmail() {
 		return email;
 	}
-	
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
 	public String getMobile() {
 		return mobile;
 	}
-	
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	
-	public String getPostcode() {
-		return postcode;
-	}
-	
-	public void setPostcode(String postcode) {
-		this.postcode = postcode;
-	}
-	
-	public String getAddress() {
-		return address;
-	}
-	
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	
-	public String getDetailaddress() {
-		return detailaddress;
-	}
-	
-	public void setDetailaddress(String detailaddress) {
-		this.detailaddress = detailaddress;
-	}
-	
-	public String getExtraaddress() {
-		return extraaddress;
-	}
-	
-	public void setExtraaddress(String extraaddress) {
-		this.extraaddress = extraaddress;
-	}
-	
-	public String getGender() {
-		return gender;
-	}
-	
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	
 	public String getBirthday() {
 		return birthday;
 	}
-	
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
-	
-	public int getCoin() {
-		return coin;
+	public int getTotal_payment() {
+		return total_payment;
 	}
-	
-	public void setCoin(int coin) {
-		this.coin = coin;
+	public void setTotal_payment(int total_payment) {
+		this.total_payment = total_payment;
 	}
-	
+	public String getFk_grade_no() {
+		return fk_grade_no;
+	}
+	public void setFk_grade_no(String fk_grade_no) {
+		this.fk_grade_no = fk_grade_no;
+	}
 	public int getPoint() {
 		return point;
 	}
-	
 	public void setPoint(int point) {
 		this.point = point;
 	}
-	
-	public String getRegisterday() {
-		return registerday;
-	}
-	
-	public void setRegisterday(String registerday) {
-		this.registerday = registerday;
-	}
-	
-	public String getLastpwdchangedate() {
-		return lastpwdchangedate;
-	}
-	
-	public void setLastpwdchangedate(String lastpwdchangedate) {
-		this.lastpwdchangedate = lastpwdchangedate;
-	}
-	
-	public int getStatus() {
-		return status;
-	}
-	
-	public void setStatus(int status) {
-		this.status = status;
-	}
-	
-	public int getIdle() {
-		return idle;
-	}
-	
-	public void setIdle(int idle) {
-		this.idle = idle;
-	}
-	
-	public boolean isRequirePwdChange() {
-		return requirePwdChange;
+	public String getRegister_date() {
+		return register_date;
 	}
 
-	public void setRequirePwdChange(boolean requirePwdChange) {
-		this.requirePwdChange = requirePwdChange;
+	public String getLast_pwd_update() {
+		return last_pwd_update;
+	}
+	public void setLast_pwd_update(String last_pwd_update) {
+		this.last_pwd_update = last_pwd_update;
+	}
+	public String getIs_withdrawn() {
+		return is_withdrawn;
+	}
+	public void setIs_withdrawn(String is_withdrawn) {
+		this.is_withdrawn = is_withdrawn;
+	}
+	public String getIs_active() {
+		return is_active;
+	}
+	public void setIs_active(String is_active) {
+		this.is_active = is_active;
+	}
+	public String getAccess_level() {
+		return access_level;
+	}
+	public void setAccess_level(String access_level) {
+		this.access_level = access_level;
 	}
 	
-	
-	
-	////////////////////////////////////////////////////////////////////
-	
-	public int getAge() { // 만나이 구하기
-		
-		int age = 0;
-	      
-	      // 회원의 올해생일이 현재날짜 보다 이전이라면 
-	      // 만나이 = 현재년도 - 회원의 태어난년도 
-	      
-	      // 회원의 올해생일이 현재날짜 보다 이후이라면
-	      // 만나이 = 현재년도 - 회원의 태어난년도 - 1
-	      
-	      Date now = new Date(); // 현재시각
-	      SimpleDateFormat sdfmt = new SimpleDateFormat("yyyyMMdd");
-	      String str_now = sdfmt.format(now); // "20250617"
-	      
-	      // 회원의 올해생일(문자열 타입)
-	      String str_now_birthday = str_now.substring(0, 4) + birthday.substring(5,7) + birthday.substring(8); 
-	      //   System.out.println("회원의 올해생일(문자열 타입) : " + str_now_birthday);
-	      // 회원의 올해생일(문자열 타입) : 20241220
-	      
-	      // 회원의 태어난년도
-	      int birth_year = Integer.parseInt(birthday.substring(0, 4));
-	      
-	      // 현재년도
-	      int now_year = Integer.parseInt(str_now.substring(0, 4)); 
-	      
-	      try {
-		      Date now_birthday = sdfmt.parse(str_now_birthday); // 회원의 올해생일(연월일) 날짜 타입 
-		      now = sdfmt.parse(str_now); // 오늘날짜(연월일) 날짜타입
-		      
-		      if(now_birthday.before(now)) {
-			      // 회원의 올해생일이 현재날짜 보다 이전이라면
-			      //   System.out.println("~~~~ 생일 지남");
-			      age = now_year - birth_year; 
-			      // 나이 = 현재년도 - 회원의 태어난년도
-		      }
-		      else {
-			      // 회원의 올해생일이 현재날짜 보다 이후이라면
-			      //   System.out.println("~~~~ 생일 아직 지나지 않음");
-			      age = now_year - birth_year - 1;
-			      // 나이 = 현재년도 - 회원의 태어난년도 - 1
-		      }
-	      
-	      } catch (ParseException e) {
-	      
-	      }
-	      
-	      return age;
-	}
-	
-	
+
 	
 	
 	

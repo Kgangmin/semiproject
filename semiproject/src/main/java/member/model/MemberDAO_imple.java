@@ -59,40 +59,6 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 	}// end of private void close()---------------
 
-
-	// ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
-	@Override
-	public boolean idDuplicateCheck(String userid) throws SQLException {
-		
-		boolean isExists = false;
-		
-		try {
-			  conn = ds.getConnection();
-			  
-			  String sql = " select userid "
-			  		     + " from tbl_member "
-			  		     + " where userid = ? ";
-			  
-			  pstmt = conn.prepareStatement(sql);
-			  pstmt.setString(1, userid);
-			  
-			  rs = pstmt.executeQuery();
-			  
-			  isExists = rs.next(); // 행이 있으면 true  (중복된 userid) 
-			                        // 행이 없으면 false (사용가능한 userid) 
-			
-		} finally {
-			close();
-		}
-		
-		return isExists;
-	}// end of public boolean idDuplicateCheck(String userid) throws SQLException------
-
-
-
-	
-
-
 	// 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
 		@Override
 		public boolean emailDuplicateCheck(String email) throws SQLException {
@@ -125,41 +91,9 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 	
-		// 회원가입을 해주는 메소드 (tbl_member 테이블에 insert)
-		@Override
-		public int registerMember(MemberVO member) throws SQLException {
-			
-			int result = 0;
-			
-			try {
-				  conn = ds.getConnection();
-				 
-				  String sql = " insert into tbl_member(name, userid, pwd, mobile, birthday) " 
-				  		     + " values(?, ?, ?, ?, ?) ";
-				  
-				  pstmt = conn.prepareStatement(sql);
-				  
-				  pstmt.setString(1, member.getName());
-				  pstmt.setString(2, member.getUserid());
-				  pstmt.setString(3, Sha256.encrypt(member.getPwd()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다. 
-				  pstmt.setString(4, aes.encrypt(member.getMobile()) ); // 휴대폰을 AES256 알고리즘으로 양방향 암호화 시킨다.			
-				  pstmt.setString(5, member.getBirthday());
-				  
-				  result = pstmt.executeUpdate();
-				  
-			} catch(GeneralSecurityException | UnsupportedEncodingException e) {
-				  e.printStackTrace();
-			} finally {
-				  close();
-			}
-			
-			return result;
-			
-		}// end of public int registerMember(MemberVO member) throws SQLException-----------
 	
 	
-	
-	
+
 	
 }
 
