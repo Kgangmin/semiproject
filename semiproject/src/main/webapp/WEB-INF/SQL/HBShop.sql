@@ -72,6 +72,7 @@ insert into tbl_user(user_id, user_pwd, user_name, email, mobile, birthday, fk_g
 select * from tbl_user;
 
 commit;
+<<<<<<< HEAD
 
 --------------------------------------------------------------------------------
 
@@ -847,7 +848,6 @@ insert into tbl_room values('11-3', '11', 'deluxe', '신라호텔제주_room3.pn
 insert into tbl_room values('20-1', '20', 'standard', '속초리츠호텔_room1.png', 45000, '기준2인/최대2인 더블베드1개 조식 시티뷰');
 insert into tbl_room values('20-2', '20', 'sweet', '속초리츠호텔_room2.png', 65000, '기준2인/최대3인 킹베드1개 조식 시티뷰 스마트TV');
 insert into tbl_room values('20-3', '20', 'deluxe', '속초리츠호텔_room3.png', 80000, '기준2인/최대3인 퀸베드1개 조식 오션뷰 스마트TV');
-
 
 
 

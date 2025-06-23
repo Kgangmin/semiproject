@@ -8,9 +8,19 @@
     String ctxPath = request.getContextPath();
 %>
 
-<jsp:include page="header1.jsp" />
 
-  <!-- 2) 날짜 지정 바 -->
+<jsp:include page="header1.jsp" />
+<style>
+.card-img-top {
+  width: 100%;        /* 가로는 카드 너비에 딱 맞추고 */
+  height: 200px;      /* 원하는 높이로 고정 */
+  object-fit: cover;  /* 이미지 비율을 유지하며 잘려서 채워줌 */
+}
+</style>
+
+
+
+   <!-- 날짜 지정 바 -->
   <div class="py-3" style="margin:10px auto;; width:800px; ">
     <div class="container-fluid">
       <div class="row align-items-center">
@@ -88,21 +98,20 @@
 		</div>
 	 
 	</div>
-	   <!-- 객실 사진 위치 -->
-  <div class="container mt-4 mb-5" style="margin: 0 auto;">
-    <div class="row text-center">
-      <div class="col-md-4 mb-3">
-        <div class="room-placeholder">객실 정보</div>
-      </div>
-      <div class="col-md-4 mb-3">
-        <div class="room-placeholder">객실 정보</div>
-      </div>
-      <div class="col-md-4 mb-3">
-        <div class="room-placeholder">객실 정보</div>
-      </div>
-    </div>
-  </div>
-
+	
+	
+	   <!-- 객실 컨테이너 무한스크롤 -->
+		<div class="container mt-4 mb-5">
+		  <div id="stayContainer" class="row" style="margin-left: 10%;"></div>
+		  <div id="endMessage"   class="text-center mt-3 text-muted"></div>
+		</div>
+	<script type="text/javascript">
+	  var ctxPath = '<%= ctxPath %>';
+	</script>
+	
+	<!-- stayScroll.js 로드 -->
+	<script src="<%= ctxPath %>/js/stayScroll.js"></script>
+	
 
 
 
