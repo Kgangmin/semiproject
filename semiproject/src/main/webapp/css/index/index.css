@@ -8,16 +8,3 @@ div.container > div{
 	
 	
 }
-
-body > div.container.mt-4.mb-5 > div > div:nth-child(1) > div,
-body > div.container.mt-4.mb-5 > div > div:nth-child(2) > div,
-body > div.container.mt-4.mb-5 > div > div:nth-child(3) > div{
-      border: 0px solid red;
-      background: #000;
-      color: red;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
