@@ -875,16 +875,18 @@ insert into tbl_room values('19-1', '19', 'standard', 'page9_room1.png', 49500, 
 insert into tbl_room values('19-2', '19', 'sweet', 'page9_room2.png', 65000, '기준2인/최대3인 킹베드1개 넷플릭스 욕조');
 insert into tbl_room values('19-3', '19', 'deluxe', 'page9_room3.png', 75000, '기준2인/최대2인 퀸베드1개 넷플릭스 욕조');
 
-insert into tbl_room values('20-1', '20', 'standard', 'page9_room1.png', 49500, '기준2인/최대2인 킹베드1개 65인치 스마트TV');
-insert into tbl_room values('20-2', '20', 'sweet', 'page9_room2.png', 65000, '기준2인/최대3인 킹베드1개 넷플릭스 욕조');
-insert into tbl_room values('20-3', '20', 'deluxe', 'page9_room3.png', 75000, '기준2인/최대2인 퀸베드1개 넷플릭스 욕조');
-
-desc tbl_room;
-
-
 insert into tbl_room values('20-1', '20', 'standard', '속초리츠호텔_room1.png', 45000, '기준2인/최대2인 더블베드1개 조식 시티뷰');
 insert into tbl_room values('20-2', '20', 'sweet', '속초리츠호텔_room2.png', 65000, '기준2인/최대3인 킹베드1개 조식 시티뷰 스마트TV');
 insert into tbl_room values('20-3', '20', 'deluxe', '속초리츠호텔_room3.png', 80000, '기준2인/최대3인 퀸베드1개 조식 오션뷰 스마트TV');
 
+insert into tbl_room values('21-1', '21', 'standard', '강릉 블루스테이_room1.png', 105000, '기준2인/최대2인 더블베드1개 오션뷰 발코니/테라스');
+insert into tbl_room values('21-2', '21', 'sweet', '강릉 블루스테이_room2.png', 130000, '기준2인/최대3인 킹베드1개 오션뷰 욕조 발코니/테라스');
+insert into tbl_room values('21-3', '21', 'twin', '강릉 블루스테이_room3.png', 160000, '기준3인/최대3인 싱블베드1개 더블베드1개 오션뷰 욕조 발코니/테라스');
 
+insert into tbl_room values('22-1', '22', 'standard', '강릉 풀빌라 케이_room1.png', 89000, '기준2인/최대2인 퀸베드1개 오션뷰');
+insert into tbl_room values('22-2', '22', 'sweet', '강릉 풀빌라 케이_room2.png', 109000, '기준2인/최대3인 퀸베드1개 월풀욕조');
+insert into tbl_room values('22-3', '22', 'twin', '강릉 풀빌라 케이_room3.png', 219000, '기준2인/최대6인 퀸베드2개 통창오션뷰 수영장 사전문의必');
 
+insert into tbl_room values('23-1', '23', 'standard', '강릉 탑 스파 펜션_room1.png', 89000, '기준2인/최대2인 퀸베드1개 오션뷰');
+insert into tbl_room values('23-2', '23', 'sweet', '강릉 탑 스파 펜션_room2.png', 109000, '기준2인/최대3인 퀸베드1개 월풀욕조');
+insert into tbl_room values('23-3', '23', 'twin', '강릉 탑 스파 펜션_room3.png', 219000, '기준2인/최대6인 퀸베드2개 통창오션뷰 수영장 사전문의必');
