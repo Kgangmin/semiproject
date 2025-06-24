@@ -5,10 +5,11 @@
 <% String ctx_Path = request.getContextPath(); %>
 
 <jsp:include page="../header1.jsp" />
+
 <script type="text/javascript" src="<%= ctx_Path%>/js/member/member.js"></script>
 
     <style>
-        /* 기본적인 스타일 예시 */
+        
         body { font-family: sans-serif; color: #333; }
         .container { width: 800px; margin: 40px auto; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; }
@@ -21,8 +22,17 @@
         .reservation-list { border: 1px solid #ccc; min-height: 150px; padding: 20px; }
         .reservation-item { padding: 10px; border-bottom: 1px solid #f0f0f0; }
         .reservation-item:last-child { border-bottom: none; }
+        .user-links a {margin-left: 15px;color: #555;text-decoration: none;font-size: 14px;}
+        .user-links a:first-child {margin-left: 0;}
+        #point { font-weight: bold;}
     </style>
+    
+    
 </head>
+
+
+
+
 <body>
 
     <div class="container">
@@ -39,17 +49,21 @@
             UserDTO user = new UserDTO("홍길동", 0);
             request.setAttribute("user", user);
         --%>
-        <div class="user-info">
-            <h3>${requestScope.userid}님</h3>
-            <a href="javascript:goEmailChange('<%= ctx_Path%>')">이메일 변경</a>
-             
-            <a href="/changePassword">비밀번호 변경</a>
-        </div>
+	    
+	   	<h3 class="user-name">${loginUser.user_name} 님</h3>
+	   
+	
+		
+		<div class="user-links">
+		    <a href="javascript:goEmailChange('<%= ctx_Path%>')">이메일 변경</a>
+		    &nbsp;
+		    <a href="/changePassword">비밀번호 변경</a>
+		</div>
 
         <div class="points-reviews">
             <div class="item">
                 <span>포인트</span>
-                <span>${user.points} ></span>
+                <span id="point">${loginUser.point}pt &nbsp;&nbsp;></span>
             </div>
             <div class="item">
                 <span>내 후기</span>
@@ -84,4 +98,6 @@
         </div>
 
     </div>
+     
+
 <jsp:include page="../footer1.jsp" />

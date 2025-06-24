@@ -58,6 +58,41 @@ public class MemberDAO_imple implements MemberDAO {
       }
    }// end of private void close()---------------
 
+
+
+
+	@Override
+	public boolean emailDuplicateCheck2(Map<String, String> paraMap) throws SQLException {
+	    boolean isExists = false;
+
+	    try {
+	        conn = ds.getConnection();
+
+	        String sql = " select email "
+	                   + " from tbl_user "
+	                   + " where email = ? ";
+
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, aes.encrypt(paraMap.get("new_email")));
+
+	        rs = pstmt.executeQuery();
+
+	        isExists = rs.next(); // 행이 있으면 true (중복된 email)
+	                              // 행이 없으면 false (사용가능한 email)
+
+	     } catch (GeneralSecurityException | UnsupportedEncodingException e) {
+			e.printStackTrace();
+	    } finally {
+	        close();
+	    }
+
+	    return isExists;
+	}
+
+
+		
+
+
    // 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
       @Override
       public boolean emailDuplicateCheck(String email) throws SQLException {
@@ -246,8 +281,14 @@ public class MemberDAO_imple implements MemberDAO {
 			}
 			
 			return result;
+
 			
 		}// end of public int registerMember(MemberVO member) throws SQLException-----------
+
+
+	
+
+	
 
 
 
