@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+div.container > div{
+	
+	border: solid 0px red;
+	width: 80%;
+	margin: 5% 0;
+	
+	
+}
