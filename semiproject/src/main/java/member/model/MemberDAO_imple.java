@@ -59,6 +59,7 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 	}// end of private void close()---------------
 
+<<<<<<< HEAD
 
 	// ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
 	@Override
@@ -161,6 +162,43 @@ public class MemberDAO_imple implements MemberDAO {
 	
 	
 	
+=======
+	// 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
+		@Override
+		public boolean emailDuplicateCheck(String email) throws SQLException {
+
+			boolean isExists = false;
+			
+			try {
+				  conn = ds.getConnection();
+				  
+				  String sql = " select email "
+				  		     + " from tbl_member "
+				  		     + " where email = ? ";
+				  
+				  pstmt = conn.prepareStatement(sql);
+				  pstmt.setString(1, aes.encrypt(email));
+				  
+				  rs = pstmt.executeQuery();
+				  
+				  isExists = rs.next(); // 행이 있으면 true  (중복된 email) 
+				                        // 행이 없으면 false (사용가능한 email) 
+				
+			} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+				  e.printStackTrace();
+			} finally {
+				  close();
+			}
+			
+			return isExists;		
+		}// end of public boolean emailDuplicateCheck(String email) throws SQLException-------
+
+
+	
+	
+	
+
+>>>>>>> branch 'main' of https://github.com/Kgangmin/semiproject.git
 	
 }
 
