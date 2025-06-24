@@ -10,8 +10,8 @@
 
     <style>
         /* 기본적인 스타일 예시 */
-        body { font-family: sans-serif; color: #333; }
-        .container { width: 800px; margin: 40px auto; padding: 20px; }
+        body {font-family: sans-serif; color: #333; }
+        .container { width: 800px; margin: 40px auto; padding:30px 0 30px 130px; border: solid 2px rgb(226,227,221); border-radius:5%; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .header h1 { font-size: 24px; }
         .user-info { margin-top: 30px; }
@@ -22,39 +22,16 @@
         .reservation-list { border: 1px solid #ccc; min-height: 150px; padding: 20px; }
         .reservation-item { padding: 10px; border-bottom: 1px solid #f0f0f0; }
         .reservation-item:last-child { border-bottom: none; }
-        
-        
-    .user-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 30px;  /* 기존 user-info의 margin 유지 */
-	}
+       
+ 
+
 	
-	.user-name {
-	    margin: 0;
-	    font-weight: normal;
-	}
 	
-	.user-points {
-	    font-weight: bold;
-	    font-size: 16px;
-	    color: #007BFF;
-	}
+	.user-links a {margin-left: 15px;color: #555;text-decoration: none;font-size: 14px;}
 	
-	.user-links {
-	    margin-top: 10px;
-	}
+	.user-links a:first-child {margin-left: 0;}
 	
-	.user-links a {
-	    margin-left: 15px;
-	    color: #555;
-	    text-decoration: none;
-	    font-size: 14px;
-	}
-	
-	.user-links a:first-child {
-	    margin-left: 0;
+	div#review {border: solid 1px red;
 	}
     </style>
     
@@ -83,16 +60,9 @@
             </div>
         </div>
 
-        <%-- 
-            서블릿에서 다음과 같이 사용자 정보를 request 객체에 담아 전달했다고 가정합니다.
-            UserDTO user = new UserDTO("홍길동", 0);
-            request.setAttribute("user", user);
-        --%>
-	    <div class="user-info">
-	    	<h3 class="user-name">${loginuser.user_name} 님</h3>
-	    	<div class="user-points">
-	        	포인트: ${loginuser.point}
-	    	</div>
+      
+	    <div class="user-info" >
+	    	<h3 class="user-name">${loginuser.user_name} 님</h3>	
 		</div>
 		
 		<div class="user-links">
@@ -102,12 +72,12 @@
 		</div>
 
         <div class="points-reviews">
-            <div class="item">
-                <span>포인트</span>
-                <span>${user.points} ></span>
+            <div id="point" class="item">
+                <span>포인트 </span>
+                <span>${loginuser.point}</span>
             </div>
-            <div class="item">
-                <span>내 후기</span>
+            <div id="review" class="item">
+                <span >내 후기</span>
                 <span>></span>
             </div>
         </div>
