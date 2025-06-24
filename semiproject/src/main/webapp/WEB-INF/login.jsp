@@ -8,19 +8,20 @@
    String ctx_Path = request.getContextPath();
 %>  
 
-<link rel="stylesheet" type="text/css" href="<%= ctx_Path%>/css/login/login.css" />
 
-<script type="text/javascript" src="<%= ctx_Path%>/js/login/login.js"></script>
     
 <jsp:include page="/WEB-INF/header1.jsp" />
 
+<link rel="stylesheet" type="text/css" href="<%= ctx_Path%>/css/login/login.css" />
+
+<script type="text/javascript" src="<%= ctx_Path%>/js/login/login.js"></script>
 
   <div class="container">
     <div class="row justify-content-center mt-5" style="margin: 0 auto;">
       <div class="col-md-8">
         <div class="p-4 ">
           <h3 class="text-center mb-4">LOGIN</h3>
-          <form name="loginFrm" action="<%= ctx_Path %>/login/login.hb" method="post">
+          <form id="loginFrm" name="loginFrm" action="<%= ctx_Path %>/login/login.hb" method="post">
             <!-- 아이디 입력 -->
             <div class="mb-3">
               <label for="user_id" class="form-label">아이디</label>
@@ -41,8 +42,8 @@
               <a href="#" class="text-decoration-none small">비밀번호 찾기</a>
             </div>
             <!-- 로그인 버튼 -->          
-              <button type="button" id="btnSubmit" class="btn btn-primary btn-lg btn-block" onclick="javascript:goLogin()" >로그인</button>
-              <button type="submit" id="goRegister" class="btn btn-secondary btn-lg btn-block" href="#">회원가입</button>          
+              <button type="button" id="btnSubmit" class="btn btn-primary btn-lg btn-block" onclick="javascript:goLogin()">로그인</button>
+              <button type="button" id="goRegister" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href='<%= ctx_Path %>/member/memberRegister.hb';">회원가입</button>          
           </form>
         </div>
       </div>

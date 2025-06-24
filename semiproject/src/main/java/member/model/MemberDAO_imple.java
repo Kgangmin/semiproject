@@ -167,7 +167,7 @@ public class MemberDAO_imple implements MemberDAO {
                 member.setUser_id(rs.getString("user_id"));
                 member.setUser_name(rs.getString("user_name"));;
                 member.setPoint(rs.getInt("point"));
-                member.setRegister_date(rs.getString("setRegister_date"));
+                member.setRegister_date(rs.getString("register_date"));
           
                 if(rs.getInt("pwdchangegap") >= 3) {
                    // 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 true
@@ -182,7 +182,7 @@ public class MemberDAO_imple implements MemberDAO {
                 
                 // ==== 휴면이 아닌 회원만 tbl_login_history(로그인기록) 테이블에 insert 하기 시작 ==== // 
                 if( rs.getInt("lastlogingap") < 12 ) {
-                   sql = " insert into tbl_login_history(fk_userid, login_records, login_ip) "
+                   sql = " insert into tbl_login_history(fk_user_id, login_records, login_ip) "
                        + " values(?, sysdate, ?) ";
                    
                    pstmt = conn.prepareStatement(sql);

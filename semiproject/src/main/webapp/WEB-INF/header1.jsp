@@ -106,7 +106,7 @@
     <div class="collapse navbar-collapse" id="navbarMain">
       <ul class="navbar-nav ml-auto align-items-center">
         <!-- 로그인 전 -->
-        <c:if test="${empty sessionScope.loginuser}">
+        <c:if test="${empty sessionScope.loginUser}">
           <li class="nav-item">
             <a class="nav-link" href="<%=ctxPath%>/member/memberRegister.hb">회원가입</a>
           </li>
@@ -115,7 +115,7 @@
           </li>
         </c:if>
         <!-- 로그인 후 -->
-        <c:if test="${not empty sessionScope.loginuser}">
+        <c:if test="${not empty sessionScope.loginUser}">
           <li class="nav-item">
             <a class="nav-link" href="#">마이페이지</a>
           </li>
