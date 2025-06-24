@@ -30,14 +30,6 @@
     
 </head>
 
-<c:choose>
-    <c:when test="${empty loginuser}">
-        <p style="color:red;">로그인이 필요합니다.
-            <a href="${pageContext.request.contextPath}/testLogin.hb">[임시 로그인]</a>
-        </p>
-    </c:when>
-
-<c:otherwise>
 
 
 
@@ -106,6 +98,6 @@
         </div>
 
     </div>
-        </c:otherwise>
-</c:choose>
+     
+
 <jsp:include page="../footer1.jsp" />
