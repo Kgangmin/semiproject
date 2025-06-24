@@ -20,23 +20,24 @@
       <div class="col-md-8">
         <div class="p-4 ">
           <h3 class="text-center mb-4">LOGIN</h3>
-          <form name="loginFrm">
+          <form name="loginFrm" action="<%= ctx_Path %>/login/login.hb" method="post">
             <!-- 아이디 입력 -->
             <div class="mb-3">
-              <label for="log_userid" class="form-label">아이디</label>
-              <input type="text" class="form-control" id="log_userid" autocomplete="off" size="20" placeholder="아이디 입력" >
+              <label for="user_id" class="form-label">아이디</label>
+              <input type="text" class="form-control" id="user_id" name="user_id"  autocomplete="off" size="20" placeholder="아이디 입력" >
             </div>
             <!-- 비밀번호 입력 -->
             <div class="mb-3">
-              <label for="log_password" class="form-label">비밀번호</label>
-              <input type="password" class="form-control" id="log_password" size="20" placeholder="비밀번호 입력">
+              <label for="user_pwd" class="form-label">비밀번호</label>
+              <input type="password" class="form-control" id="user_pwd" name="user_pwd" size="20" placeholder="비밀번호 입력">
             </div>
             <!-- 아이디 저장 + 비밀번호 찾기 -->
             <div class="d-flex justify-content-between align-items-center mb-3">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="saveid">
-                <label class="form-check-label" for="saveid">아이디 저장</label>
+                <label class="form-check-label" for="saveid">아이디 저장</label>               
               </div>
+              <a href="#" class="text-decoration-none small" style="margin-left: 40%;">아이디 찾기</a>
               <a href="#" class="text-decoration-none small">비밀번호 찾기</a>
             </div>
             <!-- 로그인 버튼 -->          

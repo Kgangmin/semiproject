@@ -1,15 +1,13 @@
 package member.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 public class MemberVO {
 
 	// insert + select 용 
-	private String user_id;             // 회원아이디
-	private String user_pwd;                // 비밀번호 (SHA-256 암호화 대상)
-	private String user_name;               // 회원명
+	private String user_id;            // 회원아이디
+	private String user_pwd;           // 비밀번호 (SHA-256 암호화 대상)
+	private String user_name;          // 회원명
 	private String email;              // 이메일 (AES-256 암호화/복호화 대상)
 	private String mobile;             // 연락처 (AES-256 암호화/복호화 대상) 
 	private String birthday;           // 생년월일   
@@ -22,6 +20,10 @@ public class MemberVO {
 	private String is_active;          // 휴면유무    
 	private String access_level;       // 접근권한      
 	
+	
+	private boolean requirePwdChange = false;
+	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 true
+	// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지나지 않았으면 false
 	
 	
 	public String getUser_id() {
@@ -82,6 +84,9 @@ public class MemberVO {
 		return register_date;
 	}
 
+	public void setRegister_date(String register_date) {
+		this.register_date = register_date;
+	}
 	public String getLast_pwd_update() {
 		return last_pwd_update;
 	}
@@ -106,7 +111,13 @@ public class MemberVO {
 	public void setAccess_level(String access_level) {
 		this.access_level = access_level;
 	}
-	
+	public boolean isRequirePwdChange() {
+		return requirePwdChange;
+	}
+
+	public void setRequirePwdChange(boolean requirePwdChange) {
+		this.requirePwdChange = requirePwdChange;
+	}
 
 	
 	
