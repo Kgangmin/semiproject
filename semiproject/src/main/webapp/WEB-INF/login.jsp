@@ -7,12 +7,12 @@
 <%
    String ctx_Path = request.getContextPath();
 %>  
+    
+<jsp:include page="/WEB-INF/header1.jsp" />
 
 <link rel="stylesheet" type="text/css" href="<%= ctx_Path%>/css/login/login.css" />
 
 <script type="text/javascript" src="<%= ctx_Path%>/js/login/login.js"></script>
-    
-<jsp:include page="/WEB-INF/header1.jsp" />
 
 
   <div class="container">
@@ -42,7 +42,7 @@
             </div>
             <!-- 로그인 버튼 -->          
               <button type="button" id="btnSubmit" class="btn btn-primary btn-lg btn-block" onclick="javascript:goLogin()" >로그인</button>
-              <button type="submit" id="goRegister" class="btn btn-secondary btn-lg btn-block" href="#">회원가입</button>          
+              <button type="button" id="goRegister" class="btn btn-secondary btn-lg btn-block" onclick="window.location.href='<%=ctx_Path%>/member/memberRegister.hb'">회원가입</button>          
           </form>
         </div>
       </div>

@@ -5,7 +5,7 @@ $(function(){
 		goLogin();  // 로그인 시도한다(아이디저장은 LocalStorage 를 사용함).	
 	});
 	
-	$('input#log_password').bind("keyup", (e)=>{
+	$('input#user_pwd').bind("keyup", (e)=>{
 		if(e.keyCode == 13) { // 암호입력란에 엔터를 했을 경우 
 			goLogin();  // 로그인 시도한다(아이디저장은 LocalStorage 를 사용함).	
 		}
@@ -28,6 +28,13 @@ function goLogin() {
 			alert("비밀번호를 입력하세요");
 			$('input#user_pwd').val("").focus();
 			return;  // goLogin() 함수 종료
+		}
+		
+		if($('input:checkbox[id="saveid"]').prop("checked")) {
+			localStorage.setItem('saveid', $('input:text[id="user_id"]').val());
+		}
+		else {
+			localStorage.removeItem('saveid');
 		}
 		
 		const frm = document.loginFrm;
