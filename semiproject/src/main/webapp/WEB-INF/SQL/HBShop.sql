@@ -841,9 +841,46 @@ insert into tbl_room values('10-3', '10', 'deluxe', '신라호텔제주_room3.pn
 
 --------------------------------------------------------------------------------
 
-insert into tbl_room values('11-1', '11', 'standard', '신라호텔제주_room1.png', 405000, '기준2인/최대2인 더블베드1개 조식 가든뷰');
-insert into tbl_room values('11-2', '11', 'sweet', '신라호텔제주_room2.png', 1899496, '기준2인/최대2인 더블베드1개 조식 가든뷰 발코니/테라스');
-insert into tbl_room values('11-3', '11', 'deluxe', '신라호텔제주_room3.png', 5420800, '기준4인/최대4인 퀸베드1개 조식 오션뷰 발코니/테라스 전용수영장');
+insert into tbl_room values('11-1', '11', 'standard', '선샤인호텔_room1.png', 107717, '기준2인/최대2인 더블베드1개 스트리트뷰');
+insert into tbl_room values('11-2', '11', 'sweet', '선샤인호텔_room2.png', 131079, '기준2인/최대2인 더블베드1개 스트리트뷰 욕조');
+insert into tbl_room values('11-3', '11', 'twin', '선샤인호텔_room3.png', 151588, '기준2인/최대2인 싱글베드1개 더블베드1개 스트리뷰 욕조');
+
+insert into tbl_room values('12-1', '12', 'standard', '수유CAFE72_room1.png', 55000, '기준2인/최대2인 킹베드1개 스마트TV');
+
+insert into tbl_room values('13-1', '13', 'standard', '독산3S호텔_room1.png', 52000, '기준2인/최대2인 킹베드1개 75인치TV');
+insert into tbl_room values('13-2', '13', 'doublePC', '독산3S호텔_room2.png', 77000, '기준2인/최대2인 킹베드1개 스마트TV 2PC 대형욕조');
+insert into tbl_room values('13-3', '13', 'deluxe', '독산3S호텔_room3.png', 82000, '기준2인/최대2인 퀸베드1개 스마트TV 안마의자 1PC 대형욕조');
+
+insert into tbl_room values('14-1', '14', 'standard', '호텔월하여관_room1.png', 30000, '기준2인/최대2인 퀸베드1개');
+insert into tbl_room values('14-2', '14', 'premium', '호텔월하여관_room2.png', 40000, '기준2인/최대2인 퀸베드1개 스마트TV');
+insert into tbl_room values('14-3', '14', 'deluxe', '호텔월하여관_room3.png', 50000, '기준2인/최대2인 퀸베드1개 스마트TV');
+
+insert into tbl_room values('15-1', '15', 'standard', '신촌아늑호텔_room1.png', 70000, '기준2인/최대2인 킹베드1개 4성급 호텔침구');
+insert into tbl_room values('15-2', '15', 'multi', '신촌아늑호텔_room2.png', 95000, '기준2인/최대2인 퀸베드1개 4성급 호텔침구 스마트TV');
+insert into tbl_room values('15-3', '15', 'deluxe', '신촌아늑호텔_room3.png', 115000, '기준2인/최대2인 퀸베드1개 4성급 호텔침구 스마트TV');
+
+insert into tbl_room values('16-1', '16', 'standard', '해운대아크블루_room1.png', 44000, '기준2인/최대2인 킹베드1개 넷플릭스 욕조 주차불가');
+insert into tbl_room values('16-2', '16', 'sweet', '해운대아크블루_room2.png', 53000, '기준2인/최대2인 킹베드1개 넷플릭스 욕조 쇼파 무료주차');
+insert into tbl_room values('16-3', '16', 'deluxe', '해운대아크블루_room3.png', 62000, '기준2인/최대3인 퀸베드1개 넷플릭스 무료주차 오션뷰');
+
+insert into tbl_room values('17-1', '17', 'standard', '광안리YAM_room1.png', 44000, '기준2인/최대2인 더블베드1개 넷플릭스');
+insert into tbl_room values('17-2', '17', 'sweet', '광안리YAM_room2.png', 65000, '기준2인/최대2인 킹베드1개 넷플릭스');
+insert into tbl_room values('17-3', '17', 'deluxe', '광안리YAM_room3.png', 83000, '기준2인/최대2인 퀸베드1개 넷플릭스');
+
+insert into tbl_room values('18-1', '18', 'standard', '호텔하운드_room1.png', 45000, '기준2인/최대2인 더블베드1개 넷플릭스 욕조');
+insert into tbl_room values('18-2', '18', 'premium', '호텔하운드_room2.png', 65000, '기준2인/최대3인 킹베드1개 넷플릭스 욕조');
+insert into tbl_room values('18-3', '18', 'deluxe', '호텔하운드_room3.png', 75000, '기준2인/최대2인 퀸베드1개 넷플릭스 욕조');
+
+insert into tbl_room values('19-1', '19', 'standard', 'page9_room1.png', 49500, '기준2인/최대2인 킹베드1개 65인치 스마트TV');
+insert into tbl_room values('19-2', '19', 'sweet', 'page9_room2.png', 65000, '기준2인/최대3인 킹베드1개 넷플릭스 욕조');
+insert into tbl_room values('19-3', '19', 'deluxe', 'page9_room3.png', 75000, '기준2인/최대2인 퀸베드1개 넷플릭스 욕조');
+
+insert into tbl_room values('20-1', '20', 'standard', 'page9_room1.png', 49500, '기준2인/최대2인 킹베드1개 65인치 스마트TV');
+insert into tbl_room values('20-2', '20', 'sweet', 'page9_room2.png', 65000, '기준2인/최대3인 킹베드1개 넷플릭스 욕조');
+insert into tbl_room values('20-3', '20', 'deluxe', 'page9_room3.png', 75000, '기준2인/최대2인 퀸베드1개 넷플릭스 욕조');
+
+desc tbl_room;
+
 
 insert into tbl_room values('20-1', '20', 'standard', '속초리츠호텔_room1.png', 45000, '기준2인/최대2인 더블베드1개 조식 시티뷰');
 insert into tbl_room values('20-2', '20', 'sweet', '속초리츠호텔_room2.png', 65000, '기준2인/최대3인 킹베드1개 조식 시티뷰 스마트TV');
