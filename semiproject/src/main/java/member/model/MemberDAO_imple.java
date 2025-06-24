@@ -6,9 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -59,7 +56,6 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 	}// end of private void close()---------------
 
-<<<<<<< HEAD
 
 	// ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
 	@Override
@@ -89,9 +85,6 @@ public class MemberDAO_imple implements MemberDAO {
 		return isExists;
 	}// end of public boolean idDuplicateCheck(String userid) throws SQLException------
 
-
-
-	
 
 
 	// 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
@@ -140,9 +133,9 @@ public class MemberDAO_imple implements MemberDAO {
 				  
 				  pstmt = conn.prepareStatement(sql);
 				  
-				  pstmt.setString(1, member.getName());
-				  pstmt.setString(2, member.getUserid());
-				  pstmt.setString(3, Sha256.encrypt(member.getPwd()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다. 
+				  pstmt.setString(1, member.getUser_name());
+				  pstmt.setString(2, member.getUser_id());
+				  pstmt.setString(3, Sha256.encrypt(member.getUser_pwd()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다. 
 				  pstmt.setString(4, aes.encrypt(member.getMobile()) ); // 휴대폰을 AES256 알고리즘으로 양방향 암호화 시킨다.			
 				  pstmt.setString(5, aes.encrypt(member.getEmail()) );
 				  pstmt.setString(6, member.getBirthday());
@@ -162,44 +155,7 @@ public class MemberDAO_imple implements MemberDAO {
 	
 	
 	
-=======
-	// 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
-		@Override
-		public boolean emailDuplicateCheck(String email) throws SQLException {
 
-			boolean isExists = false;
-			
-			try {
-				  conn = ds.getConnection();
-				  
-				  String sql = " select email "
-				  		     + " from tbl_member "
-				  		     + " where email = ? ";
-				  
-				  pstmt = conn.prepareStatement(sql);
-				  pstmt.setString(1, aes.encrypt(email));
-				  
-				  rs = pstmt.executeQuery();
-				  
-				  isExists = rs.next(); // 행이 있으면 true  (중복된 email) 
-				                        // 행이 없으면 false (사용가능한 email) 
-				
-			} catch(GeneralSecurityException | UnsupportedEncodingException e) {
-				  e.printStackTrace();
-			} finally {
-				  close();
-			}
-			
-			return isExists;		
-		}// end of public boolean emailDuplicateCheck(String email) throws SQLException-------
-
-
-	
-	
-	
-
->>>>>>> branch 'main' of https://github.com/Kgangmin/semiproject.git
-	
 }
 
 

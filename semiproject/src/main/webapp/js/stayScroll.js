@@ -49,7 +49,12 @@ $(function(){
         }
       },
       error: function(xhr){
-        console.error('숙소 로드 실패:', xhr.responseText);
+        console.error(		'숙소 로드 실패:',
+		   'status=' + jqXHR.status,
+		   'statusText=' + jqXHR.statusText,
+		   'textStatus=' + textStatus,
+		   'errorThrown=' + errorThrown,
+		   'responseText=' + jqXHR.responseText);
       },
       complete: function(){
         loading = false;

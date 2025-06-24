@@ -1,15 +1,13 @@
 package member.controller;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import common.controller.AbstractController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import member.domain.MemberVO;
-import member.model.*;
+import member.model.MemberDAO;
+import member.model.MemberDAO_imple;
 
 
 public class MemberRegister extends AbstractController {
@@ -41,9 +39,9 @@ public class MemberRegister extends AbstractController {
 			String mobile = hp1 + hp2 + hp3;
 			
 			MemberVO member = new MemberVO();
-			member.setName(name);
-			member.setUserid(userid);
-			member.setPwd(pwd);
+			member.setUser_name(name);
+			member.setUser_id(userid);
+			member.setUser_pwd(pwd);
 			member.setEmail(email);
 			member.setMobile(mobile);
 			member.setBirthday(birthday);
