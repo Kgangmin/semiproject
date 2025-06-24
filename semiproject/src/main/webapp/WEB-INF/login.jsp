@@ -40,7 +40,7 @@
               <a href="#" class="text-decoration-none small">비밀번호 찾기</a>
             </div>
             <!-- 로그인 버튼 -->          
-              <button type="button" id="btnSubmit" class="btn btn-primary btn-lg btn-block" onclick="javascript:goLogin()">로그인</button>
+              <button type="button" id="btnSubmit" class="btn btn-primary btn-lg btn-block" onclick="javascript:goLogin()" >로그인</button>
               <button type="submit" id="goRegister" class="btn btn-secondary btn-lg btn-block" href="#">회원가입</button>          
           </form>
         </div>
