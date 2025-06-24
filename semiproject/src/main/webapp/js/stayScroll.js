@@ -36,9 +36,9 @@ $(function(){
                       평점: ${s.stay_score.toFixed(1)}  
                       · 조회수: ${s.views}
                     </p>
-                    <a href="${ctxPath}/stayDetail.up?stay_no=${s.stay_no}"
+                    <a href="${ctxPath}/stayDetail.hb?stay_no=${s.stay_no}"
                        class="btn btn-sm btn-primary">상세보기</a>
-					<a href="${ctxPath}/stayDetail.up?stay_no=${s.stay_no}"
+					<a href="${ctxPath}/stayDetail.hb?stay_no=${s.stay_no}"
 					   class="stretched-link"></a>
                   </div>
                 </div>
