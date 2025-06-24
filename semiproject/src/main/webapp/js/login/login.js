@@ -1,4 +1,4 @@
-.
+
 $(function(){
    
    $('button#btnSubmit').click(()=>{
