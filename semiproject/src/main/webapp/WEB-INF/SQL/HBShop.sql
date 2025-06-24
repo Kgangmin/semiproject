@@ -800,6 +800,8 @@ rollback;
 desc tbl_room;
 select * from tbl_stay order by TO_NUMBER(stay_no);
 
+
+
 insert into tbl_room values('1-1', '1', 'twin', '롯데호텔서울_room1.png', 1053004, '기준2인/최대2인 싱글베드2개 조식 아웃도어뷰');
 insert into tbl_room values('1-2', '1', 'standard', '롯데호텔서울_room2.png', 2170000, '기준2인/최대2인 더블베드1개 조식 아웃도어뷰');
 insert into tbl_room values('1-3', '1', 'deluxe', '롯데호텔서울_room3.png', 4837858, '기준2인/최대3인 킹베드1개 조식 아웃도어뷰 객실 크기 127m²');
@@ -879,14 +881,329 @@ insert into tbl_room values('20-1', '20', 'standard', '속초리츠호텔_room1.
 insert into tbl_room values('20-2', '20', 'sweet', '속초리츠호텔_room2.png', 65000, '기준2인/최대3인 킹베드1개 조식 시티뷰 스마트TV');
 insert into tbl_room values('20-3', '20', 'deluxe', '속초리츠호텔_room3.png', 80000, '기준2인/최대3인 퀸베드1개 조식 오션뷰 스마트TV');
 
-insert into tbl_room values('21-1', '21', 'standard', '강릉 블루스테이_room1.png', 105000, '기준2인/최대2인 더블베드1개 오션뷰 발코니/테라스');
-insert into tbl_room values('21-2', '21', 'sweet', '강릉 블루스테이_room2.png', 130000, '기준2인/최대3인 킹베드1개 오션뷰 욕조 발코니/테라스');
-insert into tbl_room values('21-3', '21', 'twin', '강릉 블루스테이_room3.png', 160000, '기준3인/최대3인 싱블베드1개 더블베드1개 오션뷰 욕조 발코니/테라스');
+--------------------------------------------------------------------------------
 
-insert into tbl_room values('22-1', '22', 'standard', '강릉 풀빌라 케이_room1.png', 89000, '기준2인/최대2인 퀸베드1개 오션뷰');
-insert into tbl_room values('22-2', '22', 'sweet', '강릉 풀빌라 케이_room2.png', 109000, '기준2인/최대3인 퀸베드1개 월풀욕조');
-insert into tbl_room values('22-3', '22', 'twin', '강릉 풀빌라 케이_room3.png', 219000, '기준2인/최대6인 퀸베드2개 통창오션뷰 수영장 사전문의必');
+insert into tbl_room values('21-1', '21', '201', '강릉 블루스테이_room1.png', 105000, '기준2인/최대2인 더블베드1개 오션뷰 발코니/테라스');
+insert into tbl_room values('21-2', '21', '202', '강릉 블루스테이_room2.png', 130000, '기준2인/최대3인 킹베드1개 오션뷰 욕조 발코니/테라스');
+insert into tbl_room values('21-3', '21', '203', '강릉 블루스테이_room3.png', 160000, '기준3인/최대3인 싱블베드1개 더블베드1개 오션뷰 욕조 발코니/테라스');
 
-insert into tbl_room values('23-1', '23', 'standard', '강릉 탑 스파 펜션_room1.png', 89000, '기준2인/최대2인 퀸베드1개 오션뷰');
-insert into tbl_room values('23-2', '23', 'sweet', '강릉 탑 스파 펜션_room2.png', 109000, '기준2인/최대3인 퀸베드1개 월풀욕조');
-insert into tbl_room values('23-3', '23', 'twin', '강릉 탑 스파 펜션_room3.png', 219000, '기준2인/최대6인 퀸베드2개 통창오션뷰 수영장 사전문의必');
+insert into tbl_room values('22-1', '22', '301', '강릉 풀빌라 케이_room1.png', 89000, '기준2인/최대2인 퀸베드1개 오션뷰');
+insert into tbl_room values('22-2', '22', '302', '강릉 풀빌라 케이_room2.png', 109000, '기준2인/최대3인 퀸베드1개 월풀욕조');
+insert into tbl_room values('22-3', '22', '203', '강릉 풀빌라 케이_room3.png', 219000, '기준2인/최대6인 퀸베드2개 통창오션뷰 수영장 사전문의必');
+
+insert into tbl_room values('23-1', '23', '301', '강릉 탑 스파 펜션_room1.png', 56000, '기준2인/최대3인 더블베드1개 오션뷰 취사시설');
+insert into tbl_room values('23-2', '23', '303', '강릉 탑 스파 펜션_room2.png', 65500, '기준2인/최대3인 퀸베드1개 오션뷰 바베큐');
+insert into tbl_room values('23-3', '23', '307', '강릉 탑 스파 펜션_room3.png', 75000, '기준2인/최대4인 퀸베드1개 오션뷰 월풀욕조');
+
+insert into tbl_room values('24-1', '24', '201', '니나랑 스파 펜션_room1.png', 79000, '기준2인/최대3인 더블베드1개 오션뷰 취사시설 스파');
+insert into tbl_room values('24-2', '24', '303', '니나랑 스파 펜션_room2.png', 89000, '기준2인/최대4인 퀸베드1개 오션뷰 스파 복층');
+insert into tbl_room values('24-3', '24', '401', '니나랑 스파 펜션_room3.png', 149000, '기준4인/최대6인 퀸베드1개 오션뷰 취사시설 스파 온돌방');
+
+insert into tbl_room values('25-1', '25', '70평객실', '산토리니 펜션_room1.png', 425600, '기준4인/최대8인 퀸베드3개 오션뷰 수영장 바베큐');
+
+insert into tbl_room values('26-1', '26', '13평원룸형', '애월 한옥 펜션_room1.png', 85500, '기준2인/최대4인 더블베드1개 취사시설 엑스트라베드 최대1개');
+insert into tbl_room values('26-2', '26', '13평원룸형', '애월 한옥 펜션_room2.png', 85500, '기준2인/최대4인 더블베드1개 취사시설 엑스트라베드 최대1개');
+
+insert into tbl_room values('27-1', '27', '로즈마리', '힐링 포레스트 펜션_room1.png', 170000, '기준4인/최대6인 킹베드1개 바베큐 온돌방 2층테라스');
+insert into tbl_room values('27-2', '27', '아이리스', '힐링 포레스트 펜션_room2.png', 170000, '기준4인/최대6인 킹베드1개 바베큐 온돌방 테라스');
+insert into tbl_room values('27-3', '27', '힐링숲1호', '힐링 포레스트 펜션_room3.png', 220000, '기준4인/최대10인 킹베드2개 바베큐 온돌방2개 테라스 안마기');
+
+insert into tbl_room values('28-1', '28', '국화', '해뜨는 숲속 펜션_room1.png', 58000, '기준2인/최대6인 더블베드1개 바베큐 복층');
+insert into tbl_room values('28-2', '28', '대나무', '해뜨는 숲속 펜션_room2.png', 110000, '기준4인/최대8인 더블베드1개 바베큐 25평원룸형 테라스');
+insert into tbl_room values('28-3', '28', '매화', '해뜨는 숲속 펜션_room3.png', 170000, '기준6인/최대12인 더블베드2개 바베큐 30평거실+방 테라스 화장실2개');
+
+insert into tbl_room values('29-1', '29', 'ResortA207', '스테이 디앤디 펜션_room1.png', 85000, '기준2인/최대6인 더블베드1개 오션뷰 바베큐 복층형');
+insert into tbl_room values('29-2', '29', 'ResortA205', '스테이 디앤디 펜션_room2.png', 105000, '기준3인/최대4인 더블베드1개 싱글베드1개 오션뷰 바베큐 원룸형 월풀욕조');
+insert into tbl_room values('29-3', '29', '4-Villa독채', '스테이 디앤디 펜션_room3.png', 3500000, '기준2인/최대6인 더블베드2개 오션뷰 바베큐 복층형독채 단독수영장 월풀욕조 스파배스');
+
+insert into tbl_room values('30-1', '30', '05가파도', '그바다에 머물다 펜션_room1.png', 130000, '기준4인/최대5인 퀸베드1개 취사시설 복층형');
+insert into tbl_room values('30-2', '30', '07비양도', '그바다에 머물다 펜션_room2.png', 210000, '기준6인/최대7인 퀸베드1개 취사시설 복층형 온돌방1개');
+
+--------------------------------------------------------------------------------
+
+insert into tbl_room values('31-1', '31', '201', 'Zzzip 게스트하우스_room1.png', 40000, '4인실 공용욕실');
+insert into tbl_room values('31-2', '31', '202', 'Zzzip 게스트하우스_room2.png', 50000, '2인실 개인욕실');
+
+insert into tbl_room values('32-1', '32', '301', '백패커스 인사이드_room1.png', 30000, '4인실');
+insert into tbl_room values('32-2', '32', '302', '백패커스 인사이드_room2.png', 45000, '2인실 PC');
+insert into tbl_room values('32-3', '32', '304', '백패커스 인사이드_room3.png', 70000, '1인실');
+
+insert into tbl_room values('33-1', '33', '도미토리', '펀웨이브게스트하우스_room1.png', 23000, '6인실');
+insert into tbl_room values('33-2', '33', '2인실', '펀웨이브게스트하우스_room2.png', 49000, '2인실');
+insert into tbl_room values('33-3', '33', '1인실', '펀웨이브게스트하우스_room3.png', 65000, '1인실');
+
+insert into tbl_room values('34-1', '34', '도미토리', '보령 어썸 게스트하우스_room1.png', 16000, '6인실/최대8인');
+insert into tbl_room values('34-2', '34', '커플룸', '보령 어썸 게스트하우스_room2.png', 42000, '2인실 퀸베드1개');
+
+insert into tbl_room values('35-1', '35', '도미토리', '이태원 서울큐브 게스트하우스_room1.png', 35000, '4인실');
+insert into tbl_room values('35-2', '35', '더블룸', '이태원 서울큐브 게스트하우스_room2.png', 95000, '2인실');
+insert into tbl_room values('35-3', '35', '싱글룸', '이태원 서울큐브 게스트하우스_room3.png', 130000, '1인실');
+
+insert into tbl_room values('36-1', '36', '달콤한하루', '전주 유정 게스트하우스_room1.png', 35000, '기준2인/최대2인 더블베드1개');
+insert into tbl_room values('36-2', '36', '꿈같은하루', '전주 유정 게스트하우스_room2.png', 45000, '기준2인/최대2인 복층형');
+insert into tbl_room values('36-3', '36', '완벽한하루', '전주 유정 게스트하우스_room3.png', 80000, '기준4인/최대6인 더블베드1개 복층형');
+
+insert into tbl_room values('37-1', '37', '도미토리', '제주 게토 게스트하우스파티_room1.png', 25000, '6인실');
+insert into tbl_room values('37-2', '37', '파티션', '제주 게토 게스트하우스파티_room2.png', 30000, '4인실');
+
+insert into tbl_room values('38-1', '38', '4인도미토리', '속초 하루 게스트하우스_room1.png', 20000, '4인실');
+insert into tbl_room values('38-2', '38', '2인도미토리', '속초 하루 게스트하우스_room2.png', 25000, '2인실');
+insert into tbl_room values('38-3', '38', '특실', '속초 하루 게스트하우스_room3.png', 50000, '기준2인/최대2인 퀸베드1개 테라스객실 희망시 문의');
+
+insert into tbl_room values('39-1', '39', '2인실', '제주 반집 게스트하우스_room1.png', 40000, '2인실 취사시설');
+insert into tbl_room values('39-2', '39', '4인실', '제주 반집 게스트하우스_room2.png', 60000, '4인실 취사시설');
+
+insert into tbl_room values('40-1', '40', '5인패밀리', '서울숲 스테이_room1.png', 22000, '5인실 공용욕실');
+insert into tbl_room values('40-2', '40', '2인트윈', '서울숲 스테이_room2.png', 29500, '2인실 공용욕실');
+insert into tbl_room values('40-3', '40', '더블룸', '서울숲 스테이_room3.png', 65000, '기준2인/최대2인 더블베드1개 개별욕실');
+
+select * from tbl_room order by TO_NUMBER(fk_stay_no);
+
+commit;
+
+--------------------------------------------------------------------------------
+
+select * from tab;
+
+desc tbl_stay_extraimg;
+
+select * from tbl_stay order by to_number(stay_no);
+
+insert into tbl_stay_extraimg values('1_extraimg1', '1', '롯데호텔서울_extraimg1.png');
+insert into tbl_stay_extraimg values('1_extraimg2', '1', '롯데호텔서울_extraimg2.png');
+insert into tbl_stay_extraimg values('1_extraimg3', '1', '롯데호텔서울_extraimg3.png');
+
+insert into tbl_stay_extraimg values('2_extraimg1', '2', '그랜드하얏트서울_extraimg1.png');
+insert into tbl_stay_extraimg values('2_extraimg2', '2', '그랜드하얏트서울_extraimg2.png');
+insert into tbl_stay_extraimg values('2_extraimg3', '2', '그랜드하얏트서울_extraimg3.png');
+
+insert into tbl_stay_extraimg values('3_extraimg1', '3', '더플라자서울_extraimg1.png');
+insert into tbl_stay_extraimg values('3_extraimg2', '3', '더플라자서울_extraimg2.png');
+insert into tbl_stay_extraimg values('3_extraimg3', '3', '더플라자서울_extraimg3.png');
+
+insert into tbl_stay_extraimg values('4_extraimg1', '4', '코리아나호텔_extraimg1.png');
+insert into tbl_stay_extraimg values('4_extraimg2', '4', '코리아나호텔_extraimg2.png');
+insert into tbl_stay_extraimg values('4_extraimg3', '4', '코리아나호텔_extraimg3.png');
+
+insert into tbl_stay_extraimg values('5_extraimg1', '5', '콘래드서울_extraimg1.png');
+insert into tbl_stay_extraimg values('5_extraimg2', '5', '콘래드서울_extraimg2.png');
+insert into tbl_stay_extraimg values('5_extraimg3', '5', '콘래드서울_extraimg3.png');
+
+insert into tbl_stay_extraimg values('6_extraimg1', '6', '시그니엘서울_extraimg1.png');
+insert into tbl_stay_extraimg values('6_extraimg2', '6', '시그니엘서울_extraimg2.png');
+insert into tbl_stay_extraimg values('6_extraimg3', '6', '시그니엘서울_extraimg3.png');
+
+insert into tbl_stay_extraimg values('7_extraimg1', '7', '세인트존스호텔_extraimg1.png');
+insert into tbl_stay_extraimg values('7_extraimg2', '7', '세인트존스호텔_extraimg2.png');
+insert into tbl_stay_extraimg values('7_extraimg3', '7', '세인트존스호텔_extraimg3.png');
+
+insert into tbl_stay_extraimg values('8_extraimg1', '8', '파라다이스호텔부산_extraimg1.png');
+insert into tbl_stay_extraimg values('8_extraimg2', '8', '파라다이스호텔부산_extraimg2.png');
+insert into tbl_stay_extraimg values('8_extraimg3', '8', '파라다이스호텔부산_extraimg3.png');
+
+insert into tbl_stay_extraimg values('9_extraimg1', '9', '그랜드인터컨티넨탈서울파르나스_extraimg1.png');
+insert into tbl_stay_extraimg values('9_extraimg2', '9', '그랜드인터컨티넨탈서울파르나스_extraimg2.png');
+insert into tbl_stay_extraimg values('9_extraimg3', '9', '그랜드인터컨티넨탈서울파르나스_extraimg3.png');
+
+insert into tbl_stay_extraimg values('10_extraimg1', '10', '신라호텔제주_extraimg1.png');
+insert into tbl_stay_extraimg values('10_extraimg2', '10', '신라호텔제주_extraimg2.png');
+insert into tbl_stay_extraimg values('10_extraimg3', '10', '신라호텔제주_extraimg3.png');
+
+--------------------------------------------------------------------------------
+
+insert into tbl_stay_extraimg values('11_extraimg1', '11', '선샤인호텔_extraimg1.png');
+insert into tbl_stay_extraimg values('11_extraimg2', '11', '선샤인호텔_extraimg2.png');
+insert into tbl_stay_extraimg values('11_extraimg3', '11', '선샤인호텔_extraimg3.png');
+
+insert into tbl_stay_extraimg values('12_extraimg1', '12', '수유CAFE72_extraimg1.png');
+insert into tbl_stay_extraimg values('12_extraimg2', '12', '수유CAFE72_extraimg2.png');
+insert into tbl_stay_extraimg values('12_extraimg3', '12', '수유CAFE72_extraimg3.png');
+
+insert into tbl_stay_extraimg values('13_extraimg1', '13', '독산3S호텔_extraimg1.png');
+insert into tbl_stay_extraimg values('13_extraimg2', '13', '독산3S호텔_extraimg2.png');
+
+insert into tbl_stay_extraimg values('14_extraimg1', '14', '호텔월하여관_extraimg1.png');
+insert into tbl_stay_extraimg values('14_extraimg2', '14', '호텔월하여관_extraimg2.png');
+insert into tbl_stay_extraimg values('14_extraimg3', '14', '호텔월하여관_extraimg3.png');
+
+insert into tbl_stay_extraimg values('15_extraimg1', '15', '신촌아늑호텔_extraimg1.png');
+insert into tbl_stay_extraimg values('15_extraimg2', '15', '신촌아늑호텔_extraimg2.png');
+insert into tbl_stay_extraimg values('15_extraimg3', '15', '신촌아늑호텔_extraimg3.png');
+
+insert into tbl_stay_extraimg values('16_extraimg1', '16', '해운대아크블루_extraimg1.png');
+insert into tbl_stay_extraimg values('16_extraimg2', '16', '해운대아크블루_extraimg2.png');
+insert into tbl_stay_extraimg values('16_extraimg3', '16', '해운대아크블루_extraimg3.png');
+
+insert into tbl_stay_extraimg values('17_extraimg1', '17', '광안리YAM_extraimg1.png');
+insert into tbl_stay_extraimg values('17_extraimg2', '17', '광안리YAM_extraimg2.png');
+
+insert into tbl_stay_extraimg values('18_extraimg1', '18', '호텔하운드_extraimg1.png');
+insert into tbl_stay_extraimg values('18_extraimg2', '18', '호텔하운드_extraimg2.png');
+insert into tbl_stay_extraimg values('18_extraimg3', '18', '호텔하운드_extraimg3.png');
+
+insert into tbl_stay_extraimg values('19_extraimg1', '19', 'page9_extraimg1.png');
+insert into tbl_stay_extraimg values('19_extraimg2', '19', 'page9_extraimg2.png');
+insert into tbl_stay_extraimg values('19_extraimg3', '19', 'page9_extraimg3.png');
+
+insert into tbl_stay_extraimg values('20_extraimg1', '20', '속초리츠호텔_extraimg1.png');
+insert into tbl_stay_extraimg values('20_extraimg2', '20', '속초리츠호텔_extraimg2.png');
+insert into tbl_stay_extraimg values('20_extraimg3', '20', '속초리츠호텔_extraimg3.png');
+
+--------------------------------------------------------------------------------
+
+insert into tbl_stay_extraimg values('21_extraimg1', '21', '강릉 블루스테이_extraimg1.png');
+insert into tbl_stay_extraimg values('21_extraimg2', '21', '강릉 블루스테이_extraimg2.png');
+
+insert into tbl_stay_extraimg values('22_extraimg1', '22', '강릉 풀빌라 케이_extraimg1.png');
+insert into tbl_stay_extraimg values('22_extraimg2', '22', '강릉 풀빌라 케이_extraimg2.png');
+
+insert into tbl_stay_extraimg values('23_extraimg1', '23', '강릉 탑 스파 펜션_extraimg1.png');
+
+insert into tbl_stay_extraimg values('24_extraimg1', '24', '니나랑 스파 펜션_extraimg1.png');
+
+insert into tbl_stay_extraimg values('25_extraimg1', '25', '산토리니 펜션_extraimg1.png');
+insert into tbl_stay_extraimg values('25_extraimg2', '25', '산토리니 펜션_extraimg2.png');
+
+insert into tbl_stay_extraimg values('26_extraimg1', '26', '애월 한옥 펜션_extraimg1.png');
+insert into tbl_stay_extraimg values('26_extraimg2', '26', '애월 한옥 펜션_extraimg2.png');
+
+insert into tbl_stay_extraimg values('27_extraimg1', '27', '힐링 포레스트 펜션_extraimg1.png');
+insert into tbl_stay_extraimg values('27_extraimg2', '27', '힐링 포레스트 펜션_extraimg2.png');
+insert into tbl_stay_extraimg values('27_extraimg3', '27', '힐링 포레스트 펜션_extraimg3.png');
+
+insert into tbl_stay_extraimg values('28_extraimg1', '28', '해뜨는 숲속 펜션_extraimg1.png');
+insert into tbl_stay_extraimg values('28_extraimg2', '28', '해뜨는 숲속 펜션_extraimg2.png');
+insert into tbl_stay_extraimg values('28_extraimg3', '28', '해뜨는 숲속 펜션_extraimg3.png');
+
+insert into tbl_stay_extraimg values('29_extraimg1', '29', '스테이 디앤디 펜션_extraimg1.png');
+insert into tbl_stay_extraimg values('29_extraimg2', '29', '스테이 디앤디 펜션_extraimg2.png');
+insert into tbl_stay_extraimg values('29_extraimg3', '29', '스테이 디앤디 펜션_extraimg3.png');
+
+insert into tbl_stay_extraimg values('30_extraimg1', '30', '그바다에 머물다 펜션_extraimg1.png');
+
+--------------------------------------------------------------------------------
+
+insert into tbl_stay_extraimg values('31_extraimg1', '31', 'Zzzip 게스트하우스_extraimg1.png');
+insert into tbl_stay_extraimg values('31_extraimg2', '31', 'Zzzip 게스트하우스_extraimg2.png');
+
+insert into tbl_stay_extraimg values('32_extraimg1', '32', '백팩커스 인사이드_extraimg1.png');
+insert into tbl_stay_extraimg values('32_extraimg2', '32', '백팩커스 인사이드_extraimg2.png');
+
+insert into tbl_stay_extraimg values('33_extraimg1', '33', '펀웨이브게스트하우스_extraimg1.png');
+insert into tbl_stay_extraimg values('33_extraimg2', '33', '펀웨이브게스트하우스_extraimg2.png');
+
+insert into tbl_stay_extraimg values('34_extraimg1', '34', '보령 어썸 게스트하우스_extraimg1.png');
+insert into tbl_stay_extraimg values('34_extraimg2', '34', '보령 어썸 게스트하우스_extraimg2.png');
+
+insert into tbl_stay_extraimg values('35_extraimg1', '35', '이태원 서울큐브 게스트하우스_extraimg1.png');
+insert into tbl_stay_extraimg values('35_extraimg2', '35', '이태원 서울큐브 게스트하우스_extraimg2.png');
+insert into tbl_stay_extraimg values('35_extraimg3', '35', '이태원 서울큐브 게스트하우스_extraimg3.png');
+
+insert into tbl_stay_extraimg values('36_extraimg1', '36', '전주 유정 게스트하우스_extraimg1.png');
+insert into tbl_stay_extraimg values('36_extraimg2', '36', '전주 유정 게스트하우스_extraimg2.png');
+insert into tbl_stay_extraimg values('36_extraimg3', '36', '전주 유정 게스트하우스_extraimg3.png');
+insert into tbl_stay_extraimg values('36_extraimg4', '36', '전주 유정 게스트하우스_extraimg4.png');
+insert into tbl_stay_extraimg values('36_extraimg5', '36', '전주 유정 게스트하우스_extraimg5.png');
+
+insert into tbl_stay_extraimg values('37_extraimg1', '37', '제주 게토 게스트하우스파티_extraimg1.png');
+insert into tbl_stay_extraimg values('37_extraimg2', '37', '제주 게토 게스트하우스파티_extraimg2.png');
+insert into tbl_stay_extraimg values('37_extraimg3', '37', '제주 게토 게스트하우스파티_extraimg3.png');
+insert into tbl_stay_extraimg values('37_extraimg4', '37', '제주 게토 게스트하우스파티_extraimg4.png');
+insert into tbl_stay_extraimg values('37_extraimg5', '37', '제주 게토 게스트하우스파티_extraimg5.png');
+insert into tbl_stay_extraimg values('37_extraimg6', '37', '제주 게토 게스트하우스파티_extraimg6.png');
+
+insert into tbl_stay_extraimg values('38_extraimg1', '38', '속초 하루 게스트하우스_extraimg1.png');
+insert into tbl_stay_extraimg values('38_extraimg2', '38', '속초 하루 게스트하우스_extraimg2.png');
+insert into tbl_stay_extraimg values('38_extraimg3', '38', '속초 하루 게스트하우스_extraimg3.png');
+insert into tbl_stay_extraimg values('38_extraimg4', '38', '속초 하루 게스트하우스_extraimg4.png');
+insert into tbl_stay_extraimg values('38_extraimg5', '38', '속초 하루 게스트하우스_extraimg5.png');
+insert into tbl_stay_extraimg values('38_extraimg6', '38', '속초 하루 게스트하우스_extraimg6.png');
+
+insert into tbl_stay_extraimg values('39_extraimg1', '39', '제주 반집 게스트하우스_extraimg1.png');
+insert into tbl_stay_extraimg values('39_extraimg2', '39', '제주 반집 게스트하우스_extraimg2.png');
+insert into tbl_stay_extraimg values('39_extraimg3', '39', '제주 반집 게스트하우스_extraimg3.png');
+insert into tbl_stay_extraimg values('39_extraimg4', '39', '제주 반집 게스트하우스_extraimg4.png');
+
+insert into tbl_stay_extraimg values('40_extraimg1', '40', '서울숲 스테이_extraimg1.png');
+insert into tbl_stay_extraimg values('40_extraimg2', '40', '서울숲 스테이_extraimg2.png');
+insert into tbl_stay_extraimg values('40_extraimg3', '40', '서울숲 스테이_extraimg3.png');
+insert into tbl_stay_extraimg values('40_extraimg4', '40', '서울숲 스테이_extraimg4.png');
+insert into tbl_stay_extraimg values('40_extraimg5', '40', '서울숲 스테이_extraimg5.png');
+insert into tbl_stay_extraimg values('40_extraimg6', '40', '서울숲 스테이_extraimg6.png');
+
+select * from tbl_stay_extraimg order by to_number(fk_stay_no);
+commit;
+--------------------------------------------------------------------------------
+
+select * from tbl_room order by to_number(fk_stay_no);
+select * from tbl_room_extraimg order by fk_room_no;
+
+desc tbl_room_extraimg;
+
+insert into tbl_room_extraimg values('1-1_extraimg1', '1-1', '롯데호텔서울_room1_extraimg1.png');
+insert into tbl_room_extraimg values('1-1_extraimg2', '1-1', '롯데호텔서울_room1_extraimg2.png');
+
+insert into tbl_room_extraimg values('1-2_extraimg1', '1-2', '롯데호텔서울_room2_extraimg1.png');
+insert into tbl_room_extraimg values('1-2_extraimg2', '1-2', '롯데호텔서울_room2_extraimg2.png');
+
+insert into tbl_room_extraimg values('1-3_extraimg1', '1-3', '롯데호텔서울_room3_extraimg1.png');
+insert into tbl_room_extraimg values('1-3_extraimg2', '1-3', '롯데호텔서울_room3_extraimg2.png');
+
+insert into tbl_room_extraimg values('2-1_extraimg1', '2-1', '그랜드하얏트서울_room1_extraimg1.png');
+insert into tbl_room_extraimg values('2-1_extraimg2', '2-1', '그랜드하얏트서울_room1_extraimg2.png');
+insert into tbl_room_extraimg values('2-1_extraimg3', '2-1', '그랜드하얏트서울_room1_extraimg3.png');
+
+insert into tbl_room_extraimg values('2-2_extraimg1', '2-2', '그랜드하얏트서울_room2_extraimg1.png');
+insert into tbl_room_extraimg values('2-2_extraimg2', '2-2', '그랜드하얏트서울_room2_extraimg2.png');
+insert into tbl_room_extraimg values('2-2_extraimg3', '2-2', '그랜드하얏트서울_room2_extraimg3.png');
+
+insert into tbl_room_extraimg values('2-3_extraimg1', '2-3', '그랜드하얏트서울_room3_extraimg1.png');
+insert into tbl_room_extraimg values('2-3_extraimg2', '2-3', '그랜드하얏트서울_room3_extraimg2.png');
+insert into tbl_room_extraimg values('2-3_extraimg3', '2-3', '그랜드하얏트서울_room3_extraimg3.png');
+
+insert into tbl_room_extraimg values('3-1_extraimg1', '3-1', '더플라자서울_room1_extraimg1.png');
+insert into tbl_room_extraimg values('3-1_extraimg2', '3-1', '더플라자서울_room1_extraimg2.png');
+insert into tbl_room_extraimg values('3-1_extraimg3', '3-1', '더플라자서울_room1_extraimg3.png');
+
+insert into tbl_room_extraimg values('3-2_extraimg1', '3-2', '더플라자서울_room2_extraimg1.png');
+insert into tbl_room_extraimg values('3-2_extraimg2', '3-2', '더플라자서울_room2_extraimg2.png');
+insert into tbl_room_extraimg values('3-2_extraimg3', '3-2', '더플라자서울_room2_extraimg3.png');
+
+insert into tbl_room_extraimg values('3-3_extraimg1', '3-3', '더플라자서울_room3_extraimg1.png');
+insert into tbl_room_extraimg values('3-3_extraimg2', '3-3', '더플라자서울_room3_extraimg2.png');
+
+insert into tbl_room_extraimg values('4-1_extraimg1', '4-1', '코리아나호텔_room1_extraimg1.png');
+insert into tbl_room_extraimg values('4-1_extraimg2', '4-1', '코리아나호텔_room1_extraimg2.png');
+
+insert into tbl_room_extraimg values('4-2_extraimg1', '4-2', '코리아나호텔_room2_extraimg1.png');
+insert into tbl_room_extraimg values('4-2_extraimg2', '4-2', '코리아나호텔_room2_extraimg2.png');
+
+insert into tbl_room_extraimg values('4-3_extraimg1', '4-3', '코리아나호텔_room3_extraimg1.png');
+insert into tbl_room_extraimg values('4-3_extraimg2', '4-3', '코리아나호텔_room3_extraimg2.png');
+
+insert into tbl_room_extraimg values('5-1_extraimg1', '5-1', '콘래드서울_room1_extraimg1.png');
+insert into tbl_room_extraimg values('5-1_extraimg2', '5-1', '콘래드서울_room1_extraimg2.png');
+
+insert into tbl_room_extraimg values('5-2_extraimg1', '5-2', '콘래드서울_room2_extraimg1.png');
+insert into tbl_room_extraimg values('5-2_extraimg2', '5-2', '콘래드서울_room2_extraimg2.png');
+
+insert into tbl_room_extraimg values('6-1_extraimg1', '6-1', '시그니엘서울_room1_extraimg1.png');
+insert into tbl_room_extraimg values('6-1_extraimg2', '6-1', '시그니엘서울_room1_extraimg2.png');
+
+insert into tbl_room_extraimg values('6-2_extraimg1', '6-2', '시그니엘서울_room2_extraimg1.png');
+insert into tbl_room_extraimg values('6-2_extraimg2', '6-2', '시그니엘서울_room2_extraimg2.png');
+
+insert into tbl_room_extraimg values('6-3_extraimg1', '6-3', '시그니엘서울_room3_extraimg1.png');
+insert into tbl_room_extraimg values('6-3_extraimg2', '6-3', '시그니엘서울_room3_extraimg2.png');
+
+insert into tbl_room_extraimg values('7-1_extraimg1', '7-1', '세인트존스호텔_room1_extraimg1.png');
+insert into tbl_room_extraimg values('7-1_extraimg2', '7-1', '세인트존스호텔_room1_extraimg2.png');
+insert into tbl_room_extraimg values('7-1_extraimg3', '7-1', '세인트존스호텔_room1_extraimg3.png');
+
+insert into tbl_room_extraimg values('7-2_extraimg1', '7-2', '세인트존스호텔_room2_extraimg1.png');
+insert into tbl_room_extraimg values('7-2_extraimg2', '7-2', '세인트존스호텔_room2_extraimg2.png');
+insert into tbl_room_extraimg values('7-2_extraimg3', '7-2', '세인트존스호텔_room2_extraimg3.png');
+
+insert into tbl_room_extraimg values('7-3_extraimg1', '7-3', '세인트존스호텔_room3_extraimg1.png');
+insert into tbl_room_extraimg values('7-3_extraimg2', '7-3', '세인트존스호텔_room3_extraimg2.png');
+insert into tbl_room_extraimg values('7-3_extraimg3', '7-3', '세인트존스호텔_room3_extraimg3.png');
