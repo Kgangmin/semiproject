@@ -6,8 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -20,142 +18,239 @@ import util.security.AES256;
 import util.security.SecretMyKey;
 import util.security.Sha256;
 
+
 public class MemberDAO_imple implements MemberDAO {
 
-	private DataSource ds;  // DataSource ds 는 아파치톰캣이 제공하는 DBCP(DB Connection Pool)이다. 
-	private Connection conn;
-	private PreparedStatement pstmt;
-	private ResultSet rs;
-	
-	private AES256 aes;
-	
-	// 생성자
-	public MemberDAO_imple() {
-		
-		try {
-			Context initContext = new InitialContext();
-		    Context envContext  = (Context)initContext.lookup("java:/comp/env");
-		    ds = (DataSource)envContext.lookup("jdbc/semiproject");
-		    
-		    aes = new AES256(SecretMyKey.KEY);
-		    // SecretMyKey.KEY 은 우리가 만든 암호화/복호화 키이다.
-		    
-		} catch(NamingException e) {
-			e.printStackTrace();
-		} catch(UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	// 사용한 자원을 반납하는 close() 메소드 생성하기
-	private void close() {
-		try {
-			if(rs    != null) {rs.close();	  rs=null;}
-			if(pstmt != null) {pstmt.close(); pstmt=null;}
-			if(conn  != null) {conn.close();  conn=null;}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-	}// end of private void close()---------------
+   private DataSource ds;  // DataSource ds 는 아파치톰캣이 제공하는 DBCP(DB Connection Pool)이다. 
+   private Connection conn;
+   private PreparedStatement pstmt;
+   private ResultSet rs;
+   
+   private AES256 aes;
+   
+   // 생성자
+   public MemberDAO_imple() {
+      
+      try {
+         Context initContext = new InitialContext();
+          Context envContext  = (Context)initContext.lookup("java:/comp/env");
+          ds = (DataSource)envContext.lookup("jdbc/semiproject");
+          
+          aes = new AES256(SecretMyKey.KEY);
+          // SecretMyKey.KEY 은 우리가 만든 암호화/복호화 키이다.
+          
+      } catch(NamingException e) {
+         e.printStackTrace();
+      } catch(UnsupportedEncodingException e) {
+         e.printStackTrace();
+      }
+   }
+   
+   
+   // 사용한 자원을 반납하는 close() 메소드 생성하기
+   private void close() {
+      try {
+         if(rs    != null) {rs.close();     rs=null;}
+         if(pstmt != null) {pstmt.close(); pstmt=null;}
+         if(conn  != null) {conn.close();  conn=null;}
+      } catch(SQLException e) {
+         e.printStackTrace();
+      }
+   }// end of private void close()---------------
 
-	// ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
+   // 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
+      @Override
+      public boolean emailDuplicateCheck(String email) throws SQLException {
+
+         boolean isExists = false;
+         
+         try {
+              conn = ds.getConnection();
+              
+              String sql = " select email "
+                         + " from tbl_member "
+                         + " where email = ? ";
+              
+              pstmt = conn.prepareStatement(sql);
+              pstmt.setString(1, aes.encrypt(email));
+              
+              rs = pstmt.executeQuery();
+              
+              isExists = rs.next(); // 행이 있으면 true  (중복된 email) 
+                                    // 행이 없으면 false (사용가능한 email) 
+            
+         } catch(GeneralSecurityException | UnsupportedEncodingException e) {
+              e.printStackTrace();
+         } finally {
+              close();
+         }
+         
+         return isExists;      
+      }// end of public boolean emailDuplicateCheck(String email) throws SQLException-------
+
+
+      
+      // 로그인 처리 
+      @Override
+      public MemberVO login(Map<String, String> paraMap) throws SQLException {
+         
+         MemberVO member = null;
+         
+         try {
+             conn = ds.getConnection();
+             
+             String sql = " SELECT user_id, user_name, point, register_date, "
+                      + "            pwdchangegap, is_active, email, mobile, lastlogingap "
+                      + " FROM "
+                      + "  ( "
+                      + "   SELECT user_id, user_name, point, register_date, "
+                      + "          TRUNC( months_between(sysdate, last_pwd_update) ) AS pwdchangegap, "
+                      + "          is_active, email, mobile "
+                      + "   FROM tbl_user "
+                      + "   WHERE is_withdrawn = 0 AND user_id = ? and user_pwd = ? "
+                      + " ) M "
+                      + " CROSS JOIN "
+                      + " ( "
+                      + "   SELECT TRUNC( months_between(sysdate, MAX(login_records)) ) AS lastlogingap "
+                      + "   FROM tbl_login_history "
+                      + "   WHERE fk_user_id = ? "
+                      + " ) H ";
+             
+             pstmt = conn.prepareStatement(sql);
+             
+             pstmt.setString(1, paraMap.get("user_id"));
+         //    pstmt.setString(2, paraMap.get("user_pwd"));
+             pstmt.setString(2, Sha256.encrypt(paraMap.get("user_pwd")));
+             pstmt.setString(3, paraMap.get("user_id"));
+             
+             rs = pstmt.executeQuery();
+             
+             if(rs.next()) {
+                
+                member = new MemberVO();
+                
+                member.setUser_id(rs.getString("user_id"));
+                member.setUser_name(rs.getString("user_name"));;
+                member.setPoint(rs.getInt("point"));
+                member.setRegister_date(rs.getString("setRegister_date"));
+          
+                if(rs.getInt("pwdchangegap") >= 3) {
+                   // 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 true
+                   // 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지나지 않았으면 false
+                   
+                   member.setRequirePwdChange(true); // 로그인시 암호를 변경해라는 alert 를 띄우도록 할 때 사용한다.
+                }
+                
+                member.setEmail(aes.decrypt(rs.getString("email")));
+                member.setMobile(aes.decrypt(rs.getString("mobile")));
+                
+                
+                // ==== 휴면이 아닌 회원만 tbl_login_history(로그인기록) 테이블에 insert 하기 시작 ==== // 
+                if( rs.getInt("lastlogingap") < 12 ) {
+                   sql = " insert into tbl_login_history(fk_userid, login_records, login_ip) "
+                       + " values(?, sysdate, ?) ";
+                   
+                   pstmt = conn.prepareStatement(sql);
+                   pstmt.setString(1, paraMap.get("user_id"));
+                   pstmt.setString(2, paraMap.get("login_ip"));
+                   
+                   pstmt.executeUpdate();
+                }
+               // ==== 휴면이 아닌 회원만 tbl_loginhistory(로그인기록) 테이블에 insert 하기 끝 ==== //
+                
+                else {
+                   // 마지막으로 로그인 한 날짜시간이 현재시각으로 부터 1년이 지났으면 휴면으로 지정 
+                   member.setIs_active("1");
+                   
+                   if(rs.getInt("is_active") == 0) {
+                       // === tbl_member 테이블의 idle 컬럼의 값을 1로 변경하기 === //
+                      sql = " update tbl_user set is_active = 1 "
+                          + " where user_id = ? ";
+                      
+                      pstmt = conn.prepareStatement(sql);
+                      pstmt.setString(1, paraMap.get("user_id"));
+                      
+                      pstmt.executeUpdate();
+                   }
+                   
+                }
+                
+             }// end of if(rs.next())---------------------------
+             
+            
+         } catch(GeneralSecurityException | UnsupportedEncodingException e) {
+            e.printStackTrace();
+         } finally {
+            close();
+         }
+         
+         return member;
+      }// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
+
+      
+   // ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
+   		@Override
+   		public boolean idDuplicateCheck(String userid) throws SQLException {
+   			
+   			boolean isExists = false;
+   			
+   			try {
+   				  conn = ds.getConnection();
+   				  
+   				  String sql = " select user_id "
+   				  		     + " from tbl_user "
+   				  		     + " where user_id = ? ";
+   				  
+   				  pstmt = conn.prepareStatement(sql);
+   				  pstmt.setString(1, userid);
+   				  
+   				  rs = pstmt.executeQuery();
+   				  
+   				  isExists = rs.next(); // 행이 있으면 true  (중복된 userid) 
+   				                        // 행이 없으면 false (사용가능한 userid) 
+   				
+   			} finally {
+   				close();
+   			}
+   			
+   			return isExists;
+   		}// end of public boolean idDuplicateCheck(String userid) throws SQLException------
+
+   	// 회원가입을 해주는 메소드 (tbl_member 테이블에 insert)
 		@Override
-		public boolean idDuplicateCheck(String userid) throws SQLException {
+		public int registerMember(MemberVO member) throws SQLException {
 			
-			boolean isExists = false;
+			int result = 0;
 			
 			try {
 				  conn = ds.getConnection();
-				  
-				  String sql = " select user_id "
-				  		     + " from tbl_user "
-				  		     + " where user_id = ? ";
-				  
-				  pstmt = conn.prepareStatement(sql);
-				  pstmt.setString(1, userid);
-				  
-				  rs = pstmt.executeQuery();
-				  
-				  isExists = rs.next(); // 행이 있으면 true  (중복된 userid) 
-				                        // 행이 없으면 false (사용가능한 userid) 
-				
-			} finally {
-				close();
-			}
-			
-			return isExists;
-		}// end of public boolean idDuplicateCheck(String userid) throws SQLException------
-		
-		
-	// 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
-		@Override
-		public boolean emailDuplicateCheck(String email) throws SQLException {
-
-			boolean isExists = false;
-			
-			try {
-				  conn = ds.getConnection();
-				  
-				  String sql = " select email "
-				  		     + " from tbl_user "
-				  		     + " where email = ? ";
+				 
+				  String sql = " insert into tbl_user(user_name, user_id, user_pwd, mobile, email, birthday, fk_grade_no) " 
+				  		     + " values(?, ?, ?, ?, ?, to_date(?, 'yyyy-mm-dd'), ? )";
 				  
 				  pstmt = conn.prepareStatement(sql);
-				  pstmt.setString(1, aes.encrypt(email));
 				  
-				  rs = pstmt.executeQuery();
+				  pstmt.setString(1, member.getUser_name());
+				  pstmt.setString(2, member.getUser_id());
+				  pstmt.setString(3, Sha256.encrypt(member.getUser_pwd()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다. 
+				  pstmt.setString(4, aes.encrypt(member.getMobile()) ); // 휴대폰을 AES256 알고리즘으로 양방향 암호화 시킨다.			
+				  pstmt.setString(5, aes.encrypt(member.getEmail()) );
+				  pstmt.setString(6, member.getBirthday());
+				  pstmt.setString(7, "6");
+				  result = pstmt.executeUpdate();
 				  
-				  isExists = rs.next(); // 행이 있으면 true  (중복된 email) 
-				                        // 행이 없으면 false (사용가능한 email) 
-				
 			} catch(GeneralSecurityException | UnsupportedEncodingException e) {
 				  e.printStackTrace();
 			} finally {
 				  close();
 			}
 			
-			return isExists;		
-		}// end of public boolean emailDuplicateCheck(String email) throws SQLException-------
+			return result;
+			
+		}// end of public int registerMember(MemberVO member) throws SQLException-----------
 
-		// 회원가입을 해주는 메소드 (tbl_member 테이블에 insert)
-				@Override
-				public int registerMember(MemberVO member) throws SQLException {
-					
-					int result = 0;
-					
-					try {
-						  conn = ds.getConnection();
-						 
-						  String sql = " insert into tbl_user(user_name, user_id, user_pwd, mobile, email, birthday, fk_grade_no) " 
-						  		     + " values(?, ?, ?, ?, ?, to_date(?, 'yyyy-mm-dd'), ? )";
-						  
-						  pstmt = conn.prepareStatement(sql);
-						  
-						  pstmt.setString(1, member.getUser_name());
-						  pstmt.setString(2, member.getUser_id());
-						  pstmt.setString(3, Sha256.encrypt(member.getUser_pwd()) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다. 
-						  pstmt.setString(4, aes.encrypt(member.getMobile()) ); // 휴대폰을 AES256 알고리즘으로 양방향 암호화 시킨다.			
-						  pstmt.setString(5, aes.encrypt(member.getEmail()) );
-						  pstmt.setString(6, member.getBirthday());
-						  pstmt.setString(7, "6");
-						  result = pstmt.executeUpdate();
-						  
-					} catch(GeneralSecurityException | UnsupportedEncodingException e) {
-						  e.printStackTrace();
-					} finally {
-						  close();
-					}
-					
-					return result;
-					
-				}// end of public int registerMember(MemberVO member) throws SQLException-----------
-				
-	
-	
-	
 
-	
+
 }
 
 
