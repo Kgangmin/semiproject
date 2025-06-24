@@ -73,17 +73,15 @@ public class MemberDAO_imple implements MemberDAO {
 	                   + " where email = ? ";
 
 	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, paraMap.get("new_email"));
+	        pstmt.setString(1, aes.encrypt(paraMap.get("new_email")));
 
 	        rs = pstmt.executeQuery();
 
 	        isExists = rs.next(); // 행이 있으면 true (중복된 email)
 	                              // 행이 없으면 false (사용가능한 email)
 
-	    } catch (SQLException e) { // SQLException만 잡거나 혹은 Exception으로 변경
-	        e.printStackTrace();
-	        // 또는 SQLException을 다시 던져서 호출한 쪽에서 처리하도록 할 수 있습니다.
-	        // throw e;
+	     } catch (GeneralSecurityException | UnsupportedEncodingException e) {
+			e.printStackTrace();
 	    } finally {
 	        close();
 	    }

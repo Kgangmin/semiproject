@@ -18,95 +18,28 @@
   <script src="<%=ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
   <script type="text/javascript" src="<%= ctxPath%>/js/member/ChangeEmail.js"></script>
     <style>
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f8f8f8;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-           
-            width: 420px;
-            margin: 30px auto;
-            background-color: white;
-            padding: 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 12px;
-        }
-
-        h2 {
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        label {
-             
-            display: block;
-            margin-top: 15px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-           
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-        .button-group {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        button {
-        
-            width: 48%;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-update {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .btn-cancel {
-            background-color: #ccc;
-            color: #333;
-        }
-        
-        #emailcheck:hover {
-          
-         	background: #12cfc0;
-          	color: #fff;
-      	}
-      	
-		#emailcheck {
-		    display: inline-block; /* 이 줄 추가 */
-		    margin-top: 10px;
-		    padding: 8px 10px;
-		    border: solid 1.5px gray;
-		    border-radius: 6px;
-		    cursor: pointer;
-		    font-size: 8pt;
-		    font-weight : bold;
-		   	
-		}
-		.error {
-			color: red;
-			
-		}
+        body {font-family: 'Noto Sans KR', sans-serif;background-color: #f8f8f8;margin: 0;padding: 0;}
+		.container {width: 420px;margin: 30px auto;background-color: white;padding: 30px;box-shadow: 0 0 10px rgba(0,0,0,0.1);border-radius: 12px;}
+		h2 {margin-bottom: 25px;text-align: center;}
+		label { display: block;margin-top: 15px;font-weight: bold;}
+		input[type="text"],input[type="password"] { width: 100%;padding: 10px;margin-top: 5px;border: 1px solid #ccc;border-radius: 6px;}
+		 .button-group {margin-top: 30px;display: flex;justify-content: space-between;}
+		 button { width: 48%;padding: 10px;border: none;border-radius: 6px;font-weight: bold;cursor: pointer;}
+		.btn-update {background-color: #007bff;color: white;}
+		.btn-cancel {background-color: #ccc;color: #333;}
+        #emailcheck:hover {background: #12cfc0;color: #fff;}
+		#emailcheck {display: inline-block; margin-top: 10px;padding: 8px 10px;border: solid 1.5px gray;border-radius: 6px;cursor: pointer;font-size: 8pt;font-weight : bold;}
+		.error {color: red;}
       
     </style>
     
+   <script type="text/javascript">
+   
+
+		
+  	}// end of function goEdit()-----------------------/**
+   
+   </script>
 </head>
 <body>
 <div class="container">
@@ -114,7 +47,7 @@
     <form action="#" method="post" onsubmit="return validateForm()">
     	<input type="hidden" name="userid" value="${sessionScope.loginuser.user_id}" />
         <label for="currentEmail">현재 이메일</label>
-        <input type="text" id="currentEmail" name="currentEmail" value="${sessionScope.loginUser.user_email}" readonly />
+        <input type="text" id="currentEmail" name="currentEmail" value="${loginuser.email}" readonly />
 
         <label for="newEmail">새 이메일</label>
        	<input type="text" id="newEmail" name="newEmail" />
