@@ -50,7 +50,7 @@
             request.setAttribute("user", user);
         --%>
 	    
-	   	<h3 class="user-name">${loginuser.user_name} 님</h3>
+	   	<h3 class="user-name">${loginUser.user_name} 님</h3>
 	   
 	
 		
@@ -63,7 +63,7 @@
         <div class="points-reviews">
             <div class="item">
                 <span>포인트</span>
-                <span id="point">${loginuser.point}pt &nbsp;&nbsp;></span>
+                <span id="point">${loginUser.point}pt &nbsp;&nbsp;></span>
             </div>
             <div class="item">
                 <span>내 후기</span>
