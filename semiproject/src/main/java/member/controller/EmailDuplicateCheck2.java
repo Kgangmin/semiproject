@@ -30,7 +30,7 @@ public class EmailDuplicateCheck2 extends AbstractController {
 	        paraMap.put("new_email", new_email);
 	        paraMap.put("userid", userid);
 			
-			boolean isExists = mdao.emailDuplicateCheck(paraMap);
+			boolean isExists = mdao.emailDuplicateCheck2(paraMap);
 			// 회원정보 수정시 변경하고자 하는 이메일이 다른 사용자가 현재 사용중인지 아닌지 여부 알아오기
 			
 			JSONObject jsonObj = new JSONObject(); // {}

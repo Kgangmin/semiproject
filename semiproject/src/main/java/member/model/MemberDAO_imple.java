@@ -61,7 +61,7 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 	@Override
-	public boolean emailDuplicateCheck(Map<String, String> paraMap) throws SQLException {
+	public boolean emailDuplicateCheck2(Map<String, String> paraMap) throws SQLException {
 	    boolean isExists = false;
 
 	    try {
@@ -186,6 +186,16 @@ public class MemberDAO_imple implements MemberDAO {
 			
 			return member;
 		}// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
+
+
+		@Override
+		public boolean emailDuplicateCheck(String email) throws SQLException {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+
+	
 
 
 
