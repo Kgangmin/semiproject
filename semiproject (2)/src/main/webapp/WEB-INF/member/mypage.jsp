@@ -9,7 +9,7 @@
 <script type="text/javascript" src="<%= ctx_Path%>/js/member/member.js"></script>
 
     <style>
-        
+        /* 기본적인 스타일 예시 */
         body { font-family: sans-serif; color: #333; }
         .container { width: 800px; margin: 40px auto; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; }
@@ -22,9 +22,40 @@
         .reservation-list { border: 1px solid #ccc; min-height: 150px; padding: 20px; }
         .reservation-item { padding: 10px; border-bottom: 1px solid #f0f0f0; }
         .reservation-item:last-child { border-bottom: none; }
-        .user-links a {margin-left: 15px;color: #555;text-decoration: none;font-size: 14px;}
-        .user-links a:first-child {margin-left: 0;}
-        #point { font-weight: bold;}
+        
+        
+    .user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;  /* 기존 user-info의 margin 유지 */
+	}
+	
+	.user-name {
+	    margin: 0;
+	    font-weight: normal;
+	}
+	
+	.user-points {
+	    font-weight: bold;
+	    font-size: 16px;
+	    color: #007BFF;
+	}
+	
+	.user-links {
+	    margin-top: 10px;
+	}
+	
+	.user-links a {
+	    margin-left: 15px;
+	    color: #555;
+	    text-decoration: none;
+	    font-size: 14px;
+	}
+	
+	.user-links a:first-child {
+	    margin-left: 0;
+	}
     </style>
     
     
@@ -57,10 +88,12 @@
             UserDTO user = new UserDTO("홍길동", 0);
             request.setAttribute("user", user);
         --%>
-	    
-	   	<h3 class="user-name">${loginuser.user_name} 님</h3>
-	   
-	
+	    <div class="user-info">
+	    	<h3 class="user-name">${loginuser.user_name} 님</h3>
+	    	<div class="user-points">
+	        	포인트: ${loginuser.point}
+	    	</div>
+		</div>
 		
 		<div class="user-links">
 		    <a href="javascript:goEmailChange('<%= ctx_Path%>')">이메일 변경</a>
@@ -71,7 +104,7 @@
         <div class="points-reviews">
             <div class="item">
                 <span>포인트</span>
-                <span id="point">${loginuser.point}pt &nbsp;&nbsp;></span>
+                <span>${user.points} ></span>
             </div>
             <div class="item">
                 <span>내 후기</span>
