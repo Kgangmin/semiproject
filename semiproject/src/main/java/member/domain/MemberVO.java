@@ -1,7 +1,10 @@
 package member.domain;
 
-public class MemberVO {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+public class MemberVO {
 
 	// insert + select 용 
 	private String user_id;             // 회원아이디
@@ -105,6 +108,11 @@ public class MemberVO {
 	}
 	
 
+	
+	
+	
+	
+	
 	
 	
 	
