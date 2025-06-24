@@ -44,8 +44,8 @@ public class Login extends AbstractController {
             MemberVO loginUser = mdao.login(paraMap);
 
             if (loginUser != null) {
-               // 확인용 
-               // System.out.println("로그인 성공");
+               
+                // System.out.println("로그인 성공");
                 // 로그인 성공 시 세션에 사용자 정보 저장
                 HttpSession session = request.getSession();
                 session.setAttribute("loginUser", loginUser);
