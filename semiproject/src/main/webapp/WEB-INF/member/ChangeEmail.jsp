@@ -34,32 +34,31 @@
     </style>
     
    <script type="text/javascript">
-   
 
-		
-  	}// end of function goEdit()-----------------------/**
+
    
    </script>
 </head>
 <body>
 <div class="container">
     <h2>이메일 변경</h2>
-    <form action="#" method="post" onsubmit="return validateForm()">
-    	<input type="hidden" name="userid" value="${sessionScope.loginuser.user_id}" />
+    <form action="#" method="post" onsubmit="/" name="changeemail">
+    	<input type="hidden" name="user_id" value="${sessionScope.loginuser.user_id}" />
+    	<input type="hidden" name="user_pwd_check" value="${sessionScope.loginuser.user_pwd}" />
         <label for="currentEmail">현재 이메일</label>
         <input type="text" id="currentEmail" name="currentEmail" value="${loginuser.email}" readonly />
 
         <label for="newEmail">새 이메일</label>
        	<input type="text" id="newEmail" name="newEmail" />
 		<span id="emailcheck">이메일중복확인</span>
-		<span id="emailCheckResult" style="display:block; margin-top:8px;"></span>
+		<span id="emailCheckResult" style="display:block; margin-top:8px; "></span>
 		<span class="error">이메일 형식에 맞지 않습니다.</span>
         <label for="password">비밀번호 확인</label>
-        <input type="password" id="password" name="password"/>
+        <input type="password" id="user_pwd" name="user_pwd"/>
 
         <div class="button-group">
-            <button type="submit" class="btn-update" onclick="goEmailEdit()">변경하기</button>
-            <button type="button" class="btn-cancel" onclick="history.back();">취소</button>
+            <button type="button" class="btn-update" onclick="goEmailEdit()">변경하기</button>
+            <button type="button" class="btn-cancel" onclick="self.close()">취소</button>
         </div>
     </form>
 </div>

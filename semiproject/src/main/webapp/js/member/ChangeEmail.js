@@ -6,6 +6,7 @@ let b_email_change = false;
 
 
 
+
 $(function(){   
    
    $("span.error").hide();
@@ -42,9 +43,9 @@ $(function(){
 	
 	// "이메일중복확인" 을 클릭했을 때 이벤트 처리하기
 	$("span#emailcheck").click(function(){
-
+		$("span.error").hide();
 	    b_emailcheck_click = true;
-
+		
 	    $.ajax({
 	        url: "emailDuplicateCheck2.hb",
 	        type: "POST",
@@ -70,49 +71,54 @@ $(function(){
 
 	});
 	
-	   // 이메일값이 변경되면 수정하기 버튼을 클릭시 "이메일중복확인" 을 클릭했는지 클릭안했는지를 알아보기위한 용도 초기화 시키기  
-	   $("input#email").bind("change", function(){
-	      
-	      b_emailcheck_click = false;
-	      // "이메일중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도  
-	      
-	      b_email_change = true;
-	        // 이메일값을 변경했는지 여부를 알아오기 위한 용도
-	   });
 	
+	// 이메일값이 변경되면 수정하기 버튼을 클릭시 "이메일중복확인" 을 클릭했는지 클릭안했는지를 알아보기위한 용도 초기화 시키기  
+	$("input#newEmail").bind("change", function(){
+		
+	   b_emailcheck_click = false;
+	   // "이메일중복확인" 을 클릭했는지 클릭을 안했는지 여부를 알아오기 위한 용도  
+	   
+	   b_email_change = true;
+	     // 이메일값을 변경했는지 여부를 알아오기 위한 용도
+	});
 	
 	
    });   // end $(function(){
    
    
    
-   
-   
-
 	// "수정하기" 버튼 클릭시 호출되는 함수 
-	function goEmailEdit(){
-	   
-	   // *** 필수입력사항에 모두 입력이 되었는지 검사하기 시작 *** //
-	   
-	   const newEmail = document.getElementById("newEmail").value;
-	    const password = document.getElementById("password").value;
+		function goEmailEdit(){
+		   
+		   // *** 필수입력사항에 모두 입력이 되었는지 검사하기 시작 *** //
+		   
+		   const newEmail = document.getElementById("newEmail").value;
+		    const password = document.getElementById("user_pwd").value;
 
-	   if (newEmail.trim() === "" || password.trim() === "") {
-	      
-	        alert("모든 입력사항을 입력해주세요.");
-	        return;
-	          
-	    }
-	   
-	   
-	   
-	   
-	   // *** 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭했는지 검사하기 시작 *** //
-	   if(b_email_change && !b_emailcheck_click) {
-	      // 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭 안 했을 경우
-	      alert("이메일 중복확인을 클릭하셔야 합니다.");
-	      return; // goEdit() 함수를 종료한다.
-	   }
-	   // *** 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭했는지 검사하기 끝 *** //
-	   
-	}// end function goEmailEdit()
+		   if (newEmail.trim() === "" || password.trim() === "") {
+		      
+		        alert("모든 입력사항을 입력해주세요.");
+		        return;
+		          
+		    }
+		   else{
+			   // *** 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭했는지 검사하기 시작 *** //
+			   if(b_email_change && !b_emailcheck_click) {
+			      // 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭 안 했을 경우
+			      alert("이메일 중복확인을 클릭하셔야 합니다.");
+			      return; // goEdit() 함수를 종료한다.
+			  	}
+
+			   }
+			   // *** 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭했는지 검사하기 끝 *** //
+		   	    const frm = document.changeemail;
+			    frm.action = "/";
+		 		frm.method = "post";
+		 		frm.submit();
+		   }// end  goEmailEdit()
+		   
+		
+   
+   
+
+
