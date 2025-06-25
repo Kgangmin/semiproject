@@ -60,7 +60,7 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 
-
+   
 	@Override
 	public boolean emailDuplicateCheck2(Map<String, String> paraMap) throws SQLException {
 	    boolean isExists = false;

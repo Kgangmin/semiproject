@@ -12,7 +12,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import myshop.domain.RoomVO;
 import myshop.domain.StayVO;
+import myshop.domain.StayimgVO;
 
 public class StayDAO_imple implements StayDAO {
 
@@ -47,7 +49,7 @@ public class StayDAO_imple implements StayDAO {
 	}// end of private void close()---------------
 
 
-
+	 // start번째(1-based)부터 len개의 객실 정보를 가져온다.
 	 @Override
 	    public List<StayVO> selectStayPage(int start, int len) throws SQLException {
 	        List<StayVO> list = new ArrayList<>();
@@ -80,7 +82,7 @@ public class StayDAO_imple implements StayDAO {
 	        }
 	        return list;
 	    }
-
+	 // tbl_stay 전체 객실 수를 반환한다.
 	    @Override
 	    public int totalStayCount() throws SQLException {
 	        int total = 0;
@@ -97,4 +99,130 @@ public class StayDAO_imple implements StayDAO {
 	        }
 	        return total;
 	    }
+	    
+	 // 객실 조회시 조회수를  1증가 시킨다. 
+	    @Override
+	    public void increaseViews(String stayNo) throws Exception {
+	    	
+	        String sql = " UPDATE tbl_stay SET views = views + 1 WHERE stay_no = ? ";
+	        
+	        try {
+	            conn = ds.getConnection();
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, stayNo);
+	            pstmt.executeUpdate();
+	        } finally {
+	            close();
+	        }
+	    }
+
+	 // 숙소 정보를 조회하는 메소드
+	    @Override
+	    public StayVO selectStay(String stayNo) throws Exception {
+	    	 
+	    	StayVO svo = new StayVO();
+	        
+	    	try {
+	             conn = ds.getConnection();
+	             
+	             String sql = " SELECT * "
+	             			+ " FROM tbl_stay "
+	             			+ " WHERE stay_no = ? ";
+	             
+	             pstmt = conn.prepareStatement(sql);
+	             pstmt.setString(1, stayNo);
+	             
+	             
+	             rs = pstmt.executeQuery();
+
+	             if(rs.next()) {
+	                 
+	            	 svo.setStay_no(rs.getString("stay_no"));
+	            	 svo.setStay_name(rs.getString("stay_name"));
+	            	 svo.setFk_stay_category_no(rs.getString("fk_stay_category_no"));
+	            	 svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	            	 svo.setStay_info(rs.getString("stay_info"));
+	            	 svo.setStay_tel(rs.getString("stay_tel"));
+	            	 svo.setLatitude((rs.getDouble("latitude")));
+	            	 svo.setLongitude((rs.getDouble("longitude")));
+	            	 svo.setStay_score(rs.getInt("stay_score"));
+	            	 svo.setViews(rs.getInt("views"));
+	            	 svo.setPostcode(rs.getString("postcode"));
+	            	 svo.setAddress(rs.getString("address"));
+	            	 svo.setDetailaddres(rs.getString("detailaddress"));
+	            	 svo.setExtraaddress(rs.getString("extraaddress"));
+               
+	             }
+	             
+	         } finally {
+	             close();
+	         }
+	         return svo;
+	     
+	    }
+
+	    // 캐러셀에 사용할 추가 이미지 리스트
+	    @Override
+	    public List<StayimgVO> selectExtraImages(String stayNo) throws Exception {
+	    	
+	        List<StayimgVO> stayImgList = new ArrayList<>();
+	        
+	        try {
+	            conn = ds.getConnection();
+	            
+	        	String sql = " SELECT stay_extraimg_no, fk_stay_no, stay_extraimg_no_filename "
+		                   + " FROM tbl_stay_extraimg "
+		                   + " WHERE fk_stay_no = ? ORDER BY stay_extraimg_no ";
+	            
+	        	pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, stayNo);
+	            rs = pstmt.executeQuery();
+
+	            while(rs.next()) {
+	                StayimgVO img = new StayimgVO();
+	                img.setStay_extraimg_no(rs.getString("stay_extraimg_no"));
+	                img.setFk_stay_no(rs.getString("fk_stay_no"));
+	                img.setStay_extraimg_no_filename(rs.getString("stay_extraimg_no_filename"));
+	                stayImgList.add(img);
+	            }
+	        } finally {
+	            close();
+	        }
+	        return stayImgList;
+	    }
+
+	 // 객실 리스트
+	    @Override
+	    public List<RoomVO> selectRooms(String stayNo) throws Exception {
+	    	
+	        List<RoomVO> roomList = new ArrayList<>();
+	        try {
+	            conn = ds.getConnection();
+	            
+	            String sql = " SELECT room_no, fk_stay_no, room_grade, room_thumbnail, price_per_night, room_info "
+		                   + " FROM tbl_room "
+		                   + " WHERE fk_stay_no = ? ORDER BY room_no ";
+	            
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, stayNo);
+	            rs = pstmt.executeQuery();
+
+	            while(rs.next()) {
+	                RoomVO room = new RoomVO();
+	                room.setRoom_no(rs.getString("room_no"));
+	                room.setFk_stay_no(rs.getString("fk_stay_no"));
+	                room.setRoom_grade(rs.getString("room_grade"));
+	                room.setRoom_thumbnail(rs.getString("room_thumbnail"));
+	                room.setPrice_per_night(rs.getInt("price_per_night"));
+	                room.setRoom_info(rs.getString("room_info"));
+	                roomList.add(room);
+	            }
+	        } finally {
+	            close();
+	        }
+	        return roomList;
+	    
+	    }
+	    
+	    
 }

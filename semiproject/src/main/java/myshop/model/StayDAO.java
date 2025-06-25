@@ -3,7 +3,9 @@ package myshop.model;
 import java.sql.SQLException;
 import java.util.List;
 
+import myshop.domain.RoomVO;
 import myshop.domain.StayVO;
+import myshop.domain.StayimgVO;
 
 public interface StayDAO {
 
@@ -12,6 +14,18 @@ public interface StayDAO {
 
     // tbl_stay 전체 객실 수를 반환한다.
     int totalStayCount() throws SQLException;
+    
+    // 객실 조회시 조회수를  1증가 시킨다.  
+    void increaseViews(String stayNo) throws Exception;
+    
+    // 숙소 정보를 조회하는 메소드
+    StayVO selectStay(String stayNo) throws Exception;
+    
+    // 캐러셀에 사용할 추가 이미지 리스트
+    List<StayimgVO> selectExtraImages(String stayNo) throws Exception;
+    
+    // 객실 리스트
+    List<RoomVO> selectRooms(String stayNo) throws Exception;
 
 	
 	
