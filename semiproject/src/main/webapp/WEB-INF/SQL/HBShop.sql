@@ -1535,3 +1535,11 @@ desc tbl_stay_category;
 select      stay_category_no, stay_category_name
 from		tbl_stay_category
 order by	stay_category_no asc;
+
+SELECT * FROM "
+(
+    SELECT ROWNUM AS rn, s.* FROM
+    ( 
+        SELECT * FROM tbl_stay ORDER BY stay_no
+    ) s  WHERE fk_stay_category_no = 'A' and WHERE ROWNUM <= 1
+) WHERE rn >= 6 ";

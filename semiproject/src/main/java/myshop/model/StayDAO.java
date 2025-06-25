@@ -10,8 +10,13 @@ public interface StayDAO {
     // start번째(1-based)부터 len개의 객실 정보를 가져온다.
     List<StayVO> selectStayPage(int start, int len) throws SQLException;
 
+    // 카테고리에 해당하는 객실정보를 가져온다.
+    List<StayVO> getStaysByCategory(String category, int start, int len) throws SQLException;
+    
     // tbl_stay 전체 객실 수를 반환한다.
     int totalStayCount() throws SQLException;
+
+	
 
 	
 	

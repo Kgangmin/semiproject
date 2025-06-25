@@ -80,6 +80,46 @@ public class StayDAO_imple implements StayDAO {
 	        }
 	        return list;
 	    }
+	 
+	    // 카테고리에 해당하는 객실정보를 가져온다.
+		@Override
+		public List<StayVO> getStaysByCategory(String category, int start, int len) throws SQLException
+		{
+			List<StayVO> list = new ArrayList<>();
+			
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = " SELECT * FROM "
+	            		   + " ( "
+	            		   + "  SELECT ROWNUM AS rn, s.* FROM "
+	            		   + " ( " 
+	            		   + "    SELECT * FROM tbl_stay ORDER BY stay_no " 
+	            		   + " ) s  WHERE fk_stay_category_no = ? and ROWNUM <= ? " 
+	            		   + " ) WHERE rn >= ? ";
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, category);
+		        pstmt.setInt(2, start + len - 1);
+		        pstmt.setInt(3, start);
+
+		        rs = pstmt.executeQuery();
+		        while (rs.next()) {
+		        	StayVO svo = new StayVO();
+	                svo.setStay_no(rs.getString("stay_no"));
+	                svo.setStay_name(rs.getString("stay_name"));
+	                svo.setStay_info(rs.getString("stay_info"));
+	                svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	                svo.setStay_score(rs.getInt("stay_score"));
+	                svo.setViews(rs.getInt   ("views"));
+	                // 필요 시 latitude, longitude 등 추가 세팅
+	                list.add(svo);	                
+		        }
+		    } finally {
+		        close();
+		    }
+
+		    return list;
+		}
 
 	    @Override
 	    public int totalStayCount() throws SQLException {
@@ -97,4 +137,6 @@ public class StayDAO_imple implements StayDAO {
 	        }
 	        return total;
 	    }
+
+
 }

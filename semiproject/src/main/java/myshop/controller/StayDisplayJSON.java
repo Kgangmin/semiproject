@@ -25,18 +25,27 @@ public class StayDisplayJSON extends AbstractController {
         
         String strStart = request.getParameter("start");
         String strLen   = request.getParameter("len");
+        String category = request.getParameter("category");
+        
         int start = 1;
         int len   = 6;
-        
-        
+                
         try {
             if (strStart != null) start = Integer.parseInt(strStart);
             if (strLen   != null) len   = Integer.parseInt(strLen);
         } catch (NumberFormatException e) {
             // 파라미터가 숫자가 아닐 경우 기본값 유지
         }
+        
+        
 
-        List<StayVO> stayList = sdao.selectStayPage(start, len);
+        List<StayVO> stayList = null;
+        
+        if (category != null && !category.trim().isEmpty()) {
+            stayList = sdao.getStaysByCategory(category, start, len);
+        } else {
+            stayList = sdao.selectStayPage(start, len); // 기본 전체 목록
+        }
 
         JSONArray jsonArr = new JSONArray();
         if (stayList != null) {

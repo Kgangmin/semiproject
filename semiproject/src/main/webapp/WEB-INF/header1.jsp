@@ -82,10 +82,16 @@
     </button>
   </div>
   <div class="list-group list-group-flush">
+  	<a href="#" class="list-group-item list-group-item-action">전체</a>
+  	<c:forEach var="cvo" items="${requestScope.categoryList}">
+  		<a href="#" class="list-group-item list-group-item-action" data-value="${cvo.stay_category_no}">${cvo.stay_category_name}</a>
+  	</c:forEach>
+  <!--	<a href="#" class="list-group-item list-group-item-action">전체</a>
     <a href="#" class="list-group-item list-group-item-action">호텔/리조트</a>
     <a href="#" class="list-group-item list-group-item-action">모텔</a>
     <a href="#" class="list-group-item list-group-item-action">펜션</a>
     <a href="#" class="list-group-item list-group-item-action">게스트하우스</a>
+    -->
   </div>
 </div>
 
