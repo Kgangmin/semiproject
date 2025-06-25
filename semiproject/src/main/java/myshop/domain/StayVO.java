@@ -8,8 +8,8 @@ public class StayVO {
 	private String stay_thumbnail;			// 숙박업소사진(썸네일)
 	private String stay_info;				// 숙박업소설명(간단한)
 	private String stay_tel;				// 숙박업소전화번호
-    private int latitude;					// 위도
-    private int longitude;					// 경도
+    private double latitude;					// 위도
+    private double longitude;					// 경도
     private int stay_score;					// 평점
     private int views;						// 조회수
     private String postcode;				// 우편번호
@@ -66,19 +66,19 @@ public class StayVO {
 		this.stay_tel = stay_tel;
 	}
 	
-	public int getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 	
-	public void setLatitude(int latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 	
-	public int getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 	
-	public void setLongitude(int longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 	
