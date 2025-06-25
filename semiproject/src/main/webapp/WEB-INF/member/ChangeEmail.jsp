@@ -43,10 +43,10 @@
 <div class="container">
     <h2>이메일 변경</h2>
     <form action="#" method="post" onsubmit="/" name="changeemail">
-    	<input type="hidden" name="user_id" value="${sessionScope.loginuser.user_id}" />
-    	<input type="hidden" name="user_pwd_check" value="${sessionScope.loginuser.user_pwd}" />
+    	<input type="hidden" name="user_id" value="${sessionScope.loginUser.user_id}" />
+    	<input type="hidden" name="user_pwd_check" value="${sessionScope.loginUser.user_pwd}" />
         <label for="currentEmail">현재 이메일</label>
-        <input type="text" id="currentEmail" name="currentEmail" value="${loginuser.email}" readonly />
+        <input type="text" id="currentEmail" name="currentEmail" value="${loginUser.email}" readonly />
 
         <label for="newEmail">새 이메일</label>
        	<input type="text" id="newEmail" name="newEmail" />

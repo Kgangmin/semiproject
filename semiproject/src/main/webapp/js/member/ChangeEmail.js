@@ -112,7 +112,7 @@ $(function(){
 			   }
 			   // *** 이메일값을 수정한 다음에 "이메일중복확인" 을 클릭했는지 검사하기 끝 *** //
 		   	    const frm = document.changeemail;
-			    frm.action = "/";
+			    frm.action = "pwdcheck.hb";
 		 		frm.method = "post";
 		 		frm.submit();
 		   }// end  goEmailEdit()
