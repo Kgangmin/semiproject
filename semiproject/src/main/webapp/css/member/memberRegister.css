@@ -1,278 +1,209 @@
-body {
-    background: #f7f8fa;
-    font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+/* memberRegister.css */
+
+/* 기본 폰트와 박스 모델 */
+body, input, button, select, textarea {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
 }
 
 #divRegisterFrm {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+  max-width: 800px;  /* 가로폭 넓힘 */
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: none;
+  box-shadow: none;
 }
 
 #tblMemberRegister {
-    background: #fff;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.10);
-    border-radius: 16px;
-    width: 1000px;
-    margin: 52px auto;
-    padding: 44px 48px 30px 48px;
-    border-collapse: separate;
-    border-spacing: 0;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-#tblMemberRegister th {
-    font-size: 1.4em;
-    color: #212529;
-    font-weight: 700;
-    text-align: left;
-    background: none;
-    border: none;
-    padding-bottom: 28px;
-    letter-spacing: -1px;
+#tblMemberRegister thead th {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 16px 0;
+  color: #003366;
+  border-bottom: 2px solid #003366;
 }
 
-#tblMemberRegister td {
-    font-size: 1.11em;
-    padding: 18px 7px 12px 7px;
-    border: none;
-    background: none;
-    vertical-align: top;
+#tblMemberRegister tbody td {
+  padding: 12px 10px;
+  vertical-align: middle;
+  font-size: 1rem;
+  color: #222;
+  border-bottom: 1px solid #ddd;
 }
 
-/* 기본 입력란 */
+.star {
+  color: #d60000;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
 input[type="text"],
-input[type="password"],
-input[type="email"] {
-    width: 99%;
-    min-width: 120px;
-    max-width: 560px;
-    padding: 14px 13px;
-    font-size: 1.10em;
-    border: 1px solid #e2e4e8;
-    border-radius: 8px;
-    background: #fafbfc;
-    margin-top: 2px;
-    display: block;
-    transition: border 0.18s;
-    box-sizing: border-box;
+input[type="password"] {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
 }
 
 input[type="text"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus {
-    outline: none;
-    border: 1.7px solid #1dc0b8;
-    background: #fff;
+input[type="password"]:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
-input[readonly] {
-    background: #ececec;
-    color: #555;
-    border: 1px solid #dedede;
+span.error {
+  display: none;
+  color: #d60000;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: block;
 }
 
-
-.error {
-    display: none;
-    color: #eb5757;
-    font-size: 1em;
-    margin-top: 7px;
-    margin-bottom: 0;
-    padding-left: 2px;
-    white-space: pre-line;
-    line-height: 1.5;
+/* 아이디, 이메일 입력칸과 중복확인 버튼 한 줄 정렬 */
+#tblMemberRegister tbody tr td:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* 입력칸과 버튼 사이 간격 */
 }
 
-
-#tblMemberRegister td .input-group {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    width: 100%;
+/* 아이디, 이메일 입력칸 */
+#tblMemberRegister input#userid,
+#tblMemberRegister input#email {
+  flex: 1 1 auto; /* 입력칸이 가변적으로 공간 차지 */
+  min-width: 0;   /* flexbox에서 텍스트 오버플로우 방지 */
 }
 
-#tblMemberRegister td .input-group input[type="text"] {
-    flex: 1 1 200px;
-    max-width: 320px;
-    min-width: 120px;
-    margin-bottom: 0;
+/* 중복확인 버튼 스타일 */
+#idcheck, #emailcheck {
+  flex: 0 0 auto; /* 버튼 크기는 내용에 맞게 고정 */
+  margin-left: 0;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid #0066cc;
+  border-radius: 4px;
+  color: #0066cc;
+  background-color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-
-#idcheck {
-   background: #e8faf7;
-    color: #159d89;
-    font-weight: 600;
-    border-radius: 6px;
-    padding: 4px 10px;
-    margin-left: 10px;
-    cursor: pointer;
-    font-size: 0.98em;
-    display: inline-block;
-    transition: background 0.16s;
+#idcheck:hover, #emailcheck:hover {
+  background-color: #0066cc;
+  color: white;
 }
 
-#idcheck:hover {
-    background: #12cfc0;
-    color: #fff;
+/* 연락처 입력칸을 가로 정렬 */
+td input#hp1,
+td input#hp2,
+td input#hp3 {
+  width: auto;
+  display: inline-block;
+  padding: 8px 10px;
+  font-size: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  text-align: center;
+  margin-right: 6px;
+  vertical-align: middle;
+  box-sizing: border-box;
 }
 
-#idCheckResult {
-    font-size: 1em;
-    margin-left: 10px;
-    color: #f39c12;
-    font-weight: 600;
-    white-space: nowrap;
+td input#hp1 {
+  width: 50px;
+  background-color: #f0f0f0;
+  cursor: not-allowed;
 }
 
-
-/* 이메일 중복확인 버튼 및 결과 */
-#emailcheck {
-    background: #e8faf7;
-    color: #159d89;
-    font-weight: 600;
-    border-radius: 6px;
-    padding: 4px 10px;
-    margin-left: 10px;
-    cursor: pointer;
-    font-size: 0.98em;
-    display: inline-block;
-    transition: background 0.16s;
-}
-#emailcheck:hover {
-    background: #12cfc0;
-    color: #fff;
+td input#hp2 {
+  width: 80px;
 }
 
-#emailCheckResult {
-    font-size: 1em;
-    margin-left: 10px;
-    color: #f39c12;
-    font-weight: 600;
-    white-space: nowrap;
+td input#hp3 {
+  width: 80px;
 }
 
-/* 필수표시 */
-.star {
-    color: #ff4c4c;
-    font-size: 1em;
+/* 약관 체크박스와 레이블 */
+label[for="agree"] {
+  font-size: 1rem;
+  vertical-align: middle;
+  cursor: pointer;
+  color: #222;
 }
 
-label {
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 4px;
-    display: inline-block;
+input#agree {
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
 }
 
-input[type="checkbox"], input[type="radio"] {
-    accent-color: #12cfc0;
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
+/* 버튼 스타일 */
+.btn {
+  display: inline-block;
+  font-size: 1.1rem;
+  padding: 12px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+  min-width: 120px;
 }
 
-#datepicker {
-    width: 93%;
-    padding: 13px 12px;
+.btn-primary {
+  background-color: #007bff;
+  color: white;
 }
 
-iframe {
-    border-radius: 7px;
-    border: 1px solid #cad7e3 !important;
-    margin-top: 6px;
-    background: #f4f7fa;
-}
-
-.text-center {
-    text-align: center !important;
-}
-
-/* 버튼 가로 중앙 정렬, 나란히(좌우) 배치 */
-.text-center input[type="button"],
-.text-center input[type="reset"] {
-    display: inline-block;
-    min-width: 160px;
-    max-width: 220px;
-    width: 46%;
-    padding: 16px 0;
-    font-size: 1.13em;
-    font-weight: 700;
-    border-radius: 10px;
-    border: none;
-    margin: 0 12px;
-    box-shadow: 0 1px 8px rgba(44,204,191,0.05);
-    transition: background 0.13s, color 0.12s;
-    cursor: pointer;
-    vertical-align: middle;
-}
-
-.text-center input[type="button"] {
-    margin-right: 10px;
-}
-
-.text-center input[type="reset"] {
-    margin-left: 10px;
-}
-
-.btn-success {
-    background: #14b8a6;
-    color: #fff;
-}
-
-.btn-success:hover {
-    background: #128779;
+.btn-primary:hover {
+  background-color: #0056b3;
 }
 
 .btn-danger {
-    background: #ec5a5a;
-    color: #fff;
+  background-color: #dc3545;
+  color: white;
+  margin-left: 10px;
 }
 
 .btn-danger:hover {
-    background: #c94040;
+  background-color: #a71d2a;
 }
 
-@media (max-width: 900px) {
-    #tblMemberRegister {
-        width: 97vw;
-        padding: 8vw 2vw 8vw 2vw;
-    }
-    .text-center input[type="button"],
-    .text-center input[type="reset"] {
-        width: 100%;
-        min-width: 0;
-        max-width: none;
-        margin: 10px 0 0 0;
-        display: block;
-    }
-    #tblMemberRegister td .input-group {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 6px;
-    }
-    #idcheck {
-        margin: 5px 0 0 0;
-        width: 22px;
-        height: 22px;
-    }
+/* 버튼이 포함된 td 중앙 정렬 */
+td.text-center {
+  text-align: center;
+  padding-top: 20px;
 }
 
-/* 전화번호 입력란 - inline display */
-#tblMemberRegister input#hp1,
-#tblMemberRegister input#hp2,
-#tblMemberRegister input#hp3 {
-    display: inline-block;
-    width: 24%;
-    min-width: 48px;
-    text-align: center;
-    margin-right: 0px;
+/* iframe */
+iframe {
+  border-radius: 4px;
 }
 
-/* 부드러운 전환 효과 */
-input, .btn-success, .btn-danger, #emailcheck {
-    transition: all 0.15s;
+/* 반응형 조정 (모바일) */
+@media (max-width: 480px) {
+  #divRegisterFrm {
+    margin: 20px 10px;
+    padding: 15px;
+  }
+
+  #tblMemberRegister thead th {
+    font-size: 1.3rem;
+    padding: 12px 0;
+  }
+
+  td input#hp2,
+  td input#hp3 {
+    width: 70px;
+  }
 }
