@@ -35,6 +35,7 @@
 
 <body>
 
+
     <div class="container">
         <div class="header">
             <h1>마이페이지</h1>
@@ -55,7 +56,7 @@
 	
 		
 		<div class="user-links">
-		    <a href="javascript:goEmailChange('<%= ctx_Path%>')">이메일 변경</a>
+		    <a href="javascript:goEmailChange('${loginUser.user_id}','<%= ctx_Path%>')">이메일 변경</a>
 		    &nbsp;
 		    <a href="/changePassword">비밀번호 변경</a>
 		</div>
