@@ -103,21 +103,31 @@ input[readonly] {
 
 
 #idcheck {
-    width: 100px;
-    height: 26px;
+   background: #e8faf7;
+    color: #159d89;
+    font-weight: 600;
+    border-radius: 6px;
+    padding: 4px 10px;
+    margin-left: 10px;
     cursor: pointer;
-    margin: 0 3px 0 0;
+    font-size: 0.98em;
     display: inline-block;
-    vertical-align: middle;
+    transition: background 0.16s;
 }
 
-#idcheckResult {
+#idcheck:hover {
+    background: #12cfc0;
+    color: #fff;
+}
+
+#idCheckResult {
     font-size: 1em;
-    margin-left: 6px;
-    color: #11c27c;
+    margin-left: 10px;
+    color: #f39c12;
     font-weight: 600;
     white-space: nowrap;
 }
+
 
 /* 이메일 중복확인 버튼 및 결과 */
 #emailcheck {
