@@ -1524,3 +1524,14 @@ insert into tbl_room_extraimg values('40-2_extraimg3', '40-2', '서울숲 스테
 
 insert into tbl_room_extraimg values('40-3_extraimg1', '40-3', '서울숲 스테이_room3_extraimg1.png');
 insert into tbl_room_extraimg values('40-3_extraimg2', '40-3', '서울숲 스테이_room3_extraimg2.png');
+
+--------------------------------------------------------------------------------
+
+select * from tbl_stay;
+
+select * from tab;
+desc tbl_stay_category;
+
+select      stay_category_no, stay_category_name
+from		tbl_stay_category
+order by	stay_category_no asc;
