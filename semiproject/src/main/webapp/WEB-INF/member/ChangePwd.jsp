@@ -38,8 +38,7 @@
 <div class="container">
     <h2>비밀번호 변경</h2>
 
-    <form name="pwdChangeFrm" method="post" action="<%= ctxPath %>/changePasswordEnd.hb">
-        
+    <form name="pwdChangeFrm" method="post" action="<%= ctxPath %>/changePasswordEnd.hb">  
         <label for="currentPwd">현재 비밀번호</label>
         <input type="password" id="user_pwd" name="user_pwd" >
 
