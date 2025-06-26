@@ -26,6 +26,7 @@ public class EmailDuplicateCheck2 extends AbstractController {
 			
 			String userid = request.getParameter("userid");
 			
+			
 			Map<String, String> paraMap = new HashMap<>();
 	        paraMap.put("new_email", new_email);
 	        paraMap.put("userid", userid);

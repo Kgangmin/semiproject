@@ -51,10 +51,10 @@
 
 // Function Declaration
 // 이메일변경하기 창을 뛰우는 함수
-function goEmailChange(ctx_Path){
+function goEmailChange(user_id,ctx_Path){
 	
 	// 나의정보 수정하기 팝업창 띄우기
-	   const url = `${ctx_Path}/changeEmail.hb`;
+	   const url = `${ctx_Path}/changeEmail.hb?user_id=${user_id}`;
 	//  또는
 	//  const url = ctx_Path+"/member/memberEdit.up?userid="+userid;   
 	   

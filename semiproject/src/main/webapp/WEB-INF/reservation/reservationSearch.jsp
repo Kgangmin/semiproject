@@ -44,6 +44,7 @@
                    placeholder="기간 선택"
                    readonly
                    style="width: 100%;" >
+                   <strong id="dateCount" class="form-text text-muted mt-1"></strong>
           </div>
         </div>
         
@@ -100,7 +101,11 @@
         cancelLabel: '취소'
       },
       opens: 'center'
-    });
+    }, function(start, end) {
+        // 선택된 날짜 범위의 총 일수(포함) 계산
+        var days = end.diff(start, 'days') + 1;
+        $('#dateCount').text('총 ' + days + '박');
+      });
   });
 
 //추천 검색어/키워드 클릭 핸들러

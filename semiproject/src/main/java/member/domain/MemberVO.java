@@ -16,9 +16,9 @@ public class MemberVO {
 	private int point;                 // 포인트
 	private String register_date;	   // 가입일자
 	private String last_pwd_update;	   // 마지막암호변경날짜시각
-	private String is_withdrawn;	   // 회원탈퇴유무
-	private String is_active;          // 휴면유무    
-	private String access_level;       // 접근권한      
+	private int is_withdrawn;	   // 회원탈퇴유무
+	private int is_active;          // 휴면유무    
+	private int access_level;       // 접근권한      
 	
 	
 	private boolean requirePwdChange = false;
@@ -93,22 +93,22 @@ public class MemberVO {
 	public void setLast_pwd_update(String last_pwd_update) {
 		this.last_pwd_update = last_pwd_update;
 	}
-	public String getIs_withdrawn() {
+	public int getIs_withdrawn() {
 		return is_withdrawn;
 	}
-	public void setIs_withdrawn(String is_withdrawn) {
+	public void setIs_withdrawn(int is_withdrawn) {
 		this.is_withdrawn = is_withdrawn;
 	}
-	public String getIs_active() {
+	public int getIs_active() {
 		return is_active;
 	}
-	public void setIs_active(String is_active) {
+	public void setIs_active(int is_active) {
 		this.is_active = is_active;
 	}
-	public String getAccess_level() {
+	public int getAccess_level() {
 		return access_level;
 	}
-	public void setAccess_level(String access_level) {
+	public void setAccess_level(int access_level) {
 		this.access_level = access_level;
 	}
 	public boolean isRequirePwdChange() {
