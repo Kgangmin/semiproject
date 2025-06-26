@@ -5,6 +5,8 @@ import java.util.List;
 import common.controller.AbstractController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import member.domain.MemberVO;
 import myshop.domain.RoomVO;
 import myshop.domain.StayVO;
 import myshop.domain.StayimgVO;
@@ -42,10 +44,22 @@ public class StayDetail extends AbstractController {
         // 4) 객실 리스트
         List<RoomVO> rooms = sdao.selectRooms(stayNo);
 
-        // 속성 등록
+        // 로그인 세션에서 찜 여부 확인
+        HttpSession session = request.getSession(false);
+        boolean wishlistExists = false;
+        if (session != null) {
+            MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
+            if (loginUser != null) {
+                wishlistExists = sdao.isWished(loginUser.getUser_id(), stayNo);
+            }
+        }
+
+        // JSP 속성으로 등록
         request.setAttribute("stay", stay);
         request.setAttribute("extraImgList", extraImgs);
         request.setAttribute("roomList", rooms);
+        request.setAttribute("wishlistExists", wishlistExists);
+
 
         // forward to JSP
         super.setRedirect(false);

@@ -26,6 +26,15 @@ public interface StayDAO {
     
     // 객실 리스트
     List<RoomVO> selectRooms(String stayNo) throws Exception;
+    
+    // 위시리스트 추가 유무 검사
+    boolean isWished(String userId, String stayNo) throws SQLException;
+    
+    // 찜 하기
+    void insertWishlist(String userId, String stayNo) throws SQLException;
+    
+    // 찜 삭제하기
+    void deleteWishlist(String userId, String stayNo) throws SQLException;
 
 	
 	
