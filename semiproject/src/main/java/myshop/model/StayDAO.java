@@ -37,10 +37,5 @@ public interface StayDAO {
     void insertWishlist(String userId, String stayNo) throws SQLException;
     
     // 찜 삭제하기
-    void deleteWishlist(String userId, String stayNo) throws SQLException;
-
-	
-
-	
-	
+    void deleteWishlist(String userId, String stayNo) throws SQLException;	
 }

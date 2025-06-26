@@ -16,9 +16,10 @@ $(function(){
     }
   });
 
+  //	좌측 사이드바 내의 카테고리 클릭시 발생하는 이벤트
   $(document).on('click', '.list-group-item', function(e)
   {
-	window.scrollTo({ top: 0});
+	window.scrollTo({ top: 0 });	//	해당 카테고리를 보여주는 페이지를 띄울 때 항상 스크롤이 맨 위로가게 설정
 	start=1;
 	e.preventDefault();
 	
@@ -26,19 +27,18 @@ $(function(){
 	$('#endMessage').text('');
 	
 	const value = $(this).data('value');
-	// console.log(value);
+	//	console.log(value);
 	//	카테고리 값 설정
 	if($(this).text=='전체')
-	{
+	{	//	사이드바 목록에서 전체를 선택하였을 경우
 		selectedCategory = '';
 	}
 	else
-	{
+	{	//	전체를 제외한 나머지 특정 카테고리를 선택한 경우
 		selectedCategory = value;
 	}
 	
-	
-	console.log(start, lenStay, selectedCategory);
+	//	console.log(start, lenStay, selectedCategory);
 	loadStays();
   });
   

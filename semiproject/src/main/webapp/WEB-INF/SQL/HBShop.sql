@@ -1551,6 +1551,26 @@ SELECT * FROM
     ) s  WHERE ROWNUM <= 6 and fk_stay_category_no='B'
 ) WHERE rn >= 1 ;
 
-SELECT room_no, fk_stay_no, room_grade, room_thumbnail, price_per_night, room_info
-FROM tbl_room
-WHERE fk_stay_no = ? ORDER BY room_no
+SELECT      room_no, fk_stay_no, room_grade, room_thumbnail, price_per_night, room_info
+FROM        tbl_room
+WHERE       fk_stay_no = 37
+ORDER BY    TO_NUMBER(REGEXP_SUBSTR(room_no, '^[^-]+')),
+            TO_NUMBER(REGEXP_SUBSTR(room_no, '[^-]+$', 1, 1));
+
+
+select user_id, access_level from tbl_user;
+
+commit;
+update tbl_user
+set access_level = 1
+where user_id = 'admin';
+
+desc tbl_room_extraimg;
+
+select * from tbl_room_extraimg;
+
+SELECT *
+FROM tbl_room_extraimg;
+ORDER BY    TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '^\d+')),                             -- 앞 숫자
+  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '-(\d+)', 1, 1, NULL, 1)),           -- 중간 숫자
+  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, 'extraimg(\d+)', 1, 1, NULL, 1));    -- 마지막 숫자
