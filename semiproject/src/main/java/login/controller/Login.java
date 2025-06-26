@@ -46,25 +46,23 @@ public class Login extends AbstractController {
             if (loginUser != null) {
                   
                 
-                if ("1".equals(loginUser.getIs_active())) {
-            	    
-            		System.out.println("확인용 is_active => "+ loginUser.getIs_active());
+                if (1 == loginUser.getIs_active()) {            	    
             		
-            	    String message = "로그인을 한지 1년이 지나서 휴면상태로 되었습니다.\n휴면을 풀어주는 페이지로 이동합니다.";
-            	    String loc = request.getContextPath()+"/index.hb";
-            	    
+            	    String message = "로그인을 한지 1년이 지나서 휴면상태로 되었습니다.휴면을 풀어주는 페이지로 이동합니다.";
+            	    String loc = request.getContextPath()+"/index.hb";  // 휴면을 풀어주는 페이지 만들어야함
+            	              	    
             	    request.setAttribute("message", message);
             	    request.setAttribute("loc", loc);
             	    
             	    super.setRedirect(false);
-                    super.setViewPage("/WEB-INF/msg.jsp"); // 휴면을 풀어주는 페이지 만들어야함
+                    super.setViewPage("/WEB-INF/msg.jsp");
             	    
             	    return; // 메소드 종료 
             	}
                 if(loginUser.isRequirePwdChange()) {
 					// 휴면이 아니면서 비밀번호를 변경한지 3개월 이상된 경우 
 					
-					String message = "비밀번호를 변경하신지 3개월이 지났습니다.\\n암호를 변경해주는 페이지로 이동합니다.";
+					String message = "비밀번호를 변경하신지 3개월이 지났습니다.암호를 변경해주는 페이지로 이동합니다.";
 					String loc = request.getContextPath()+"/index.hb";
 					// 원래는 위와같이 index.up 이 아니라 암호를 변경하는 페이지로 URL을 잡아주어야 한다.!!
 					
