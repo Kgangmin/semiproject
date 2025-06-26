@@ -1551,14 +1551,6 @@ SELECT * FROM
     ) s  WHERE ROWNUM <= 6 and fk_stay_category_no='B'
 ) WHERE rn >= 1 ;
 
-select      *
-from        tbl_stay
-where       to_number(stay_no)>=1 and to_number(stay_no)<=6
-order by    to_number(stay_no);
-
-select * from tbl_room;
-=======
-
-desc tbl_login_history;
-
->>>>>>> refs/heads/main
+SELECT room_no, fk_stay_no, room_grade, room_thumbnail, price_per_night, room_info
+FROM tbl_room
+WHERE fk_stay_no = ? ORDER BY room_no
