@@ -225,4 +225,67 @@ public class StayDAO_imple implements StayDAO {
 	    }
 	    
 	    
+	    // 위시리스트 추가 유무 검사
+	    @Override
+	    public boolean isWished(String userId, String stayNo) throws SQLException {
+	        
+	    	boolean result = false;
+	        
+	    	try {
+	            conn = ds.getConnection();
+	            
+	            String sql = " SELECT COUNT(*) "
+	            		   + " FROM tbl_wishlist "
+	            		   + " WHERE w_user_id = ? AND w_stay_no = ? ";
+	            
+	            pstmt = conn.prepareStatement(sql); 
+	            pstmt.setString(1, userId);
+	            pstmt.setString(2, stayNo);
+	            rs = pstmt.executeQuery();
+	            if(rs.next()) {
+	                result = rs.getInt(1) > 0;
+	            }
+	        } finally {
+	            close();
+	        }
+	        return result;
+	    }
+
+	    // 찜 하기
+	    @Override
+	    public void insertWishlist(String userId, String stayNo) throws SQLException {
+	        
+	    	try {
+	            conn = ds.getConnection();
+	            
+	            String sql = " INSERT INTO tbl_wishlist (w_user_id, w_stay_no) VALUES (?, ?) ";
+	            
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, userId);
+	            pstmt.setString(2, stayNo);
+	            pstmt.executeUpdate();
+	        } finally {
+	            close();
+	        }
+	    }
+
+	    // 찜 삭제하기
+	    @Override
+	    public void deleteWishlist(String userId, String stayNo) throws SQLException {
+	        
+	    	try {
+	            conn = ds.getConnection();
+	           
+	            String sql = " DELETE FROM tbl_wishlist WHERE w_user_id = ? AND w_stay_no = ? ";
+	           
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, userId);
+	            pstmt.setString(2, stayNo);
+	            pstmt.executeUpdate();
+	        } finally {
+	            close();
+	        }
+	    }
+	    
+	    
 }

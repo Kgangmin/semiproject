@@ -19,12 +19,12 @@
         <div class="carousel-inner">
             <!-- 메인 썸네일 -->
             <div class="carousel-item active">
-                <img src="<%=ctxPath%>/images/${stay.stay_thumbnail}" class="d-block w-100" alt="메인 이미지">
+                <img src="<%=ctxPath%>/images/${stay.stay_thumbnail}" class="d-block w-100 img-modal" alt="메인 이미지">
             </div>
             <!-- 추가 이미지 -->
             <c:forEach var="img" items="${extraImgList}">
                 <div class="carousel-item">
-                    <img src="<%=ctxPath%>/images/${img.stay_extraimg_no_filename}" class="d-block w-100" alt="추가 이미지">
+                    <img src="<%=ctxPath%>/images/${img.stay_extraimg_no_filename}" class="d-block w-100 img-modal" alt="추가 이미지">
                 </div>
             </c:forEach>
         </div>
@@ -39,8 +39,18 @@
     </div>
 
     <!-- 2. 숙소 기본 정보 -->
-    <div class="mt-4">
-        <h2>${stay.stay_name}</h2>
+   <div class="mt-4 d-flex align-items-center">
+  <h2 class="mb-0">${stay.stay_name}</h2>
+  <div class="ml-auto">
+    <a href="<%=ctxPath%>/wishlistToggle.hb?stay_no=${stay.stay_no}">
+      <img
+        src="<%=ctxPath%>/images/${wishlistExists ? '찜한버튼.png' : '찜버튼.png'}"
+        style="width:32px; height:32px; cursor:pointer;"
+        alt="찜 버튼"/>
+    </a>
+  </div>
+</div>
+    <div class="mt-2">
         <p>${stay.stay_info}</p>
         <p>연락처: ${stay.stay_tel}</p>
         <p>평점: <strong>${stay.stay_score}</strong> · 조회수: <strong>${stay.views}</strong></p>
@@ -75,7 +85,7 @@
 	        
 	        <!-- 5-1) 왼쪽: 객실 썸네일 -->
 	        <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
-	             class="img-thumbnail"
+	             class="img-thumbnail img-modal"
 	             style="width:200px; height:150px; object-fit:cover;"
 	             alt="객실 사진">
 	        
@@ -104,6 +114,15 @@
 
 <jsp:include page="/WEB-INF/footer1.jsp" />
 
+<!-- Image Preview Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content bg-transparent border-0">
+      <img src="" id="modalImage" class="img-fluid" alt="확대 이미지" style="max-height:95vh; max-width:95vw;" />
+    </div>
+  </div>
+</div>
+
 <!-- 1) kakao SDK 불러오기 (JS키 + libraries) -->
 <script
   type="text/javascript"
@@ -112,6 +131,7 @@
 
 <!-- 2) DOM 준비 후 지도 초기화 -->
 <script>
+
   // 2-1) SDK가 완전히 로드된 뒤에 init 함수 실행
   kakao.maps.load(function() {
     var container = document.getElementById('map');
@@ -143,5 +163,15 @@
         var days = end.diff(start, 'days') + 1;
         $('#dateCount').text('총 ' + days + '박');
       });
+    
+ // 3) Image modal on click
+    $('.img-modal').on('click', function() {
+      var src = $(this).attr('src');
+      $('#modalImage').attr('src', src);
+      $('#imageModal').modal('show');
+    });
+    
+  
+    
   });
 </script>
