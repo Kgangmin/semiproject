@@ -479,7 +479,7 @@ public class MemberDAO_imple implements MemberDAO {
 			return result;
 			
 		}// end of public int pwdUpdate(Map<String, String> paraMap) throws SQLException----------------
-<<<<<<< HEAD
+
 
 		//입력한 비밀번호가 맞는지 확인하는 메소드
 		@Override
@@ -506,16 +506,6 @@ public class MemberDAO_imple implements MemberDAO {
 			return isExists;
 		}
 
-
-	
-
-	
-
-
-
-=======
-
->>>>>>> refs/heads/main
 }
 
 
