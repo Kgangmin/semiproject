@@ -58,7 +58,7 @@
 		<div class="user-links">
 		    <a href="javascript:goEmailChange('${loginUser.user_id}','<%= ctx_Path%>')">이메일 변경</a>
 		    &nbsp;
-		    <a href="/changePassword">비밀번호 변경</a>
+		    <a href="javascript:goPwdChange('${loginUser.user_id}','${loginUser.user_pwd}','<%= ctx_Path%>')">비밀번호 변경</a>
 		</div>
 
         <div class="points-reviews">
