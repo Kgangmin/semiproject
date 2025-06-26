@@ -100,7 +100,7 @@
 	        </div>
 	        
 	        <!-- 5-3) 오른쪽: 예약 버튼 -->
-	        <a href="<%=ctxPath%>/reserve?stay_no=${stay.stay_no}"
+	        <a href="<%=ctxPath%>/reserveRoom?stay_no=${stay.stay_no}"
 	               + "&room_no=${room.room_no}&date=${param.stayDate}"
 	           class="btn btn-primary btn-sm ml-3">
 	          예약하기
@@ -170,8 +170,6 @@
       $('#modalImage').attr('src', src);
       $('#imageModal').modal('show');
     });
-    
-  
     
   });
 </script>

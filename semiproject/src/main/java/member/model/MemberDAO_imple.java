@@ -195,6 +195,7 @@ public class MemberDAO_imple implements MemberDAO {
                 
                 else {
                    // 마지막으로 로그인 한 날짜시간이 현재시각으로 부터 1년이 지났으면 휴면으로 지정 
+
                    member.setIs_active(1);
                    
                    if(rs.getInt("is_active") == 0) {
@@ -478,6 +479,7 @@ public class MemberDAO_imple implements MemberDAO {
 			return result;
 			
 		}// end of public int pwdUpdate(Map<String, String> paraMap) throws SQLException----------------
+<<<<<<< HEAD
 
 		//입력한 비밀번호가 맞는지 확인하는 메소드
 		@Override
@@ -511,6 +513,9 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 
+=======
+
+>>>>>>> refs/heads/main
 }
 
 
