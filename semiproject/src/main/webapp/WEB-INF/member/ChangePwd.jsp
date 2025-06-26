@@ -50,7 +50,7 @@
         <input type="password" id="confirm_Pwd" name="confirm_Pwd" >
 
         <div class="button-group">
-            <button type="submit" class="btn-update" >변경하기</button>
+            <button type="button" class="btn-update" name="changePwd")>변경하기</button>
             <button type="button" class="btn-cancel" onclick="window.close();">취소</button>
         </div>
     </form>
