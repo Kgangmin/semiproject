@@ -120,7 +120,7 @@
             <a class="nav-link" href="<%= ctxPath%>/myPage.hb">마이페이지</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">로그아웃</a>
+            <a class="nav-link" href="<%=ctxPath%>/login/logout.hb">로그아웃</a>
           </li>
         </c:if>
       </ul>

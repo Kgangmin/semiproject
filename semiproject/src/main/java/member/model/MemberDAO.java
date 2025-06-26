@@ -24,6 +24,15 @@ public interface MemberDAO {
 	// 회원가입을 해주는 메소드 (tbl_member 테이블에 insert)
 	int registerMember(MemberVO member) throws SQLException;
 
+	// 아이디찾기
+	String findUserid(Map<String, String> paraMap) throws SQLException;
+
+	// 비밀번호 찾기
+	boolean isUserExist(Map<String, String> paraMap) throws SQLException;
+
+	// 비밀번호 변경하기
+	int pwdUpdate(Map<String, String> paraMap) throws SQLException;
+
 	
 
 	

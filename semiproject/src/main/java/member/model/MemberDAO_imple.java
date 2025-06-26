@@ -139,14 +139,14 @@ public class MemberDAO_imple implements MemberDAO {
                       + " FROM "
                       + "  ( "
                       + "   SELECT user_id, user_name, point, register_date, "
-                      + "          TRUNC( months_between(sysdate, last_pwd_update) ) AS pwdchangegap, "
+                      + "          to_number(TRUNC( months_between(sysdate, last_pwd_update) )) AS pwdchangegap, "
                       + "          is_active, email, mobile "
                       + "   FROM tbl_user "
                       + "   WHERE is_withdrawn = 0 AND user_id = ? and user_pwd = ? "
                       + " ) M "
                       + " CROSS JOIN "
                       + " ( "
-                      + "   SELECT TRUNC( months_between(sysdate, MAX(login_records)) ) AS lastlogingap "
+                      + "   SELECT to_number(TRUNC( months_between(sysdate, MAX(login_records)) )) AS lastlogingap "
                       + "   FROM tbl_login_history "
                       + "   WHERE fk_user_id = ? "
                       + " ) H ";
@@ -154,71 +154,62 @@ public class MemberDAO_imple implements MemberDAO {
              pstmt = conn.prepareStatement(sql);
              
              pstmt.setString(1, paraMap.get("user_id"));
-         //  pstmt.setString(2, paraMap.get("user_pwd"));
              pstmt.setString(2, Sha256.encrypt(paraMap.get("user_pwd")));
              pstmt.setString(3, paraMap.get("user_id"));
              
              rs = pstmt.executeQuery();
              
              if(rs.next()) {
-                
-                member = new MemberVO();
-                
-                member.setUser_id(rs.getString("user_id"));
-                member.setUser_name(rs.getString("user_name"));;
-                member.setPoint(rs.getInt("point"));
-                member.setRegister_date(rs.getString("register_date"));
-          
-                if(rs.getInt("pwdchangegap") >= 3) {
-                   // 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 true
-                   // 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지나지 않았으면 false
-                   
-                   member.setRequirePwdChange(true); // 로그인시 암호를 변경해라는 alert 를 띄우도록 할 때 사용한다.
-                }
-                
-                member.setEmail(aes.decrypt(rs.getString("email")));
-                member.setMobile(aes.decrypt(rs.getString("mobile")));
-                
-                
-                // ==== 휴면이 아닌 회원만 tbl_login_history(로그인기록) 테이블에 insert 하기 시작 ==== // 
-                if( rs.getInt("lastlogingap") < 12 ) {
-                   sql = " insert into tbl_login_history(fk_user_id, login_records, login_ip) "
-                       + " values(?, sysdate, ?) ";
-                   
-                   pstmt = conn.prepareStatement(sql);
-                   pstmt.setString(1, paraMap.get("user_id"));
-                   pstmt.setString(2, paraMap.get("login_ip"));
-                   
-                   pstmt.executeUpdate();
-                }
-               // ==== 휴면이 아닌 회원만 tbl_loginhistory(로그인기록) 테이블에 insert 하기 끝 ==== //
-                
-                else {
-                   // 마지막으로 로그인 한 날짜시간이 현재시각으로 부터 1년이 지났으면 휴면으로 지정 
-                   member.setIs_active("1");
-                   
-                   if(rs.getInt("is_active") == 0) {
-                       // === tbl_member 테이블의 idle 컬럼의 값을 1로 변경하기 === //
-                      sql = " update tbl_user set is_active = 1 "
-                          + " where user_id = ? ";
-                      
-                      pstmt = conn.prepareStatement(sql);
-                      pstmt.setString(1, paraMap.get("user_id"));
-                      
-                      pstmt.executeUpdate();
-                   }
-                   
-                }
-                
-             }// end of if(rs.next())---------------------------
-             
-            
+            	    member = new MemberVO();
+            	    
+            	    member.setUser_id(rs.getString("user_id"));
+            	    member.setUser_name(rs.getString("user_name"));
+            	    member.setPoint(rs.getInt("point"));
+            	    member.setRegister_date(rs.getString("register_date"));           	    
+            	    member.setIs_active(rs.getString("is_active")); // getInt 로 수정하기 !!!!!!!!!!!!!!!
+
+            	    if(rs.getInt("pwdchangegap") >= 3) {
+            	    	
+            	        member.setRequirePwdChange(true);
+            	        // 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 true
+   					    // 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지나지 않았으면 false
+            	    }
+            	    
+            	    member.setEmail(aes.decrypt(rs.getString("email")));
+            	    member.setMobile(aes.decrypt(rs.getString("mobile")));
+
+            	    // ==== 휴면이 아닌 회원만 tbl_loginhistory(로그인기록) 테이블에 insert 하기 시작 ==== //
+            	    if(rs.getInt("lastlogingap") < 12) {
+            	        sql = " insert into tbl_login_history(fk_user_id, login_records, login_ip) "
+            	            + " values(?, sysdate, ?) ";
+            	        
+            	        pstmt = conn.prepareStatement(sql);
+            	        
+            	        pstmt.setString(1, paraMap.get("user_id"));
+            	        pstmt.setString(2, paraMap.get("login_ip"));
+            	        
+            	        pstmt.executeUpdate();
+            	    } 
+            	    else {
+            	    	// 마지막으로 로그인 한 날짜시간이 현재시각으로 부터 1년이 지났으면 휴면으로 지정 
+            	    	member.setIs_active("1");  // "1" => 1 로 수정하기 !!!!!!!!!!!!!!!! 
+            	    	
+            	    	if(rs.getString("is_active").equalsIgnoreCase("0")) {
+            	            sql = " update tbl_user set is_active = 1 "
+            	                + " where user_id = ? ";
+            	            pstmt = conn.prepareStatement(sql);
+            	            pstmt.setString(1, paraMap.get("user_id"));
+            	            pstmt.executeUpdate();
+            	        }
+            	    }
+            	        
+    	     }// end of if(rs.next()---------------------------------------
+           
          } catch(GeneralSecurityException | UnsupportedEncodingException e) {
             e.printStackTrace();
          } finally {
             close();
-         }
-         
+         }        
          return member;
       }// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
 
@@ -284,6 +275,101 @@ public class MemberDAO_imple implements MemberDAO {
 
 			
 		}// end of public int registerMember(MemberVO member) throws SQLException-----------
+
+
+		// 아이디 찾기
+		@Override
+		public String findUserid(Map<String, String> paraMap) throws SQLException {
+			
+			String user_id = null;
+			
+			try {
+				  conn = ds.getConnection();
+				  
+				  String sql = " select user_id "
+				  		     + " from tbl_user "
+				  		     + " where is_withdrawn = 0 and user_name = ? and email = ? ";
+				  
+				  pstmt = conn.prepareStatement(sql);
+				  pstmt.setString(1, paraMap.get("user_name"));
+				  pstmt.setString(2, aes.encrypt(paraMap.get("email")) );
+				  
+				  rs = pstmt.executeQuery();
+				  
+				  if(rs.next()) {
+					  user_id = rs.getString("user_id");
+				  }
+				
+			} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+				  e.printStackTrace();
+			} finally {
+				  close();
+			}
+			
+			return user_id;	
+			
+		}// end of public String findUserid(Map<String, String> paraMap) throws SQLException------------------
+
+
+		
+		// 비밀번호 찾기
+		@Override
+		public boolean isUserExist(Map<String, String> paraMap) throws SQLException {
+			
+			boolean isUserExist = false;
+			
+			try {
+				  conn = ds.getConnection();
+				  
+				  String sql = " select user_id "
+				  		     + " from tbl_user "
+				  		     + " where is_withdrawn = 0 and user_id = ? and email = ? ";
+				  
+				  pstmt = conn.prepareStatement(sql);
+				  pstmt.setString(1, paraMap.get("user_id"));
+				  pstmt.setString(2, aes.encrypt(paraMap.get("email")) );
+				  
+				  rs = pstmt.executeQuery();
+				  
+				  isUserExist = rs.next();
+				
+			} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+				  e.printStackTrace();
+			} finally {
+				  close();
+			}		
+			
+			return isUserExist;
+		}// end of public boolean isUserExist(Map<String, String> paraMap) throws SQLException-----------
+
+
+		// 비밀번호 변경하기
+		@Override
+		public int pwdUpdate(Map<String, String> paraMap) throws SQLException {
+			
+			int result = 0;
+			
+			try {
+				  conn = ds.getConnection();
+				 
+				  String sql = " update tbl_user set user_pwd = ? "
+				  		     + "                     , last_pwd_update = sysdate " 
+				  		     + " where user_id = ? ";
+				  
+				  pstmt = conn.prepareStatement(sql);
+				  
+				  pstmt.setString(1, Sha256.encrypt(paraMap.get("new_pwd")) ); // 암호를 SHA256 알고리즘으로 단방향 암호화 시킨다.  
+				  pstmt.setString(2, paraMap.get("user_id"));
+				  			  
+				  result = pstmt.executeUpdate();
+				  
+			} finally {
+				  close();
+			}
+			
+			return result;
+			
+		}// end of public int pwdUpdate(Map<String, String> paraMap) throws SQLException----------------
 
 
 	
