@@ -210,12 +210,7 @@ public class MemberDAO_imple implements MemberDAO {
                    
                 }
                 
-             
-             
             
-
-            	    member = new MemberVO();
-            	    
             	    member.setUser_id(rs.getString("user_id"));
             	    member.setUser_name(rs.getString("user_name"));
             	    member.setPoint(rs.getInt("point"));
@@ -265,6 +260,8 @@ public class MemberDAO_imple implements MemberDAO {
          } finally {
             close();
          }        
+         
+         System.out.println("[DEBUG] VO 최종 is_active 값: " + member.getIs_active());
          return member;
       }// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
 
