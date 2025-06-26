@@ -40,10 +40,9 @@
                     <td>아이디&nbsp;<span class="star">*</span></td>
                     <td>
                        <input type="text" name="userid" id="userid" maxlength="40" class="requiredInfo" />&nbsp;&nbsp;  
-                       <%-- 아이디중복체크 --%>
-                       <img src="<%= ctxPath%>/images/b_id_check.gif" id="idcheck" />
-                       <span id="idcheckResult"></span>
-                       <span class="error">아이디는 필수입력 사항입니다.</span>
+                      <%-- 아이디 --%>
+                       <span id="idcheck">아이디중복확인</span>
+                       <span id="idCheckResult"></span>
                     </td>
                 </tr>
                 
@@ -109,8 +108,8 @@
                 
                 <tr>
                     <td colspan="2" class="text-center">
-                       <input type="button" class="btn btn-success btn-lg mr-5" value="가입하기" onclick="goRegister()" />
-                       <input type="reset"  class="btn btn-danger btn-lg" value="취소하기" onclick="goReset()" />
+                       <input type="button" class="btn btn-primary btn-lg mr-5" value="가입하기" onclick="goRegister()" />
+                       <input type="button"  class="btn btn-danger btn-lg" value="취소하기" onclick="goReset()" />
                     </td>
                 </tr>
                  

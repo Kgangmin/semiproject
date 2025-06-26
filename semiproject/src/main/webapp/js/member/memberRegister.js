@@ -293,7 +293,7 @@ $(function(){
 	 /////////////////////////////////////////////////////////////
 	 
 	 // "아이디중복확인" 을 클릭했을 때 이벤트 처리하기 시작 // 
-	 $('img#idcheck').click(function(){
+	 $('span#idcheck').click(function(){
 		 b_idcheck_click = true;
 		 // "아이디중복확인" 을 클릭했는지, 클릭을 안했는지 여부를 알아오기 위한 용도
 		
@@ -319,7 +319,7 @@ $(function(){
 			success:function(text){
 				console.log(text);
 				// {"isExists":false}
-				// {"isExists":true}
+				// {"isExists":true}	
 				// text 는 idDuplicateCheck.up 을 통해 가져온 결과물인 "{"isExists":true}" 또는 "{"isExists":false}" 로 되어지는 string 타입의 결과물이다. 
 				
 				console.log("~~~~ text 의 데이터타입 : ", typeof text);
@@ -339,7 +339,7 @@ $(function(){
 				
 				if(json.isExists) {
 					// 입력한 userid 가 이미 사용중이라면 
-					$('span#idcheckResult')
+					$('span#idCheckResult')
 					.html($('input#userid').val() + "은 이미 사용중 이므로 다른 아이디를 입력하세요")
 					.css({"color":"red"});
 					
@@ -347,7 +347,7 @@ $(function(){
 				}
 				else {
 					// 입력한 userid 가 존재하지 않는 경우라면 
-					$('span#idcheckResult')
+					$('span#idCheckResult')
 					.html($('input#userid').val() + "은 사용가능 합니다.")
 					.css({"color":"navy"});
 				}

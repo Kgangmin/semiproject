@@ -103,7 +103,7 @@ public class MemberDAO_imple implements MemberDAO {
               conn = ds.getConnection();
               
               String sql = " select email "
-                         + " from tbl_member "
+                         + " from tbl_user "
                          + " where email = ? ";
               
               pstmt = conn.prepareStatement(sql);
