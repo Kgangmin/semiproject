@@ -26,6 +26,9 @@ public interface MemberDAO {
 
 	// 패스워드가 맞는지 확인 하는 메소드 
 	boolean pwdcheck(Map<String, String> paramap) throws SQLException;
+
+	//유저의 이메일을 변경하는 메소드 
+	int changeEmailMember(Map<String, String> paramap) throws SQLException;
 	
 
 	

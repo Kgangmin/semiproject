@@ -312,6 +312,32 @@ public class MemberDAO_imple implements MemberDAO {
    			return isExists;
 		}// end public boolean pwdcheck(Map<String, String> paramap) throws SQLException
 
+		//유저의 이메일을 변경하는 메소드 
+		@Override
+		public int changeEmailMember(Map<String, String> paramap) throws SQLException {
+			int result = 0;
+
+			try {
+				conn = ds.getConnection();
+ 
+				String sql = " update tbl_user set email = ? where user_id = ? "; 
+
+				pstmt = conn.prepareStatement(sql);
+
+				pstmt.setString(1, aes.encrypt(paramap.get("new_email")) );
+				pstmt.setString(2, paramap.get("user_id"));
+
+				result = pstmt.executeUpdate();
+
+			} catch(GeneralSecurityException | UnsupportedEncodingException e) {
+				  e.printStackTrace();
+			} finally {
+				close();
+			}
+
+			return result;
+		}
+
 
 	
 
