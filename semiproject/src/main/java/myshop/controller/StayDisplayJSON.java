@@ -66,6 +66,7 @@ public class StayDisplayJSON extends AbstractController {
         String json = jsonArr.toString();
         request.setAttribute("json", json);
 
+        
         super.setRedirect(false);
         super.setViewPage("/WEB-INF/jsonview.jsp");
     }

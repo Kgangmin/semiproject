@@ -11,15 +11,22 @@ $(function(){
     if($(window).scrollTop() + $(window).height() 
        >= $(document).height() - 100) {
       loading = true;
+	  console.log(start, lenStay, selectedCategory);
       loadStays();
     }
   });
 
   $(document).on('click', '.list-group-item', function(e)
   {
+	window.scrollTo({ top: 0});
+	start=1;
 	e.preventDefault();
+	
+	$('#stayContainer').empty(); // 기존 숙소 목록 초기화
+	$('#endMessage').text('');
+	
 	const value = $(this).data('value');
-		console.log(value);
+	// console.log(value);
 	//	카테고리 값 설정
 	if($(this).text=='전체')
 	{
@@ -29,9 +36,9 @@ $(function(){
 	{
 		selectedCategory = value;
 	}
-	start = 1;
-	$('#stayContainer').empty(); // 기존 숙소 목록 초기화
-	$('#endMessage').text('');
+	
+	
+	console.log(start, lenStay, selectedCategory);
 	loadStays();
   });
   
@@ -42,7 +49,9 @@ $(function(){
       dataType: 'json',
       success: function(data){
         if(!data || data.length === 0) {
+			console.log(start, lenStay, selectedCategory);
           $('#endMessage').text('더 이상 숙소가 없습니다.');
+		  
         } else {
           let cards = '';
           data.forEach(function(s){
@@ -66,10 +75,11 @@ $(function(){
               </div>`;
           });
           $('#stayContainer').append(cards);
-          start += lenStay;
+		  start += lenStay;
         }
       },
       error: function(xhr){
+		console.log(start, lenStay, selectedCategory);
         console.error('숙소 로드 실패:', xhr.responseText);
       },
       complete: function(){

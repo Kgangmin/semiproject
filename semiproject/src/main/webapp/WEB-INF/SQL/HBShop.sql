@@ -1536,10 +1536,17 @@ select      stay_category_no, stay_category_name
 from		tbl_stay_category
 order by	stay_category_no asc;
 
-SELECT * FROM "
+SELECT * FROM
 (
     SELECT ROWNUM AS rn, s.* FROM
     ( 
         SELECT * FROM tbl_stay ORDER BY stay_no
-    ) s  WHERE fk_stay_category_no = 'A' and WHERE ROWNUM <= 1
-) WHERE rn >= 6 ";
+    ) s  WHERE ROWNUM <= 6 and fk_stay_category_no='B'
+) WHERE rn >= 1 ;
+
+select      *
+from        tbl_stay
+where       to_number(stay_no)>=1 and to_number(stay_no)<=6
+order by    to_number(stay_no);
+
+select * from tbl_room;

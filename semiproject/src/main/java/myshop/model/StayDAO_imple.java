@@ -95,17 +95,20 @@ public class StayDAO_imple implements StayDAO {
 	            		   + "  SELECT ROWNUM AS rn, s.* FROM "
 	            		   + " ( " 
 	            		   + "    SELECT * FROM tbl_stay ORDER BY stay_no " 
-	            		   + " ) s  WHERE fk_stay_category_no = ? and ROWNUM <= ? " 
+	            		   + " ) s WHERE ROWNUM <= ?  and fk_stay_category_no = ? " 
 	            		   + " ) WHERE rn >= ? ";
 		        pstmt = conn.prepareStatement(sql);
-		        pstmt.setString(1, category);
-		        pstmt.setInt(2, start + len - 1);
+		        
+		        pstmt.setInt(1, start + len - 1);
+		        pstmt.setString(2, category);
 		        pstmt.setInt(3, start);
+		        
+		        
 
 		        rs = pstmt.executeQuery();
 		        while (rs.next()) {
 		        	StayVO svo = new StayVO();
-	                svo.setStay_no(rs.getString("stay_no"));
+		        	svo.setStay_no(rs.getString("stay_no"));
 	                svo.setStay_name(rs.getString("stay_name"));
 	                svo.setStay_info(rs.getString("stay_info"));
 	                svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
