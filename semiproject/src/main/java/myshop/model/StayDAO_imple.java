@@ -82,7 +82,6 @@ public class StayDAO_imple implements StayDAO {
 	        }
 	        return list;
 	    }
-<<<<<<< HEAD
 	 
 	    // 카테고리에 해당하는 객실정보를 가져온다.
 		@Override
@@ -127,9 +126,9 @@ public class StayDAO_imple implements StayDAO {
 		    return list;
 		}
 
-=======
+
 	 // tbl_stay 전체 객실 수를 반환한다.
->>>>>>> refs/heads/main
+
 	    @Override
 	    public int totalStayCount() throws SQLException {
 	        int total = 0;
@@ -146,10 +145,7 @@ public class StayDAO_imple implements StayDAO {
 	        }
 	        return total;
 	    }
-<<<<<<< HEAD
 
-
-=======
 	    
 	 // 객실 조회시 조회수를  1증가 시킨다. 
 	    @Override
@@ -337,7 +333,5 @@ public class StayDAO_imple implements StayDAO {
 	            close();
 	        }
 	    }
-	    
-	    
->>>>>>> refs/heads/main
+
 }
