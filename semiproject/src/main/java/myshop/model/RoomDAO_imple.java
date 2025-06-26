@@ -64,7 +64,10 @@ public class RoomDAO_imple implements RoomDAO
 
         	String sql = " SELECT	room_extraimg_no, fk_room_no, room_extraimg_no_filename "
 	                   + " FROM		tbl_room_extraimg "
-	                   + " WHERE	fk_room_no = ? ORDER BY stay_extraimg_no ";
+	                   + " WHERE	fk_room_no = ? "
+	                   + " ORDER BY	TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '^\\d+')), "
+	                   + " 			TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '-(\\d+)', 1, 1, NULL, 1)), "
+	                   + " 			TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, 'extraimg(\\d+)', 1, 1, NULL, 1)) ";
             
         	pstmt = conn.prepareStatement(sql);
         	pstmt.setString(1, roomNo);

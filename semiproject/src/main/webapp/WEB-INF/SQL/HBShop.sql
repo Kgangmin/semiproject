@@ -1566,11 +1566,10 @@ set access_level = 1
 where user_id = 'admin';
 
 desc tbl_room_extraimg;
+desc tbl_stay_extraimg;
 
 select * from tbl_room_extraimg;
 
-SELECT *
-FROM tbl_room_extraimg;
-ORDER BY    TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '^\d+')),                             -- 앞 숫자
-  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '-(\d+)', 1, 1, NULL, 1)),           -- 중간 숫자
-  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, 'extraimg(\d+)', 1, 1, NULL, 1));    -- 마지막 숫자
+SELECT      *
+FROM        tbl_room_extraimg;
+ORDER BY    substr(
