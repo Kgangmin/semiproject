@@ -15,7 +15,7 @@ public class ReservationSearch extends AbstractController {
 		// 1) 상세 검색어 리스트 생성 (예: 하드코딩 or DB 조회)
         List<String> detailKeywords = Arrays.asList(
             "강릉", "부산", "경주", "속초", "서울",
-            "여수", "가평", "제주도", "제주", "글램핑"
+            "여수", "가평", "전주", "제주", "보령"
         );
         request.setAttribute("detailKeywords", detailKeywords);
         
