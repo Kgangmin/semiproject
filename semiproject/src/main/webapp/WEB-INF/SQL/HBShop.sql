@@ -29,6 +29,12 @@ commit;
 select * from tab;
 
 select * from tbl_user_grade;
+select * from TBL_STAY_CATEGORY;
+select * from TBL_STAY_EXTRAIMG;
+select * from TBL_STAY;
+select * from TBL_ROOM;
+select * from TBL_USER;
+
 
 insert into tbl_user_grade(grade_no, grade_name, grade_cutoff, pointrate) values(1, 'VVIP', 100000000, 0.08);      
 insert into tbl_user_grade(grade_no, grade_name, grade_cutoff, pointrate) values(2, 'VIP', 10000000, 0.05);
@@ -72,6 +78,7 @@ insert into tbl_user(user_id, user_pwd, user_name, email, mobile, birthday, fk_g
 select * from tbl_user;
 
 commit;
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 --------------------------------------------------------------------------------
@@ -1550,3 +1557,8 @@ where       to_number(stay_no)>=1 and to_number(stay_no)<=6
 order by    to_number(stay_no);
 
 select * from tbl_room;
+=======
+
+desc tbl_login_history;
+
+>>>>>>> refs/heads/main
