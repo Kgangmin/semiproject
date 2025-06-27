@@ -66,6 +66,8 @@
       $("body").removeClass("sidebar-open");
     });
   });
+  
+  
 </script>
 
 </head>

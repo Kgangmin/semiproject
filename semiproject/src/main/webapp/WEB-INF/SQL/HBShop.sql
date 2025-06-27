@@ -1570,6 +1570,12 @@ desc tbl_stay_extraimg;
 
 select * from tbl_room_extraimg;
 
-SELECT      *
-FROM        tbl_room_extraimg;
-ORDER BY    substr(
+SELECT *
+FROM tbl_room_extraimg
+ORDER BY
+  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '^\d+')),                             -- 앞번호
+  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '-(\d+)', 1, 1, NULL, 1)),           -- 중간번호
+  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, 'extraimg(\d+)', 1, 1, NULL, 1));    -- 끝번호
+  
+  
+desc tbl_room;
