@@ -101,7 +101,7 @@
             </p>
           </div>
           <!-- 예약하기 -->
-          <a href="<%=ctxPath%>/reserveRoom?stay_no=${param.stay_no}
+          <a href="<%=ctxPath%>/roomDetail.hb?stay_no=${param.stay_no}
                      &room_no=${room.room_no}
                      &checkin=${checkin}
                      &checkout=${checkout}"
@@ -201,33 +201,5 @@
       $('#modalImage').attr('src', src);
       $('#imageModal').modal('show');
     });
-    
-//	예약하기 버튼 클릭 시 발생 이벤트
-  	$(document).on('click', '.book-btn', function()
-	{
-		const stayNo = $(this).data('stay-no');
-		const roomNo = $(this).data('room-no');
-		const dateRange = $('#stayDate').val(); // 사용자가 선택한 날짜 범위
-		
-		console.log("stayNo:", stayNo);
-	    console.log("roomNo:", roomNo);
-	    console.log("dateRange:", dateRange);
-		
-		if (!dateRange)
-		{
-	    	alert('날짜를 선택해주세요.');
-	    	return;
-		}
-		
-		const encodedRoomNo = encodeURIComponent(roomNo);
-		const encodedDate = encodeURIComponent(dateRange);
-
-		console.log(encodedRoomNo);
-		console.log(encodedDate);
-		const url = `/semiproject/roomDetail.hb?stay_no=${stayNo}&room_no=${encodedRoomNo}&date=${encodedDate}`;
-		
-	    console.log(url);
-	   	window.location.href = url;
-	});
   });
 </script>

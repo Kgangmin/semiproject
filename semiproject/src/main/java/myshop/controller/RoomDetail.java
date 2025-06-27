@@ -22,6 +22,10 @@ public class RoomDetail extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		String stayno = request.getParameter("stay_no");
+		String roomNo = request.getParameter("room_no");
+		
+		RoomVO room = rdao.selectRoom(roomNo);
 		/*
 		 * String roomNo = request.getParameter("room_no");
 		 * 
