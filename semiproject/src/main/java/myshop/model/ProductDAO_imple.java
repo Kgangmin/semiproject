@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import myshop.domain.CategoryVO;
 import myshop.domain.ImageVO;
 
 public class ProductDAO_imple implements ProductDAO {
@@ -81,6 +82,41 @@ public class ProductDAO_imple implements ProductDAO {
 		return imgList;
 		
 	}// end of public List<ImageVO> imageSelectAll() throws SQLException--------
+
+
+	@Override
+	public List<CategoryVO> getCategoryList() throws SQLException
+	{
+		List<CategoryVO> categoryList = new ArrayList<>();
+		
+		try
+		{
+			conn = ds.getConnection();
+			
+			String sql =	" select	stay_category_no, stay_category_name "+
+							" from		tbl_stay_category "+
+							" order by	stay_category_no asc ";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next())
+			{
+				CategoryVO cvo = new CategoryVO();
+				cvo.setStay_category_no(rs.getString("stay_category_no"));
+				cvo.setStay_category_name(rs.getString("stay_category_name"));
+				
+				categoryList.add(cvo);
+			}	//	end of while(rs.next())------------------------------------------------------------
+		}
+		finally
+		{
+			close();
+		}	
+		
+		return categoryList;
+	}
 	
 	
 	

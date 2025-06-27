@@ -195,6 +195,7 @@ public class MemberDAO_imple implements MemberDAO {
                 
                 else {
                    // 마지막으로 로그인 한 날짜시간이 현재시각으로 부터 1년이 지났으면 휴면으로 지정 
+
                    member.setIs_active(1);
                    
                    if(rs.getInt("is_active") == 0) {
@@ -210,12 +211,7 @@ public class MemberDAO_imple implements MemberDAO {
                    
                 }
                 
-             
-             
             
-
-            	    member = new MemberVO();
-            	    
             	    member.setUser_id(rs.getString("user_id"));
             	    member.setUser_name(rs.getString("user_name"));
             	    member.setPoint(rs.getInt("point"));
@@ -265,6 +261,8 @@ public class MemberDAO_imple implements MemberDAO {
          } finally {
             close();
          }        
+         
+         System.out.println("[DEBUG] VO 최종 is_active 값: " + member.getIs_active());
          return member;
       }// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
 
@@ -480,10 +478,30 @@ public class MemberDAO_imple implements MemberDAO {
 		}// end of public int pwdUpdate(Map<String, String> paraMap) throws SQLException----------------
 
 
-	
+		//입력한 비밀번호가 맞는지 확인하는 메소드
+		@Override
+		public boolean checkPassword(String user_id, String currentPwd) throws SQLException {
+			boolean isExists = false;
 
-	
+			try {
+				conn = ds.getConnection();
 
+				String sql = " select   * " + " from      tbl_user " + " where      user_id = ? and user_pwd = ? ";
+
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1,	user_id );
+				pstmt.setString(2, Sha256.encrypt(currentPwd));
+
+				rs = pstmt.executeQuery();
+
+				isExists = rs.next(); // 행이 있으면 true (기존과 동일한 pwd)
+				// 행이 없으면 false (기존과 상이한 pwd > 사용가능한 pwd)
+			} finally {
+				close();
+			}
+
+			return isExists;
+		}
 
 
 }

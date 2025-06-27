@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import myshop.domain.CategoryVO;
 import myshop.domain.ImageVO;
 import myshop.model.ProductDAO;
 import myshop.model.ProductDAO_imple;
@@ -37,6 +38,9 @@ public class IndexController extends AbstractController {
 			*/
 			
 			request.setAttribute("imgList", imgList);
+			
+			List<CategoryVO> categoryList = pdao.getCategoryList();
+			request.setAttribute("categoryList", categoryList);
 			
 			super.setRedirect(false); 
 			super.setViewPage("/WEB-INF/index.jsp"); 

@@ -56,10 +56,4 @@ public class RoomVO {
 		public void setRoom_info(String room_info) {
 			this.room_info = room_info;
 		}
-	    
-	    
-	    
-	    
-	    
-	    
 }

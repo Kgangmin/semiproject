@@ -12,6 +12,9 @@ public interface StayDAO {
     // start번째(1-based)부터 len개의 객실 정보를 가져온다.
     List<StayVO> selectStayPage(int start, int len) throws SQLException;
 
+    // 카테고리에 해당하는 객실정보를 가져온다.
+    List<StayVO> getStaysByCategory(String category, int start, int len) throws SQLException;
+    
     // tbl_stay 전체 객실 수를 반환한다.
     int totalStayCount() throws SQLException;
     
@@ -34,8 +37,30 @@ public interface StayDAO {
     void insertWishlist(String userId, String stayNo) throws SQLException;
     
     // 찜 삭제하기
-    void deleteWishlist(String userId, String stayNo) throws SQLException;
+    void deleteWishlist(String userId, String stayNo) throws SQLException;	
+    
+    // 키워드+기간으로 이용 가능한 숙소 검색
+    List<StayVO> searchAvailableStays(
+        String keyword,
+        String checkinDate,     // "YYYY-MM-DD"
+        String checkoutDate,    // "YYYY-MM-DD"
+        int start,
+        int len
+    ) throws SQLException;
 
-	
-	
+    // 키워드+기간으로 이용 가능한 숙소 총 개수
+    int totalAvailableCount(
+        String keyword,
+        String checkinDate,
+        String checkoutDate
+    ) throws SQLException;
+    
+    // 기간에 예약이 겹치지 않는 객실만 조회
+    List<RoomVO> selectAvailableRooms(
+        String stayNo,
+        String checkinDate,    // "YYYY-MM-DD"
+        String checkoutDate    // "YYYY-MM-DD"
+    ) throws SQLException;
+    
+    
 }
