@@ -38,4 +38,29 @@ public interface StayDAO {
     
     // 찜 삭제하기
     void deleteWishlist(String userId, String stayNo) throws SQLException;	
+    
+    // 키워드+기간으로 이용 가능한 숙소 검색
+    List<StayVO> searchAvailableStays(
+        String keyword,
+        String checkinDate,     // "YYYY-MM-DD"
+        String checkoutDate,    // "YYYY-MM-DD"
+        int start,
+        int len
+    ) throws SQLException;
+
+    // 키워드+기간으로 이용 가능한 숙소 총 개수
+    int totalAvailableCount(
+        String keyword,
+        String checkinDate,
+        String checkoutDate
+    ) throws SQLException;
+    
+    // 기간에 예약이 겹치지 않는 객실만 조회
+    List<RoomVO> selectAvailableRooms(
+        String stayNo,
+        String checkinDate,    // "YYYY-MM-DD"
+        String checkoutDate    // "YYYY-MM-DD"
+    ) throws SQLException;
+    
+    
 }
