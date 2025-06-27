@@ -1,10 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="stayDetailUrl" value="${pageContext.request.contextPath}/stayDetail.hb" />
 <%
-    String ctxPath = request.getContextPath();
+    String ctxPath   = request.getContextPath();
+    String period    = (String) request.getAttribute("period");
+    String checkin   = (String) request.getAttribute("checkin");
+    String checkout  = (String) request.getAttribute("checkout");
 %>
-
 <jsp:include page="/WEB-INF/header1.jsp" />
 
 <!-- daterangepicker CSS & JS -->
@@ -62,55 +65,61 @@
         <div id="map" style="width: 500px; height: 400px;"></div>
     </div>
 
-    <!-- 4. 날짜 선택 -->
-    <div class="mb-3">
-    <label for="stayDate">체크인 날짜 선택</label>
-            <input type="text"
-                   id="stayDate"
-                   name="stayDate"
-                   class="form-control"
-                   placeholder="체크인 날짜 선택"
-                   readonly
-                   style="width: 100%;" >
-                   <strong id="dateCount" class="form-text text-muted mt-1"></strong>
+ <!-- 3. 날짜 선택 & 적용 -->
+  <div class="mt-4 mb-3" style="width:300px;">
+    <label for="stayDate">체크인–체크아웃</label>
+    <input type="text"
+           id="stayDate"
+           class="form-control"
+           placeholder="기간 선택"
+           readonly
+           value="${period != null ? period : ''}" />
+    <small id="dateCount" class="form-text text-muted mt-1">
+      <c:if test="${nights > 0}">
+  		<p>총 ${nights}박</p>
+		</c:if>
+    </small>
+  </div>
+
+
+   <!-- 4. 객실 목록 -->
+  <div class="mt-5">
+    <h5>객실 정보</h5>
+    <div class="list-group">
+      <c:forEach var="room" items="${roomList}">
+        <div class="list-group-item d-flex align-items-center mb-4">
+          <!-- 썸네일 -->
+          <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
+               class="img-thumbnail"
+               style="width:200px; height:150px; object-fit:cover;" />
+          <!-- 등급·가격 -->
+          <div class="ml-3 flex-grow-1">
+            <h6>${room.room_grade}</h6>
+            <p>
+              1박당 
+              <fmt:formatNumber value="${room.price_per_night}" pattern="#,##0"/> 원
+            </p>
           </div>
-
-
-   <!-- 5. 객실 목록 (한 줄에 한 개씩) -->
-	<div class="mt-5">
-	  <h5>객실 정보</h5>
-	  <div class="list-group">
-	    <c:forEach var="room" items="${roomList}">
-	      <div class="list-group-item d-flex align-items-center mb-5">
-	        
-	        <!-- 5-1) 왼쪽: 객실 썸네일 -->
-	        <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
-	             class="img-thumbnail img-modal"
-	             style="width:200px; height:150px; object-fit:cover;"
-	             alt="객실 사진">
-	        
-	        <!-- 5-2) 가운데: 등급, 가격 -->
-	        <div class="ml-3 flex-grow-1">
-	          <h6 class="mb-1">${room.room_grade}</h6>
-	          <p class="mb-0">
-	            1박당: 
-	            <fmt:formatNumber value="${room.price_per_night}" pattern="#,##0"/>
-	            원
-	          </p>
-	        </div>
-	        
-	        <!-- 5-3) 오른쪽: 예약 버튼 -->
-	        <a href="<%=ctxPath%>/reserveRoom?stay_no=${stay.stay_no}"
-	               + "&room_no=${room.room_no}&date=${param.stayDate}"
-	           class="btn btn-primary btn-sm ml-3">
-	          예약하기
-	        </a>
-	      
-	      </div>
-	    </c:forEach>
-	  </div>
-	</div>
+          <!-- 예약하기 -->
+          <a href="<%=ctxPath%>/reserveRoom?stay_no=${param.stay_no}
+                     &room_no=${room.room_no}
+                     &checkin=${checkin}
+                     &checkout=${checkout}"
+             class="btn btn-primary btn-sm ml-3"
+             <c:if test="${empty checkin}">
+               onclick="alert('먼저 기간을 선택하세요'); return false;"
+             </c:if>>
+            예약하기
+          </a>
+        </div>
+      </c:forEach>
+      <c:if test="${empty roomList}">
+        <p class="text-muted">선택한 기간에 이용 가능한 객실이 없습니다.</p>
+      </c:if>
+    </div>
+  </div>
 </div>
+
 
 <jsp:include page="/WEB-INF/footer1.jsp" />
 
@@ -122,6 +131,10 @@
     </div>
   </div>
 </div>
+<script>
+  var ctxPath = '${ctxPath}';
+  var stayNo  = '${param.stay_no}';
+</script>
 
 <!-- 1) kakao SDK 불러오기 (JS키 + libraries) -->
 <script
@@ -148,21 +161,39 @@
     
   });
 
-//daterangepicker 초기화
+//daterangepicker
   $(function() {
-    $('#stayDate').daterangepicker({
-      locale: {
-        format: 'YYYY-MM-DD',
-        separator: ' ~ ',
-        applyLabel: '적용',
-        cancelLabel: '취소'
-      },
-      opens: 'center'
-    }, function(start, end) {
-        // 선택된 날짜 범위의 총 일수(포함) 계산
-        var days = end.diff(start, 'days') + 1;
-        $('#dateCount').text('총 ' + days + '박');
-      });
+	  var stayDetailUrl = '${stayDetailUrl}';
+	    var stayNo  = '${param.stay_no}';
+	    var checkin = '${checkin}';
+	    var checkout= '${checkout}';
+
+	    var opts = {
+	      locale: {
+	        format:     'YYYY-MM-DD',
+	        separator:  '~',
+	        applyLabel: '적용',
+	        cancelLabel:'취소'
+	      },
+	      opens: 'center'
+	    };
+
+	    if (checkin && checkout) {
+	      opts.startDate = moment(checkin, 'YYYY-MM-DD');
+	      opts.endDate   = moment(checkout, 'YYYY-MM-DD');
+	    } else {
+	      opts.startDate = moment();
+	      opts.endDate   = moment().add(1, 'days');
+	    }
+
+	    $('#stayDate').daterangepicker(opts, function(start, end){
+	      var period = start.format('YYYY-MM-DD') + '~' + end.format('YYYY-MM-DD');
+	      var target = stayDetailUrl
+	                     + '?stay_no=' + stayNo
+	                     + '&period='   + encodeURIComponent(period);
+	      console.log('Redirect to:', target);
+	      window.location.href = target;
+	    });
     
  // 3) Image modal on click
     $('.img-modal').on('click', function() {

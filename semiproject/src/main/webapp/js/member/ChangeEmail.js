@@ -4,48 +4,25 @@ let b_emailcheck_click = false;
 let b_email_change = false;
 // 이메일값을 변경했는지 여부를 알아오기 위한 용도
 
-
-
-
-$(function(){   
-   
-   $("span.error").hide();
-   $("input#newEmail").blur( (e) => {
-       
-    //   const regExp_email = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;  
-    //  또는
-        const regExp_email = new RegExp(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i);  
-        // 이메일 정규표현식 객체 생성 
-        
-        const bool = regExp_email.test($(e.target).val());   
-       
-       if(!bool) {
-          // 이메일이 정규표현식에 위배된 경우
-            
-          $(e.target).parent().find("span.error").show();
-               
-          $(e.target).val("").focus(); 
-       }
-       else {
-          // 이메일이 정규표현식에 맞는 경우 
-          $("table#tblMemberEdit :input").prop("disabled", false);
-          
-          //   $(e.target).next().hide();
-           //  또는
-           $(e.target).parent().find("span.error").hide();
-       }
-       
-    });// 아이디가 email 인 것은 포커스를 잃어버렸을 경우(blur) 이벤트를 처리해주는 것이다.
-    
-	
-	
-	
-	
+$(function(){
+	$("span.error").hide();
 	// "이메일중복확인" 을 클릭했을 때 이벤트 처리하기
 	$("span#emailcheck").click(function(){
-		$("span.error").hide();
-	    b_emailcheck_click = true;
+		$("span#emailCheckResult").hide()
 		
+		const emailVal = $("input#newEmail").val().trim();
+		const regExp_email = new RegExp(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i);  
+	    
+		if (!regExp_email.test(emailVal)) {
+				
+		          $("span.error").show();
+		          $("input#newEmail").focus();
+		          return;
+		      }
+		$("span.error").hide();
+		b_emailcheck_click = true;
+		$("span#emailCheckResult").show()
+
 	    $.ajax({
 	        url: "emailDuplicateCheck2.hb",
 	        type: "POST",

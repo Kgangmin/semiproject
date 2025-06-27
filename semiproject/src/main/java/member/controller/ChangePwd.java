@@ -16,8 +16,8 @@ public class ChangePwd extends AbstractController {
 			// 로그인을 했으면 
 			
 			String userid = request.getParameter("user_id");
-			
-			
+			String user_pwd = request.getParameter("user_pwd");
+			request.setAttribute("user_pwd", user_pwd);
 			HttpSession session = request.getSession();
 			
 			MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");

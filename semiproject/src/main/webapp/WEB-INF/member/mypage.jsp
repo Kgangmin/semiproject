@@ -72,6 +72,29 @@
             </div>
         </div>
 
+
+		<div class="wishlist-section">
+		    <h3>찜한 숙소</h3>
+		    <div class="wishlist-grid">
+		        <c:choose>
+		            <c:when test="${not empty wishList}">
+		                <c:forEach var="wish" items="${wishList}">
+		                    <div class="wishlist-card">
+		                        <img src="<%= ctx_Path %>/images/product/${wish.image}" alt="${wish.productName}" class="wishlist-img">
+		                        <div class="wishlist-info">
+		                            <h4 class="wishlist-title">${wish.productName}</h4>
+		                            <p class="wishlist-price">${wish.price}원</p>
+		                            <p class="wishlist-date">${wish.wishDate}</p>
+		                        </div>
+		                    </div>
+		                </c:forEach>
+		            </c:when>
+		            <c:otherwise>
+		                <p>찜한 숙소가 없습니다.</p>
+		            </c:otherwise>
+		        </c:choose>
+		    </div>
+		</div>
         <div class="reservation-history">
             <h3>예약내역</h3>
             <%-- 

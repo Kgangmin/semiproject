@@ -333,5 +333,163 @@ public class StayDAO_imple implements StayDAO {
 	            close();
 	        }
 	    }
+	    
+	    
+	 // 키워드+기간으로 이용 가능한 숙소 검색
+	    @Override
+	    public List<StayVO> searchAvailableStays(String keyword,
+	                                             String checkinDate,
+	                                             String checkoutDate,
+	                                             int start,
+	                                             int len) throws SQLException {
+	        List<StayVO> list = new ArrayList<>();
+	        
+	        String kw = "%" + keyword + "%";
+	        
+	        try {
+	            conn = ds.getConnection();
+	            String sql = " SELECT * FROM ( " +
+	            			 "  SELECT ROWNUM rn, t.* FROM ( " +
+	            			 "    SELECT DISTINCT st.* " +
+	            			 "    FROM tbl_stay st " +
+	            			 "    JOIN tbl_room r ON r.fk_stay_no = st.stay_no " +
+	            			 "    WHERE (st.stay_name    LIKE ? OR " +
+	            			 "           st.address       LIKE ? OR " +
+	            			 "           st.detailaddress LIKE ? OR " +
+	            			 "           st.extraaddress  LIKE ?) " +
+	            			 "      AND NOT EXISTS ( " +
+	            			 "        SELECT 1 FROM tbl_reservation rv " +
+	            			 "        WHERE rv.fk_room_no   = r.room_no " +
+	            			 "          AND rv.checkin_date  <= TO_DATE(?,'YYYY-MM-DD') " +
+	            			 "          AND rv.checkout_date >= TO_DATE(?,'YYYY-MM-DD') " +
+	            			 "      ) " +
+	            			 "    ORDER BY st.stay_no " +
+	            			 "  ) t WHERE ROWNUM <= ? " +
+	            			 " ) WHERE rn >= ?";
+	            
+	            pstmt = conn.prepareStatement(sql);
+	            
+	            // 1~4: 키워드
+	            pstmt.setString(1, kw);
+	            pstmt.setString(2, kw);
+	            pstmt.setString(3, kw);
+	            pstmt.setString(4, kw);
+	            // 5: 예약 시작일 ≤ 내가 체크아웃일
+	            pstmt.setString(5, checkoutDate);
+	            // 6: 예약 종료일 ≥ 내가 체크인일
+	            pstmt.setString(6, checkinDate);
+	            // 7: 페이징 상한
+	            pstmt.setInt(7, start + len - 1);
+	            // 8: 페이징 하한
+	            pstmt.setInt(8, start);
+	            
+	            rs = pstmt.executeQuery();
+	            
+	            while (rs.next()) {
+	                StayVO svo = new StayVO();
+	                svo.setStay_no(rs.getString("stay_no"));
+	                svo.setStay_name(rs.getString("stay_name"));
+	                svo.setStay_info(rs.getString("stay_info"));
+	                svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	                svo.setStay_score(rs.getInt("stay_score"));
+	                svo.setViews(rs.getInt("views"));
+	                list.add(svo);
+	            }
+	        } finally {
+	            close();
+	        }
+	        return list;
+	    }
+
+	    
+	 // 키워드+기간으로 이용 가능한 숙소 총 개수
+	    @Override
+	    public int totalAvailableCount(String keyword,
+	                                   String checkinDate,
+	                                   String checkoutDate) throws SQLException {
+	    	
+	        int total = 0;
+	        
+	        String kw = "%" + keyword + "%";
+	        
+	        try {
+	            conn = ds.getConnection();
+	            
+	            String sql = " SELECT COUNT(DISTINCT st.stay_no) AS cnt " +
+	            			 " FROM tbl_stay st " +
+	            			 " JOIN tbl_room r ON r.fk_stay_no = st.stay_no " +
+	            			 " WHERE (st.stay_name    LIKE ? OR " +
+	            			 "       st.address       LIKE ? OR " +
+	            			 "       st.detailaddress LIKE ? OR " +
+	            			 "       st.extraaddress  LIKE ?) " +
+	            			 "  AND NOT EXISTS ( " +
+	            			 "    SELECT 1 FROM tbl_reservation rv " +
+	            			 "    WHERE rv.fk_room_no   = r.room_no " +
+	            			 "      AND rv.checkin_date  <= TO_DATE(?,'YYYY-MM-DD') " +
+	            			 "      AND rv.checkout_date >= TO_DATE(?,'YYYY-MM-DD') " +
+	            			 "  ) ";
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, kw);
+	            pstmt.setString(2, kw);
+	            pstmt.setString(3, kw);
+	            pstmt.setString(4, kw);
+	            pstmt.setString(5, checkoutDate);
+	            pstmt.setString(6, checkinDate);
+	            
+	            rs = pstmt.executeQuery();
+	            if (rs.next()) {
+	            	total = rs.getInt("cnt");
+	            }
+	        } finally {
+	            close();
+	        }
+	        return total;
+	    }
+	    
+	    
+	 // 기간에 예약이 겹치지 않는 객실만 조회
+	    @Override
+	    public List<RoomVO> selectAvailableRooms(String stayNo,
+	                                             String checkinDate,
+	                                             String checkoutDate) throws SQLException {
+	    	
+	        List<RoomVO> roomList = new ArrayList<>();
+	        
+	        try {
+	            conn = ds.getConnection();
+	            
+	            String sql = " SELECT r.room_no, r.fk_stay_no, r.room_grade, r.room_thumbnail, r.price_per_night, r.room_info " +
+	            			 " FROM tbl_room r " +
+	            			 " WHERE r.fk_stay_no = ? " +
+	            			 "  AND NOT EXISTS ( " +
+	            			 "    SELECT 1 FROM tbl_reservation rv " +
+	            			 "    WHERE rv.fk_room_no   = r.room_no " +
+	            			 "      AND rv.checkin_date  <= TO_DATE(?,'YYYY-MM-DD') " +
+	            			 "      AND rv.checkout_date >= TO_DATE(?,'YYYY-MM-DD') " +
+	            			 "  ) " +
+	            			 " ORDER BY r.room_no";
+	            
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, stayNo);
+	            pstmt.setString(2, checkoutDate);
+	            pstmt.setString(3, checkinDate);
+	            
+	            rs = pstmt.executeQuery();
+	            
+	            while (rs.next()) {
+	                RoomVO room = new RoomVO();
+	                room.setRoom_no(rs.getString("room_no"));
+	                room.setFk_stay_no(rs.getString("fk_stay_no"));
+	                room.setRoom_grade(rs.getString("room_grade"));
+	                room.setRoom_thumbnail(rs.getString("room_thumbnail"));
+	                room.setPrice_per_night(rs.getInt("price_per_night"));
+	                room.setRoom_info(rs.getString("room_info"));
+	                roomList.add(room);
+	            }
+	        } finally {
+	            close();
+	        }
+	        return roomList;
+	    }
 
 }
