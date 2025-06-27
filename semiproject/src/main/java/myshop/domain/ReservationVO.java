@@ -1,5 +1,7 @@
 package myshop.domain;
 
+import member.domain.MemberVO;
+
 public class ReservationVO {
 
 	private String reserv_no;		// 예약 번호
@@ -11,6 +13,8 @@ public class ReservationVO {
     private String checkout_date;	// 체크아웃 날짜
     private String reserv_date;		// 예약한 날짜(결제한날짜)
     
+    private MemberVO mvo;
+    private RoomVO rvo;
     
 	public String getReserv_no() {
 		return reserv_no;
@@ -76,5 +80,19 @@ public class ReservationVO {
 		this.reserv_date = reserv_date;
 	}
 	
-    
+	public MemberVO getMvo() {
+		return mvo;
+	}
+
+	public void setMvo(MemberVO mvo) {
+		this.mvo = mvo;
+	}
+	
+	public RoomVO getRvo() {
+		return rvo;
+	}
+
+	public void setRvo(RoomVO rvo) {
+		this.rvo = rvo;
+	}
 }

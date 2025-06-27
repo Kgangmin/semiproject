@@ -1579,3 +1579,21 @@ ORDER BY
   
   
 desc tbl_room;
+
+desc tbl_review;
+
+select  fk_stay_no, room_no, review_no, reserv_score, review_contents, review_writedate, fk_reserv_no
+from
+(
+    select  *
+    from    
+    (   select  *
+        from    tbl_reservation A
+        join    tbl_review  B
+        on      A.reserv_no = B.fk_reserv_no
+        where   review_no = 1
+    )
+)   C
+join    tbl_room D
+on      C.fk_room_no = D.room_no
+where   fk_stay_no = 1 and room_no = '1-1';
