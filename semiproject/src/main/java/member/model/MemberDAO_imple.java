@@ -262,7 +262,7 @@ public class MemberDAO_imple implements MemberDAO {
             close();
          }        
          
-         System.out.println("[DEBUG] VO 최종 is_active 값: " + member.getIs_active());
+     //  System.out.println("[DEBUG] VO 최종 is_active 값: " + member.getIs_active());
          return member;
       }// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
 

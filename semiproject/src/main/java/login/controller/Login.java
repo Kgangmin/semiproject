@@ -49,7 +49,7 @@ public class Login extends AbstractController {
                 if (1 == loginUser.getIs_active()) {            	    
             		
             	    String message = "로그인을 한지 1년이 지나서 휴면상태로 되었습니다.휴면을 풀어주는 페이지로 이동합니다.";
-            	    String loc = request.getContextPath()+"/index.hb";  // 휴면을 풀어주는 페이지 만들어야함
+            	    String loc = request.getContextPath()+"/login/dormant.hb";  // 휴면을 풀어주는 페이지 만들어야함
             	              	    
             	    request.setAttribute("message", message);
             	    request.setAttribute("loc", loc);
