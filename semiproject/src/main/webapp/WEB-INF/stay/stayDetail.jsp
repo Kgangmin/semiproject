@@ -101,7 +101,7 @@
             </p>
           </div>
           <!-- 예약하기 -->
-          <a href="<%=ctxPath%>/reserveRoom?stay_no=${param.stay_no}
+          <a href="<%=ctxPath%>/reservation/reserveRoom.hb?stay_no=${param.stay_no}
                      &room_no=${room.room_no}
                      &checkin=${checkin}
                      &checkout=${checkout}"
