@@ -5,7 +5,12 @@
 <% String ctx_Path = request.getContextPath(); %>
 
 <jsp:include page="../header1.jsp" />
-
+<script type="text/javascript">
+    const ctxPath = '<%= ctx_Path %>';
+    const userId = '${loginUser.user_id}';
+    let offset = 6;
+    const limit = 6;
+</script>
 <script type="text/javascript" src="<%= ctx_Path%>/js/member/member.js"></script>
 
     <style>
@@ -25,6 +30,42 @@
         .user-links a {margin-left: 15px;color: #555;text-decoration: none;font-size: 14px;}
         .user-links a:first-child {margin-left: 0;}
         #point { font-weight: bold;}
+        
+		.wishlist-section {margin-top: 40px;}
+		.wishlist-grid {display: grid;grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));gap: 20px;margin-top: 20px;}
+		.wishlist-card {border: 1px solid #ddd;border-radius: 10px;overflow: hidden;background: #fff;box-shadow: 0 2px 5px rgba(0,0,0,0.05);transition: transform 0.2s;}
+		.wishlist-card:hover {transform: translateY(-5px);}
+		.wishlist-img {width: 100%;height: 140px;object-fit: cover;}
+		.wishlist-info {padding: 10px;}
+		.wishlist-title {font-size: 16px;font-weight: bold;margin: 0 0 5px;}
+		.wishlist-price {color: #e91e63;font-weight: bold;margin: 0 0 5px;}
+		.wishlist-date {font-size: 12px;color: #777;}
+		
+		#loadMoreBtn {
+  display: block;
+  width: 150px;
+  margin: 30px auto 0;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background-color: #007BFF; /* 파란색 */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0, 123, 255, 0.5);
+  transition: background-color 0.3s ease;
+}
+
+#loadMoreBtn:hover {
+  background-color: #0056b3; /* 좀 더 진한 파란색 */
+}
+
+#loadMoreBtn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}
     </style>
     
     
@@ -72,21 +113,21 @@
             </div>
         </div>
 
-
 		<div class="wishlist-section">
 		    <h3>찜한 숙소</h3>
-		    <div class="wishlist-grid">
+		    <div id="wishlistGrid" class="wishlist-grid">
 		        <c:choose>
 		            <c:when test="${not empty wishList}">
 		                <c:forEach var="wish" items="${wishList}">
-		                    <div class="wishlist-card">
-		                        <img src="<%= ctx_Path %>/images/product/${wish.image}" alt="${wish.productName}" class="wishlist-img">
-		                        <div class="wishlist-info">
-		                            <h4 class="wishlist-title">${wish.productName}</h4>
-		                            <p class="wishlist-price">${wish.price}원</p>
-		                            <p class="wishlist-date">${wish.wishDate}</p>
+		                    <a href="${pageContext.request.contextPath}/stayDetail.hb?stay_no=${wish.w_stay_no}" class="wishlist-link">
+		                        <div class="wishlist-card">
+		                            <img src="${pageContext.request.contextPath}/images/${wish.stayVO.stay_thumbnail}" 
+		                                 alt="${wish.stayVO.stay_name}" class="wishlist-img">
+		                            <div class="wishlist-info">
+		                                <h4 class="wishlist-title">${wish.stayVO.stay_name}</h4>
+		                            </div>
 		                        </div>
-		                    </div>
+		                    </a>
 		                </c:forEach>
 		            </c:when>
 		            <c:otherwise>
@@ -94,6 +135,7 @@
 		            </c:otherwise>
 		        </c:choose>
 		    </div>
+		    <button id="loadMoreBtn">더보기</button>
 		</div>
         <div class="reservation-history">
             <h3>예약내역</h3>
