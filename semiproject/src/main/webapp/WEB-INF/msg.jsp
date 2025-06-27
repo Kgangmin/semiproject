@@ -8,7 +8,6 @@
 
 	if( ${not empty requestScope.popup_close && requestScope.popup_close == true} ) {
 		 
-		//	opener.location.reload(true); // 부모창 새로고침
 			opener.history.go(0);         // 부모창 새로고침
 			self.close(); // 팝업창 닫기 
 	}

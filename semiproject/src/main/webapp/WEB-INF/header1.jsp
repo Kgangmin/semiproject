@@ -4,6 +4,7 @@
 <%
     String ctxPath = request.getContextPath();
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -81,10 +82,10 @@
     </button>
   </div>
   <div class="list-group list-group-flush">
-    <a href="#" class="list-group-item list-group-item-action">호텔/리조트</a>
-    <a href="#" class="list-group-item list-group-item-action">모텔</a>
-    <a href="#" class="list-group-item list-group-item-action">펜션</a>
-    <a href="#" class="list-group-item list-group-item-action">게스트하우스</a>
+    <a href="#" class="list-group-item list-group-item-action">전체</a>
+  	<c:forEach var="cvo" items="${requestScope.categoryList}">
+  		<a href="#" class="list-group-item list-group-item-action" data-value="${cvo.stay_category_no}">${cvo.stay_category_name}</a>
+  	</c:forEach>
   </div>
 </div>
 
@@ -105,7 +106,7 @@
     <div class="collapse navbar-collapse" id="navbarMain">
       <ul class="navbar-nav ml-auto align-items-center">
         <!-- 로그인 전 -->
-        <c:if test="${empty sessionScope.loginuser}">
+        <c:if test="${empty sessionScope.loginUser}">
           <li class="nav-item">
             <a class="nav-link" href="<%=ctxPath%>/member/memberRegister.hb">회원가입</a>
           </li>
@@ -114,12 +115,12 @@
           </li>
         </c:if>
         <!-- 로그인 후 -->
-        <c:if test="${not empty sessionScope.loginuser}">
+        <c:if test="${not empty sessionScope.loginUser}">
           <li class="nav-item">
-            <a class="nav-link" href="#">마이페이지</a>
+            <a class="nav-link" href="<%= ctxPath%>/myPage.hb?user_id=${loginUser.user_id}">마이페이지</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">로그아웃</a>
+            <a class="nav-link" href="<%=ctxPath%>/login/logout.hb">로그아웃</a>
           </li>
         </c:if>
       </ul>
