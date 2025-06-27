@@ -25,10 +25,38 @@ public class ChangePasswordEnd extends AbstractController {
 		
 		
 		if(isMatch) {
+			System.out.println("있다");
+			// 현재비밀번호가 db 유저에 비밀번호와 같다
 			
-			
+			if(currentPwd == newPwd) {
+				// 현재 비밀번호가 새로입력한 비밀번호와 같다면 
+				String message = "현재 비밀번호와 새로운 비밀번호가 같습니다 다른 비밀번호를 입력해주세요";
+				String loc = "javascript:history.back()";
+				
+				request.setAttribute("message", message);
+				request.setAttribute("loc", loc);
+				request.setAttribute("popup_close", true);
+				
+				super.setRedirect(false);
+				super.setViewPage("/WEB-INF/msg.jsp");
+			}
+			else {
+				//int update_pwd = mdao.changePwd(newPwd,user_id);
+			}
 		}
-		
+		else {
+			System.out.println("없다");
+			// 현재비밀번호가 db 유저에 비밀번호와 같지않다
+			String message = "현재 비밀번호가 아닙니다";
+			String loc = "javascript:history.back()";
+			
+			request.setAttribute("message", message);
+			request.setAttribute("loc", loc);
+			request.setAttribute("popup_close", true);
+			
+			super.setRedirect(false);
+			super.setViewPage("/WEB-INF/msg.jsp");
+		}
 		
 		
 	}
