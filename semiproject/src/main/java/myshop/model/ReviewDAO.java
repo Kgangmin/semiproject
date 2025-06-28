@@ -1,12 +1,16 @@
 package myshop.model;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import myshop.domain.ReviewVO;
 
 public interface ReviewDAO
 {
-	//	리뷰 번호에 해당되는 리뷰정보 조회
-	ReviewVO selectReview(String reviewno) throws SQLException;
+	//	숙박업소 번호에 해당하는 모든 리뷰정보를 조회
+	List<ReviewVO> selectReview(String reviewNo) throws SQLException;
+
+	//	해당 숙소에 작성된 모든 리뷰의 평점 평균 구하기
+	String averageScore(String stayNo) throws SQLException;
 	
 }

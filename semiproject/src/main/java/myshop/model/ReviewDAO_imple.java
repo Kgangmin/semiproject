@@ -1,15 +1,20 @@
 package myshop.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import myshop.domain.ReservationVO;
 import myshop.domain.ReviewVO;
 import myshop.domain.RoomVO;
 
@@ -51,57 +56,123 @@ public class ReviewDAO_imple implements ReviewDAO
 	}	//	end of private void close()---------------------------------------------------
 	
 	
-	//	리뷰 번호에 해당되는 리뷰정보 조회
+	//	숙박업소 번호에 해당하는 모든 리뷰정보를 조회
 	@Override
-	public ReviewVO selectReview(String reviewno) throws SQLException
+	public List<ReviewVO> selectReview(String stayNo) throws SQLException
 	{
-		ReviewVO reviewvo = null;
+		List<ReviewVO> reviewList = new ArrayList<>();
 		
 		try
 		{
 			conn = ds.getConnection();
 			
-			String sql	= " select	fk_stay_no, room_no, review_no, reserv_score, review_contents, review_writedate, fk_reserv_no "
-					+ " from "
-					+ " ( "
-					+ " 	select	* "
-					+ " 	from "
-					+ " 	( "
-					+ " 		select	* "
-					+ " 		from	tbl_reservation	A "
-					+ " 		join	tbl_review		B "
-					+ " 		on		A.reserv_no =	B.fk_reserv_no "
-					+ " 		where	review_no =		? "
-					+ " 	) "
-					+ " )	C "
-					+ " join	tbl_room	D "
-					+ " on		C.fk_room_no = D.room_no ";
+			String sql	= " select	fk_stay_no, fk_room_no, room_grade, fk_user_id, reserv_no, review_no, reserv_score, review_contents, review_writedate "
+						+ " from "
+						+ " ( "
+						+ " 	select  fk_user_id, fk_room_no, reserv_no, review_no, reserv_score, review_contents, review_writedate "
+						+ " 	from	tbl_review A "
+						+ " 	join	tbl_reservation B "
+						+ " 	on		A.fk_reserv_no = B.reserv_no "
+						+ " )	C "
+						+ " join	tbl_room	D "
+						+ " on		C.fk_room_no = D.room_no "
+						+ " where 	fk_stay_no = ? ";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, reviewno);
+			pstmt.setString(1, stayNo);
 			
 			rs = pstmt.executeQuery();
 			
-			if(rs.next())
+			while(rs.next())
 			{
-				reviewvo = new ReviewVO();
-				
-				reviewvo.setReview_no(rs.getString("review_no"));
+				ReviewVO reviewvo = new ReviewVO();
 				
 				RoomVO rvo = new RoomVO();
 				rvo.setFk_stay_no(rs.getString("fk_stay_no"));
-				rvo.setRoom_no(rs.getString("room_no"));
+				rvo.setRoom_no(rs.getString("fk_room_no"));
+				rvo.setRoom_grade(rs.getString("room_grade"));
 				reviewvo.setRvo(rvo);
 				
-				reviewvo.setReview_score(rs.getDouble("review_score"));
+				ReservationVO rsvvo = new ReservationVO();
+				String rawId = rs.getString("fk_user_id");
+			    int visibleLength = Math.min(3, rawId.length()); // 최대 3글자까지 보이기
+			    String visible = rawId.substring(0, visibleLength);
+			    int hiddenCount = rawId.length() - visibleLength;
+			    String stars = "*".repeat(hiddenCount);
+
+			    String maskedId = visible + stars;
+				
+				
+				rsvvo.setFk_user_id(maskedId);
+				reviewvo.setRsvvo(rsvvo);
+				
+				reviewvo.setFk_reserv_no(rs.getString("reserv_no"));
+				reviewvo.setReview_no(rs.getString("review_no"));
+				reviewvo.setReview_score(rs.getDouble("reserv_score"));
 				reviewvo.setReview_contents(rs.getString("review_contents"));
-				reviewvo.setFk_reserv_no(rs.getString("fk_reserv_no"));
+				
+				Date rawDate = rs.getDate("review_writedate");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");		
+				String writedate = sdf.format(rawDate);
+				reviewvo.setReview_writedate(writedate);
+				
+				reviewList.add(reviewvo);
 			}
 		}
 		finally
 		{
 			close();
 		}
-		return reviewvo;
+		return reviewList;
+	}
+
+	//	해당 숙소에 작성된 모든 리뷰의 평점 평균 구하기
+	@Override
+	public String averageScore(String stayNo) throws SQLException
+	{
+		String averageScore = "0";	//	기본값은 0(리뷰가 하나도 없을 경우)
+		
+		try
+		{
+			conn = ds.getConnection();
+			
+			String sql	= " select      fk_stay_no, avg(reserv_score) "
+						+ " from "
+						+ " ( "
+						+ " 	select  fk_room_no, reserv_score "
+						+ " 	from    tbl_review A "
+						+ " 	join    tbl_reservation B "
+						+ " 	on      A.fk_reserv_no = B.reserv_no "
+						+ " ) C "
+						+ " join        tbl_room D "
+						+ " on          C.fk_room_no = D.room_no "
+						+ " where       fk_stay_no = ? "
+						+ " group by    fk_stay_no ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, stayNo);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				double avg = rs.getDouble(2);
+				
+				if(avg % 1 == 0)
+				{	//	평점 평균이 .00 인 정수로 떨어지는 경우
+					averageScore = String.valueOf((int)avg);
+				}
+				else
+				{	//	평점 평균을 소숫점 첫 째자리 까지만 보여주기
+					averageScore = String.format("%.1f", avg);
+				}
+			}
+		}
+		finally
+		{
+			close();
+		}
+		
+		return averageScore;
 	}
 }

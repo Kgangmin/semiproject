@@ -30,23 +30,23 @@ public class ReviewStay extends AbstractController
 		//	숙소 번호
 		String stayNo = request.getParameter("stay_no");
 		//	리뷰 번호
-		String reviewno = request.getParameter("reviewno");
+		String reviewNo = request.getParameter("reviewno");
 		
-		// 숙소 정보
+		//	숙소 정보
         StayVO stay = sdao.selectStay(stayNo);
-        // 추가 이미지
+        //	추가 이미지
         List<StayimgVO> extraImgs = sdao.selectExtraImages(stayNo);
 		
-		//	리뷰 번호에 해당되는 예약이 어느 숙소에 대한 것인지 조회하기
-		ReviewVO reviewvo = rdao.selectReview(reviewno);
+    	//	숙박업소 번호에 해당하는 모든 리뷰정보를 조회
+		List<ReviewVO> reviewList = rdao.selectReview(stayNo);
 		
-		System.out.println(">> stayNo = " + stayNo);
-		System.out.println(">> stay = " + stay);
-		System.out.println(">> stay.getStay_thumbnail() = " + (stay != null ? stay.getStay_thumbnail() : "null"));
+		//	해당 숙소에 작성된 모든 리뷰의 평점 평균 구하기
+		String stayScore = rdao.averageScore(stayNo);
 		
 		request.setAttribute("stay", stay);
         request.setAttribute("extraImgList", extraImgs);
-		request.setAttribute("reviewvo", reviewvo);
+		request.setAttribute("reviewList", reviewList);
+		request.setAttribute("stayScore", stayScore);
 		
 		super.setRedirect(false);
 		super.setViewPage("/WEB-INF/review/reviewStay.jsp");

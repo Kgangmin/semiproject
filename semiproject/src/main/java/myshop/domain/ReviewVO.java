@@ -8,7 +8,7 @@ public class ReviewVO
 	private String	review_writedate;
 	private String	fk_reserv_no;
 	
-	private ReservationVO	rsvVO;
+	private ReservationVO	rsvvo;
 	private RoomVO			rvo;
 	
 	public ReviewVO() {};
@@ -58,6 +58,10 @@ public class ReviewVO
 	{
 		return review_writedate;
 	}
+	public void setReview_writedate(String review_writedate)
+	{
+		this.review_writedate = review_writedate;
+	}
 	
 	public String getFk_reserv_no()
 	{
@@ -68,13 +72,13 @@ public class ReviewVO
 		this.fk_reserv_no = fk_reserv_no;
 	}
 	
-	public ReservationVO getRsvVO()
+	public ReservationVO getRsvvo()
 	{
-		return rsvVO;
+		return rsvvo;
 	}
-	public void setRsvVO(ReservationVO rsvVO)
+	public void setRsvvo(ReservationVO rsvvo)
 	{
-		this.rsvVO = rsvVO;
+		this.rsvvo = rsvvo;
 	}
 	
 	public RoomVO getRvo()
