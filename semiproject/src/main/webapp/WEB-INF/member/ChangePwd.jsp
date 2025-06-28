@@ -38,8 +38,7 @@
 <div class="container">
     <h2>비밀번호 변경</h2>
 
-    <form name="pwdChangeFrm" method="post" action="<%= ctxPath %>/changePasswordEnd.hb">
-        
+    <form name="pwdChangeFrm" method="post" action="<%= ctxPath %>/changePasswordEnd.hb">  
         <label for="currentPwd">현재 비밀번호</label>
         <input type="password" id="user_pwd" name="user_pwd" >
 
@@ -50,7 +49,7 @@
         <input type="password" id="confirm_Pwd" name="confirm_Pwd" >
 
         <div class="button-group">
-            <button type="submit" class="btn-update" >변경하기</button>
+            <button type="button" class="btn-update" name="changePwd")>변경하기</button>
             <button type="button" class="btn-cancel" onclick="window.close();">취소</button>
         </div>
     </form>

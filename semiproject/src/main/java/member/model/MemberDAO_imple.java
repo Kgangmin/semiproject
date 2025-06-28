@@ -477,6 +477,33 @@ public class MemberDAO_imple implements MemberDAO {
 			
 		}// end of public int pwdUpdate(Map<String, String> paraMap) throws SQLException----------------
 
+
+		//입력한 비밀번호가 맞는지 확인하는 메소드
+		@Override
+		public boolean checkPassword(String user_id, String currentPwd) throws SQLException {
+			boolean isExists = false;
+
+			try {
+				conn = ds.getConnection();
+
+				String sql = " select   * " + " from      tbl_user " + " where      user_id = ? and user_pwd = ? ";
+
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1,	user_id );
+				pstmt.setString(2, Sha256.encrypt(currentPwd));
+
+				rs = pstmt.executeQuery();
+
+				isExists = rs.next(); // 행이 있으면 true (기존과 동일한 pwd)
+				// 행이 없으면 false (기존과 상이한 pwd > 사용가능한 pwd)
+			} finally {
+				close();
+			}
+
+			return isExists;
+		}
+
+
 }
 
 
