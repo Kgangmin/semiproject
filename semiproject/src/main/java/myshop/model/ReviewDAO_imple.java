@@ -256,17 +256,10 @@ public class ReviewDAO_imple implements ReviewDAO
 		{
 			conn = ds.getConnection();
 			
-			String sql	= " select  room_grade "
-						+ " from "
-						+ " ( "
-						+ " 	select	fk_room_no "
-						+ " 	from	tbl_review A "
-						+ " 	join	tbl_reservation B "
-						+ " 	on		A.fk_reserv_no = B.reserv_no "
-						+ " ) C "
-						+ " join	tbl_room D "
-						+ " on		C.fk_room_no = D.room_no "
-						+ " where	fk_stay_no = ? ";
+			String sql	= " select distinct	room_grade "
+						+ " from			tbl_room "
+						+ " where			fk_stay_no = ? "
+						+ " order by		room_grade ";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, stayNo);
