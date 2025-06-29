@@ -285,12 +285,4 @@ public class ReviewDAO_imple implements ReviewDAO
 		
 		return roomGradeList;
 	}
-	
-	//	해당 숙소에 작성된 모든 리뷰의 수 구하기
-	@Override
-	public int howManyReview(String stayNo) throws SQLException
-	{
-		
-		return 0;
-	}
 }

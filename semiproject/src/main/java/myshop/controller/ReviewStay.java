@@ -56,16 +56,12 @@ public class ReviewStay extends AbstractController
 		
 		//	해당 숙소가 갖춘 모든 room_grade 조회
 		List<ReviewVO> roomGradeList = rvdao.selectRoomGrade(stayNo);
-		
-		//	해당 숙소에 작성된 모든 리뷰의 수 구하기
-		int reviewCount = rvdao.howManyReview(stayNo);
-		
+				
 		request.setAttribute("stay", stay);
         request.setAttribute("extraImgList", extraImgs);
 		request.setAttribute("reviewList", reviewList);
 		request.setAttribute("stayScore", stayScore);
 		request.setAttribute("roomGradeList", roomGradeList);
-		request.setAttribute("reviewCount", reviewCount);
 		request.setAttribute("selectedGrade", roomGrade); // 선택 유지용
 		
 		super.setRedirect(false);

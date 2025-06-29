@@ -70,10 +70,30 @@ function renderStars(score)
     </div>
     
 	<!-- 2. 숙소 명칭 -->
-	<div class="mt-4 d-flex align-items-center">
+	<div class="mt-4 d-flex justify-content-between align-items-center">
 		<h2 class="mb-0">${stay.stay_name}</h2>
+		
+	<!-- 3. 숙소 평균별점 -->
+		<div class="text-center d-flex align-items-center">
+			<c:choose>
+				<c:when test="${stayScore == '0'}">
+					<!-- 빈 별 아이콘 (0점) -->
+					<i class="far fa-star text-primary" style="font-size:18px; color:gray;"></i>
+				</c:when>
+				<c:otherwise>
+					<!-- 채워진 별 아이콘 -->
+					<i class="fas fa-star text-primary" style="font-size:18px; color:gold;"></i>
+				</c:otherwise>
+			</c:choose>
+			<!-- 평균 평점 출력 -->
+			<span style="font-size:25px; margin-left:8px;">${stayScore}</span>
+		</div>
 	</div>
-	<!-- 3. 숙박업소 정보 / 해당 숙박업소 리뷰목록 뷰 선택 탭 -->
+	
+		
+
+	
+	<!-- 4. 숙박업소 정보 / 해당 숙박업소 리뷰목록 뷰 선택 탭 -->
 	<div>
 	  	<ul class="nav nav-pills nav-justified nav-tabs">
 			<li class="nav-item">
@@ -88,34 +108,20 @@ function renderStars(score)
 			</li>
 		</ul>
 	</div>
-	
-	<!-- 4. 숙소 평균별점 -->
-	<div class=text-center>
-		<c:choose>
-			<c:when test="${stayScore == '0'}">
-				<!-- 빈 별 아이콘 (0점) -->
-				<i class="far fa-star text-primary" style="font-size:30px; color:gray;"></i>
-			</c:when>
-			<c:otherwise>
-				<!-- 채워진 별 아이콘 -->
-				<i class="fas fa-star text-primary" style="font-size:30px; color:gold;"></i>
-			</c:otherwise>
-		</c:choose>
-		<!-- 평균 평점 출력 -->
-		<span style="font-size:40px; margin-left:8px;">${stayScore}</span>
-	</div>
-	
+
 	<!-- 5-1. room_grade 선택 필터 -->
-	<form method="get" action="reviewStay.hb">
-		<input type="hidden" name="stay_no" value="${stay.stay_no}" />
-		<select name="room_grade" class="form-control" onchange="this.form.submit();">
-			<option value="all" ${selectedGrade == 'all' ? 'selected' : ''}>객실 전체</option>
-			<c:forEach var="grade" items="${roomGradeList}">
-				<c:set var="value" value="${grade.rvo.room_grade}" />
-				<option value="${value}" ${value == selectedGrade ? 'selected' : ''}>${value}</option>
-			</c:forEach>
-		</select>
-	</form>
+	<div class="container">
+		<form method="get" action="reviewStay.hb">
+			<input type="hidden" name="stay_no" value="${stay.stay_no}" />
+			<select name="room_grade" class="form-control" onchange="this.form.submit();">
+				<option value="all" ${selectedGrade == 'all' ? 'selected' : ''}>객실 전체</option>
+				<c:forEach var="grade" items="${roomGradeList}">
+					<c:set var="value" value="${grade.rvo.room_grade}" />
+					<option value="${value}" ${value == selectedGrade ? 'selected' : ''}>${value}</option>
+				</c:forEach>
+			</select>
+		</form>
+	</div>
     
     <!-- 5-2. 리뷰 목록 -->
     <div class="mt-4">
