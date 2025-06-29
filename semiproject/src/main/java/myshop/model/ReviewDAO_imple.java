@@ -58,7 +58,7 @@ public class ReviewDAO_imple implements ReviewDAO
 	
 	//	숙박업소 번호에 해당하는 모든 리뷰정보를 조회
 	@Override
-	public List<ReviewVO> selectReview(String stayNo) throws SQLException
+	public List<ReviewVO> selectAllReview(String stayNo) throws SQLException
 	{
 		List<ReviewVO> reviewList = new ArrayList<>();
 		
@@ -80,6 +80,76 @@ public class ReviewDAO_imple implements ReviewDAO
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, stayNo);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next())
+			{
+				ReviewVO reviewvo = new ReviewVO();
+				
+				RoomVO rvo = new RoomVO();
+				rvo.setFk_stay_no(rs.getString("fk_stay_no"));
+				rvo.setRoom_no(rs.getString("fk_room_no"));
+				rvo.setRoom_grade(rs.getString("room_grade"));
+				reviewvo.setRvo(rvo);
+				
+				ReservationVO rsvvo = new ReservationVO();
+				String rawId = rs.getString("fk_user_id");
+			    int visibleLength = Math.min(3, rawId.length()); // 최대 3글자까지 보이기
+			    String visible = rawId.substring(0, visibleLength);
+			    int hiddenCount = rawId.length() - visibleLength;
+			    String stars = "*".repeat(hiddenCount);
+
+			    String maskedId = visible + stars;
+				
+				
+				rsvvo.setFk_user_id(maskedId);
+				reviewvo.setRsvvo(rsvvo);
+				
+				reviewvo.setFk_reserv_no(rs.getString("reserv_no"));
+				reviewvo.setReview_no(rs.getString("review_no"));
+				reviewvo.setReview_score(rs.getDouble("reserv_score"));
+				reviewvo.setReview_contents(rs.getString("review_contents"));
+				
+				Date rawDate = rs.getDate("review_writedate");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");		
+				String writedate = sdf.format(rawDate);
+				reviewvo.setReview_writedate(writedate);
+				
+				reviewList.add(reviewvo);
+			}
+		}
+		finally
+		{
+			close();
+		}
+		return reviewList;
+	}
+	
+	//	숙박업소 번호에 해당하며, 특정 객실등급에 해당하는 리뷰정보를 조회
+	@Override
+	public List<ReviewVO> selectGradeReview(String stayNo, String roomGrade) throws SQLException {
+		List<ReviewVO> reviewList = new ArrayList<>();
+		
+		try
+		{
+			conn = ds.getConnection();
+			
+			String sql	= " select	fk_stay_no, fk_room_no, room_grade, fk_user_id, reserv_no, review_no, reserv_score, review_contents, review_writedate "
+						+ " from "
+						+ " ( "
+						+ " 	select  fk_user_id, fk_room_no, reserv_no, review_no, reserv_score, review_contents, review_writedate "
+						+ " 	from	tbl_review A "
+						+ " 	join	tbl_reservation B "
+						+ " 	on		A.fk_reserv_no = B.reserv_no "
+						+ " )	C "
+						+ " join	tbl_room	D "
+						+ " on		C.fk_room_no = D.room_no "
+						+ " where 	fk_stay_no = ? and room_grade = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, stayNo);
+			pstmt.setString(2, roomGrade);
 			
 			rs = pstmt.executeQuery();
 			
@@ -174,5 +244,60 @@ public class ReviewDAO_imple implements ReviewDAO
 		}
 		
 		return averageScore;
+	}
+
+	//	해당 숙소가 갖춘 모든 room_grade를 중복없이 조회
+	@Override
+	public List<ReviewVO> selectRoomGrade(String stayNo) throws SQLException
+	{
+		List<ReviewVO> roomGradeList = new ArrayList<>();
+		
+		try
+		{
+			conn = ds.getConnection();
+			
+			String sql	= " select  room_grade "
+						+ " from "
+						+ " ( "
+						+ " 	select	fk_room_no "
+						+ " 	from	tbl_review A "
+						+ " 	join	tbl_reservation B "
+						+ " 	on		A.fk_reserv_no = B.reserv_no "
+						+ " ) C "
+						+ " join	tbl_room D "
+						+ " on		C.fk_room_no = D.room_no "
+						+ " where	fk_stay_no = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, stayNo);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next())
+			{
+				ReviewVO reviewvo = new ReviewVO();
+				
+				RoomVO rvo = new RoomVO();
+				
+				rvo.setRoom_grade(rs.getString("room_grade"));
+				reviewvo.setRvo(rvo);
+				
+				roomGradeList.add(reviewvo);
+			}
+		}
+		finally
+		{
+			close();
+		}
+		
+		return roomGradeList;
+	}
+	
+	//	해당 숙소에 작성된 모든 리뷰의 수 구하기
+	@Override
+	public int howManyReview(String stayNo) throws SQLException
+	{
+		
+		return 0;
 	}
 }

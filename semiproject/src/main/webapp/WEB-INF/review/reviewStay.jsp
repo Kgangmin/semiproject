@@ -16,9 +16,10 @@
 
 <c:set var="score" value="${review.reserv_score}" />
 <script>
+//	리뷰 하나에 대한 별점을 0.5점 단위로 아이콘의 별 채우기
 function renderStars(score)
-{	//	리뷰 하나에 대한 별점을 0.5점 단위로 아이콘의 별 채우기
-	const fullStars = Math.floor(score);
+{	
+	const fullStars = Math.floor(score);	//	소수점 이하 버리기
 	const hasHalfStar = (score - fullStars) >= 0.5;
 	const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
 	let html = '';
@@ -37,6 +38,8 @@ function renderStars(score)
     }
     return html + ' <span>' + score + '점</span>';
 }
+
+
 </script>
 
 <jsp:include page="/WEB-INF/header1.jsp" />
@@ -101,8 +104,20 @@ function renderStars(score)
 		<!-- 평균 평점 출력 -->
 		<span style="font-size:40px; margin-left:8px;">${stayScore}</span>
 	</div>
+	
+	<!-- 5-1. room_grade 선택 필터 -->
+	<form method="get" action="reviewStay.hb">
+		<input type="hidden" name="stay_no" value="${stay.stay_no}" />
+		<select name="room_grade" class="form-control" onchange="this.form.submit();">
+			<option value="all" ${selectedGrade == 'all' ? 'selected' : ''}>객실 전체</option>
+			<c:forEach var="grade" items="${roomGradeList}">
+				<c:set var="value" value="${grade.rvo.room_grade}" />
+				<option value="${value}" ${value == selectedGrade ? 'selected' : ''}>${value}</option>
+			</c:forEach>
+		</select>
+	</form>
     
-    <!-- 리뷰 목록 -->
+    <!-- 5-2. 리뷰 목록 -->
     <div class="mt-4">
     	<h4>리뷰 목록</h4>
     	<c:if test="${empty reviewList}">
@@ -110,7 +125,7 @@ function renderStars(score)
     	</c:if>
 		
 		<c:forEach var="review" items="${reviewList}">
-			<div class="mb-4 border-bottom pb-3">
+			<div class="mb-4 border-bottom pb-3" data-room-grade="${review.rvo.room_grade}">
 				<!-- 별점 -->
 				<div class="text-primary" id="star-container-${review.review_no}"></div>
 				<script>
