@@ -38,9 +38,26 @@ function renderStars(score)
     }
     return html + ' <span>' + score + '점</span>';
 }
-
-
 </script>
+
+<style>
+	<%-- 폰트어썸 아이콘과 번호 버튼 높이 맞춤 --%>
+	.pagination .page-link
+	{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 38px;
+		padding: 0 12px;
+		font-size: 1rem;
+	}
+	
+	.pagination .page-link i
+	{
+		font-size: 1rem;
+		line-height: 1;
+	}
+</style>
 
 <jsp:include page="/WEB-INF/header1.jsp" />
 
@@ -122,6 +139,8 @@ function renderStars(score)
 			</select>
 		</form>
 	</div>
+	
+	
     
     <!-- 5-2. 리뷰 목록 -->
     <div class="mt-4">
@@ -159,6 +178,50 @@ function renderStars(score)
 		
     </div>
     
+    <!-- 5-3 페이징 -->
+    <c:set var="currentPage" value="${currentShowPageNo}" />
+	<c:set var="totalPage" value="${totalPage}" />
+	
+	<c:if test="${totalPage > 1}">
+		<div class="mt-4 d-flex justify-content-center">
+			<ul class="pagination">
+				<!-- 처음(First) 버튼 -->
+				<li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+					<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=1">
+						<i class="fas fa-angle-double-left"></i>
+					</a>
+				</li>
+	
+				<!-- 이전(Previous) 버튼 -->
+				<li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+					<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=${currentPage - 1}">
+						<i class="fas fa-angle-left"></i>
+					</a>
+				</li>
+	
+				<!-- 페이지 번호 -->
+				<c:forEach var="page" begin="1" end="${totalPage}">
+					<li class="page-item ${page == currentPage ? 'active' : ''}">
+						<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=${page}">${page}</a>
+					</li>
+				</c:forEach>
+	
+				<!-- 다음(Next) 버튼 -->
+				<li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
+					<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=${currentPage + 1}">
+						<i class="fas fa-angle-right"></i>
+					</a>
+				</li>
+	
+				<!-- 마지막(Last) 버튼 -->
+				<li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
+					<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=${totalPage}">
+						<i class="fas fa-angle-double-right"></i>
+					</a>
+				</li>
+			</ul>
+		</div>
+    </c:if>
     
 </div>
 <jsp:include page="/WEB-INF/footer1.jsp" />

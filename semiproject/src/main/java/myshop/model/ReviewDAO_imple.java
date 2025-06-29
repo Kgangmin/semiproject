@@ -55,10 +55,68 @@ public class ReviewDAO_imple implements ReviewDAO
 		}
 	}	//	end of private void close()---------------------------------------------------
 	
+	//	페이징 처리를 위한 해당 숙소의 모든 리뷰 수
+	@Override
+	public int countAllReview(String stayNo) throws SQLException
+	{
+		int count = 0;
+		try
+	    {
+	    	conn = ds.getConnection();
+	    	
+	        String sql = " select	count(*) "
+	                   + " from		tbl_review A "
+	                   + " join		tbl_reservation B ON A.fk_reserv_no = B.reserv_no "
+	                   + " join		tbl_room C ON B.fk_room_no = C.room_no "
+	                   + " where	fk_stay_no = ? ";
+	        
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, stayNo);
+	        
+	        rs = pstmt.executeQuery();
+	        
+	        if(rs.next())
+	        {
+	        	count = rs.getInt(1);
+	        }
+	    }
+		finally { close(); }
+	    return count;
+	}
+
+	//	페이징 처리를 위한 해당 숙소의 특정 객실 등급의 리뷰 수
+	@Override
+	public int countGradeReview(String stayNo, String roomGrade) throws SQLException
+	{
+		int count = 0;
+	    try
+	    {
+	    	conn = ds.getConnection();
+	    	
+	        String sql = " select	COUNT(*) "
+	                   + " from		tbl_review A "
+	                   + " join		tbl_reservation B ON A.fk_reserv_no = B.reserv_no "
+	                   + " join		tbl_room C ON B.fk_room_no = C.room_no "
+	                   + " where	fk_stay_no = ? AND room_grade = ?";
+	        
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, stayNo);
+	        pstmt.setString(2, roomGrade);
+	        
+	        rs = pstmt.executeQuery();
+	        
+	        if(rs.next())
+	        {
+	        	count = rs.getInt(1);
+	        }
+	    }
+	    finally { close(); }
+	    return count;
+	}
 	
 	//	숙박업소 번호에 해당하는 모든 리뷰정보를 조회
 	@Override
-	public List<ReviewVO> selectAllReview(String stayNo) throws SQLException
+	public List<ReviewVO> selectAllReview(String stayNo, int offset, int sizePerPage) throws SQLException
 	{
 		List<ReviewVO> reviewList = new ArrayList<>();
 		
@@ -66,20 +124,30 @@ public class ReviewDAO_imple implements ReviewDAO
 		{
 			conn = ds.getConnection();
 			
-			String sql	= " select	fk_stay_no, fk_room_no, room_grade, fk_user_id, reserv_no, review_no, reserv_score, review_contents, review_writedate "
-						+ " from "
+			String sql	= " select	* from "
 						+ " ( "
-						+ " 	select  fk_user_id, fk_room_no, reserv_no, review_no, reserv_score, review_contents, review_writedate "
-						+ " 	from	tbl_review A "
-						+ " 	join	tbl_reservation B "
-						+ " 	on		A.fk_reserv_no = B.reserv_no "
-						+ " )	C "
-						+ " join	tbl_room	D "
-						+ " on		C.fk_room_no = D.room_no "
-						+ " where 	fk_stay_no = ? ";
+						+ " 	select	rownum as rn, data.* "
+						+ " 	from "
+						+ " 	( "
+						+ " 		select	fk_stay_no, fk_room_no, room_grade, fk_user_id, reserv_no, review_no, reserv_score, review_contents, review_writedate "
+						+ " 		from "
+						+ " 		( "
+						+ " 			select  fk_user_id, fk_room_no, reserv_no, review_no, reserv_score, review_contents, review_writedate "
+						+ " 			from	tbl_review A "
+						+ " 			join	tbl_reservation B "
+						+ " 			on		A.fk_reserv_no = B.reserv_no "
+						+ " 		)	C "
+						+ " 		join	tbl_room	D "
+						+ " 		on		C.fk_room_no = D.room_no "
+						+ " 		where 	fk_stay_no = ? "
+						+ " 	) data "
+						+ " ) "
+						+ " where rn > ? and rn <= ? ";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, stayNo);
+	        pstmt.setInt(2, offset);
+	        pstmt.setInt(3, offset + sizePerPage);
 			
 			rs = pstmt.executeQuery();
 			
@@ -128,28 +196,38 @@ public class ReviewDAO_imple implements ReviewDAO
 	
 	//	숙박업소 번호에 해당하며, 특정 객실등급에 해당하는 리뷰정보를 조회
 	@Override
-	public List<ReviewVO> selectGradeReview(String stayNo, String roomGrade) throws SQLException {
+	public List<ReviewVO> selectGradeReview(String stayNo, String roomGrade, int offset, int sizePerPage) throws SQLException {
 		List<ReviewVO> reviewList = new ArrayList<>();
 		
 		try
 		{
 			conn = ds.getConnection();
 			
-			String sql	= " select	fk_stay_no, fk_room_no, room_grade, fk_user_id, reserv_no, review_no, reserv_score, review_contents, review_writedate "
-						+ " from "
+			String sql	= " select	* from "
 						+ " ( "
-						+ " 	select  fk_user_id, fk_room_no, reserv_no, review_no, reserv_score, review_contents, review_writedate "
-						+ " 	from	tbl_review A "
-						+ " 	join	tbl_reservation B "
-						+ " 	on		A.fk_reserv_no = B.reserv_no "
-						+ " )	C "
-						+ " join	tbl_room	D "
-						+ " on		C.fk_room_no = D.room_no "
-						+ " where 	fk_stay_no = ? and room_grade = ? ";
+						+ " 	select	rownum as rn, data.* "
+						+ " 	from "
+						+ " 	( "
+						+ " 		select	fk_stay_no, fk_room_no, room_grade, fk_user_id, reserv_no, review_no, reserv_score, review_contents, review_writedate "
+						+ " 		from "
+						+ " 		( "
+						+ " 			select  fk_user_id, fk_room_no, reserv_no, review_no, reserv_score, review_contents, review_writedate "
+						+ " 			from	tbl_review A "
+						+ " 			join	tbl_reservation B "
+						+ " 			on		A.fk_reserv_no = B.reserv_no "
+						+ " 		)	C "
+						+ " 		join	tbl_room	D "
+						+ " 		on		C.fk_room_no = D.room_no "
+						+ " 		where 	fk_stay_no = ? and room_grade = ? "
+						+ " 	) data "
+						+ " ) "
+						+ " where rn > ? and rn <= ? ";
 			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, stayNo);
-			pstmt.setString(2, roomGrade);
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, stayNo);
+	        pstmt.setString(2, roomGrade);
+	        pstmt.setInt(3, offset);
+	        pstmt.setInt(4, offset + sizePerPage);
 			
 			rs = pstmt.executeQuery();
 			
