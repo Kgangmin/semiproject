@@ -8,12 +8,12 @@
     String checkin   = (String) request.getAttribute("checkin");
     String checkout  = (String) request.getAttribute("checkout");
     
-	String currentUri	= request.getRequestURI();	// 예: /semiproject/stayDetail.jsp
-	String currentQuery	= request.getQueryString();	// 예: stay_no=1
+   String currentUri   = request.getRequestURI();   // 예: /semiproject/stayDetail.jsp
+   String currentQuery   = request.getQueryString();   // 예: stay_no=1
 
     // 기본 탭 설정: 처음 진입했거나 stayDetail일 경우 Home을 active
-    boolean isHomeActive	= currentUri.contains("stayDetail.jsp") || currentQuery == null;
-    boolean isReviewActive	= currentUri.contains("reviewStay.jsp");
+    boolean isHomeActive   = currentUri.contains("stayDetail.jsp") || currentQuery == null;
+    boolean isReviewActive   = currentUri.contains("reviewStay.jsp");
 %>
 <jsp:include page="/WEB-INF/header1.jsp" />
 
@@ -24,18 +24,18 @@
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1/daterangepicker.min.js"></script>
 
 <div class="container my-4">
-	<!-- 1. 숙소 이미지 캐러셀 -->
-	<div id="stayCarousel" class="carousel slide" data-ride="carousel">
-		<div class="carousel-inner">
-			<!-- 메인 썸네일 -->
-			<div class="carousel-item active">
-				<img src="<%=ctxPath%>/images/${stay.stay_thumbnail}" class="d-block w-100 img-modal" alt="메인 이미지">
-			</div>
-			<!-- 추가 이미지 -->
-			<c:forEach var="img" items="${extraImgList}">
-				<div class="carousel-item">
-					<img src="<%=ctxPath%>/images/${img.stay_extraimg_no_filename}" class="d-block w-100 img-modal" alt="추가 이미지">
-				</div>
+    <!-- 1. 숙소 이미지 캐러셀 -->
+    <div id="stayCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner">
+            <!-- 메인 썸네일 -->
+            <div class="carousel-item active">
+                <img src="<%=ctxPath%>/images/${stay.stay_thumbnail}" class="d-block w-100 img-modal" alt="메인 이미지">
+            </div>
+            <!-- 추가 이미지 -->
+            <c:forEach var="img" items="${extraImgList}">
+                <div class="carousel-item">
+                    <img src="<%=ctxPath%>/images/${img.stay_extraimg_no_filename}" class="d-block w-100 img-modal" alt="추가 이미지">
+                </div>
             </c:forEach>
         </div>
         <a class="carousel-control-prev" href="#stayCarousel" role="button" data-slide="prev">
@@ -48,33 +48,33 @@
         </a>
     </div>
 
-	<!-- 2. 숙소 기본 정보 -->
-	<div class="mt-4 d-flex align-items-center">
-		<h2 class="mb-0">${stay.stay_name}</h2>
-		<div class="ml-auto">
-			<a href="<%=ctxPath%>/wishlistToggle.hb?stay_no=${stay.stay_no}">
-				<img
-					src="<%=ctxPath%>/images/${wishlistExists ? '찜한버튼.png' : '찜버튼.png'}"
-					style="width:32px; height:32px; cursor:pointer;"
-					alt="찜 버튼"/>
-			</a>
-		</div>
-	</div>
-	<!-- 숙박업소 정보 / 해당 숙박업소 리뷰목록 뷰 선택 탭 -->
-	<div>
-		<ul class="nav nav-pills nav-justified nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link <%= isHomeActive ? "active" : "" %>" href="<%=ctxPath%>/stayDetail.hb?stay_no=${stay.stay_no}">
-					Info
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link <%= isReviewActive ? "active" : "" %>" href="<%=ctxPath%>/reviewStay.hb?stay_no=${stay.stay_no}">
-					Review
-				</a>
-			</li>
-		</ul>
-	</div>
+    <!-- 2. 숙소 기본 정보 -->
+   <div class="mt-4 d-flex align-items-center">
+  <h2 class="mb-0">${stay.stay_name}</h2>
+  <div class="ml-auto">
+    <a href="<%=ctxPath%>/wishlistToggle.hb?stay_no=${stay.stay_no}">
+      <img
+        src="<%=ctxPath%>/images/${wishlistExists ? '찜한버튼.png' : '찜버튼.png'}"
+        style="width:32px; height:32px; cursor:pointer;"
+        alt="찜 버튼"/>
+    </a>
+  </div>
+</div>
+   <!-- 숙박업소 정보 / 해당 숙박업소 리뷰목록 뷰 선택 탭 -->
+   <div>
+      <ul class="nav nav-pills nav-justified nav-tabs">
+         <li class="nav-item">
+            <a class="nav-link <%= isHomeActive ? "active" : "" %>" href="<%=ctxPath%>/stayDetail.hb?stay_no=${stay.stay_no}">
+               Info
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link <%= isReviewActive ? "active" : "" %>" href="<%=ctxPath%>/reviewStay.hb?stay_no=${stay.stay_no}">
+               Review
+            </a>
+         </li>
+      </ul>
+   </div>
     <div class="mt-2">
         <p>${stay.stay_info}</p>
         <p>연락처: ${stay.stay_tel}</p>
@@ -87,58 +87,69 @@
         <div id="map" style="width: 500px; height: 400px;"></div>
     </div>
 
-	<!-- 3. 날짜 선택 & 적용 -->
-	<div class="mt-4 mb-3" style="width:300px;">
-		<label for="stayDate">체크인–체크아웃</label>
-		<input	type="text"
-				id="stayDate"
-				class="form-control"
-				placeholder="기간 선택"
-				readonly
-				value="${period != null ? period : ''}" />
-		<small id="dateCount" class="form-text text-muted mt-1">
-			<c:if test="${nights > 0}">
-				<p>총 ${nights}박</p>
-			</c:if>
-		</small>
-	</div>
+ <!-- 3. 날짜 선택 & 적용 -->
+  <div class="mt-4 mb-3" style="width:300px;">
+    <label for="stayDate">체크인–체크아웃</label>
+    <input type="text"
+           id="stayDate"
+           class="form-control"
+           placeholder="기간 선택"
+           readonly
+           value="${period != null ? period : ''}" />
+    <small id="dateCount" class="form-text text-muted mt-1">
+      <c:if test="${nights > 0}">
+  		<p>총 ${nights}박</p>
+		</c:if>
+    </small>
+  </div>
 
-	<!-- 4. 객실 목록 -->
-	<div class="mt-5">
-		<h5>객실 정보</h5>
-		<div class="list-group">
-			<c:forEach var="room" items="${roomList}">
-				<div class="list-group-item d-flex align-items-center mb-4">
-					<!-- 썸네일 -->
-					<img	src="<%=ctxPath%>/images/${room.room_thumbnail}"
-							class="img-thumbnail"
-							style="width:200px; height:150px; object-fit:cover;" />
-					<!-- 등급·가격 -->
-					<div class="ml-3 flex-grow-1">
-						<h6>${room.room_grade}</h6>
-						<p>
-							1박당 
-							<fmt:formatNumber value="${room.price_per_night}" pattern="#,##0"/> 원
-						</p>
-					</div>
-					<!-- 예약하기 -->
-					<a	href="<%=ctxPath%>/roomDetail.hb?stay_no=${param.stay_no}
-								&room_no=${room.room_no}
-								&checkin=${checkin}
-								&checkout=${checkout}"
-						class="btn btn-primary btn-sm ml-3"
-						<c:if test="${empty checkin}">
-									onclick="alert('먼저 기간을 선택하세요'); return false;"
-						</c:if>>
-						예약하기
-					</a>
-				</div>
-			</c:forEach>
-			<c:if test="${empty roomList}">
-				<p class="text-muted">선택한 기간에 이용 가능한 객실이 없습니다.</p>
-			</c:if>
-		</div>
-	</div>
+
+   <!-- 4. 객실 목록 -->
+  <div class="mt-5">
+    <h5>객실 정보</h5>
+    <div class="list-group">
+      <c:forEach var="room" items="${roomList}">
+        <div class="list-group-item d-flex align-items-center mb-4">
+          <!-- 썸네일 -->
+          <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
+               class="img-thumbnail"
+               style="width:200px; height:150px; object-fit:cover;" />
+          <!-- 등급·가격 -->
+          <div class="ml-3 flex-grow-1">
+            <h6>${room.room_grade}</h6>
+            <p>
+              1박당 
+              <fmt:formatNumber value="${room.price_per_night}" pattern="#,##0"/> 원
+            </p>
+          </div>
+          <!-- 예약하기 -->
+          <c:choose>
+      <%-- 1) 로그인 안 된 경우 --%>
+      <c:when test="${empty sessionScope.loginUser}">
+        <a href="javascript:void(0);"
+           class="btn btn-primary btn-sm ml-3"
+           onclick="if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) { window.location.href='<%=ctxPath%>/login/login.hb'; } else { history.back(); }">
+          예약하기
+        </a>
+      </c:when>
+      <%--  2) 로그인 된 경우 --%>
+      <c:otherwise>
+        <a href="<%=ctxPath%>/reservation/reserveRoom.hb?stay_no=${param.stay_no}&room_no=${room.room_no}&checkin=${checkin}&checkout=${checkout}"
+           class="btn btn-primary btn-sm ml-3"
+           <c:if test="${empty checkin}">
+             onclick="alert('먼저 기간을 선택하세요'); return false;"
+           </c:if>>
+          예약하기
+        </a>
+      </c:otherwise>
+    </c:choose>
+        </div>
+      </c:forEach>
+      <c:if test="${empty roomList}">
+        <p class="text-muted">선택한 기간에 이용 가능한 객실이 없습니다.</p>
+      </c:if>
+    </div>
+  </div>
 </div>
 
 
@@ -146,80 +157,91 @@
 
 <!-- Image Preview Modal -->
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-		<div class="modal-content bg-transparent border-0">
-			<img src="" id="modalImage" class="img-fluid" alt="확대 이미지" style="max-height:95vh; max-width:95vw;" />
-		</div>
-	</div>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content bg-transparent border-0">
+      <img src="" id="modalImage" class="img-fluid" alt="확대 이미지" style="max-height:95vh; max-width:95vw;" />
+    </div>
+  </div>
 </div>
 <script>
-	var ctxPath = '${ctxPath}';
-	var stayNo  = '${param.stay_no}';
+  var ctxPath = '${ctxPath}';
+  var stayNo  = '${param.stay_no}';
 </script>
 
 <!-- 1) kakao SDK 불러오기 (JS키 + libraries) -->
 <script
-	type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=43e1bc9de3bc707bc039e3d3bbf88100&libraries=services">
+  type="text/javascript"
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=43e1bc9de3bc707bc039e3d3bbf88100&libraries=services">
 </script>
 
 <!-- 2) DOM 준비 후 지도 초기화 -->
 <script>
 
-	// 2-1) SDK가 완전히 로드된 뒤에 init 함수 실행
-	kakao.maps.load(function() {
-	var container = document.getElementById('map');
-	var option = {
-		center: new kakao.maps.LatLng(${stay.latitude}, ${stay.longitude}),
-		level: 3
-	};
-	var map = new kakao.maps.Map(container, option);
+  // 2-1) SDK가 완전히 로드된 뒤에 init 함수 실행
+  kakao.maps.load(function() {
+    var container = document.getElementById('map');
+    var option = {
+      center: new kakao.maps.LatLng(${stay.latitude}, ${stay.longitude}),
+      level: 3
+    };
+    var map = new kakao.maps.Map(container, option);
 
-	new kakao.maps.Marker({
-		position: map.getCenter(),
-		map: map
-	});  
+    new kakao.maps.Marker({
+      position: map.getCenter(),
+      map: map
+    });
+    
   });
 
 //daterangepicker
-$(function() {
-	var stayDetailUrl = '${stayDetailUrl}';
-	var stayNo  = '${param.stay_no}';
-	var checkin = '${checkin}';
-	var checkout= '${checkout}';
+  $(function() {
+	  var stayDetailUrl = '${stayDetailUrl}';
+	    var stayNo  = '${param.stay_no}';
+	    var checkin = '${checkin}';
+	    var checkout= '${checkout}';
 
-	var opts = {
-		locale: {
-			format:     'YYYY-MM-DD',
-			separator:  '~',
-			applyLabel: '적용',
-			cancelLabel:'취소'
-		},
-		opens: 'center'
-	};
+	    var opts = {
+	      locale: {
+	        format:     'YYYY-MM-DD',
+	        separator:  '~',
+	        applyLabel: '적용',
+	        cancelLabel:'취소',
+	        
+	      },
+	      opens: 'center',
+	      minDate:  moment(), 
+	    };
 
-	if (checkin && checkout) {
-		opts.startDate = moment(checkin, 'YYYY-MM-DD');
-		opts.endDate   = moment(checkout, 'YYYY-MM-DD');
-	} else {
-		opts.startDate = moment();
-		opts.endDate   = moment().add(1, 'days');
-	}
+	    if (checkin && checkout) {
+	      opts.startDate = moment(checkin, 'YYYY-MM-DD');
+	      opts.endDate   = moment(checkout, 'YYYY-MM-DD');
+	    } else {
+	      opts.startDate = moment();
+	      opts.endDate   = moment().add(1, 'days');
+	    }
 
-	$('#stayDate').daterangepicker(opts, function(start, end){
-		var period = start.format('YYYY-MM-DD') + '~' + end.format('YYYY-MM-DD');
-		var target = stayDetailUrl
-					+ '?stay_no=' + stayNo
-					+ '&period='   + encodeURIComponent(period);
-		console.log('Redirect to:', target);
-		window.location.href = target;
-	});
-
-	// 3) Image modal on click
-	$('.img-modal').on('click', function() {
-		var src = $(this).attr('src');
-		$('#modalImage').attr('src', src);
-		$('#imageModal').modal('show');
-	});
-});
+	    $('#stayDate').daterangepicker(opts, function(start, end){
+	    	// 선택한 체크인 날짜가 오늘 이전이면 경고
+	        if (start.isBefore(moment(), 'day')) {
+	          alert('오늘 이후 날짜만 선택 가능합니다.');
+	          // 입력값 초기화
+	          $('#stayDate').val('');
+	          return;
+	        }
+	      var period = start.format('YYYY-MM-DD') + '~' + end.format('YYYY-MM-DD');
+	      var target = stayDetailUrl
+	                     + '?stay_no=' + stayNo
+	                     + '&period='   + encodeURIComponent(period);
+	      //console.log('Redirect to:', target);
+	      window.location.href = target;
+	    });
+    
+ // 3) Image modal on click
+    $('.img-modal').on('click', function() {
+      var src = $(this).attr('src');
+      $('#modalImage').attr('src', src);
+      $('#imageModal').modal('show');
+    });
+    
+  });
 </script>
