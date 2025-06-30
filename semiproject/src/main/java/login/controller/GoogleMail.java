@@ -118,7 +118,7 @@ public class GoogleMail {
     	MimeMessage msg = new MimeMessage(ses);
 
     	// 제목 설정
-    	String subject = "주문이 완료되었습니다.";
+    	String subject = "예약이 완료되었습니다.";
     	msg.setSubject(subject);
     	        
     	// 보내는 사람의 메일주소

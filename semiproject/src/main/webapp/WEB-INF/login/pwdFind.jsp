@@ -4,8 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
-    String ctxPath = request.getContextPath();
-    
+    String ctxPath = request.getContextPath();   
 %>
 
 <!-- Required meta tags -->
