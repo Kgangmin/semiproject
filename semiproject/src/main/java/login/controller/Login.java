@@ -42,8 +42,11 @@ public class Login extends AbstractController {
             paraMap.put("login_ip", login_ip);
 
             MemberVO loginUser = mdao.login(paraMap);
+            int access_level = mdao.getAccessLevelByUserId(user_id);
 
             if (loginUser != null) {
+            	
+            	loginUser.setAccess_level(access_level);
                   
                 
                 if (1 == loginUser.getIs_active()) {            	    

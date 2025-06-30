@@ -1,11 +1,14 @@
 package member.model;
 
+
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -267,6 +270,7 @@ public class MemberDAO_imple implements MemberDAO {
       }// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
 
       
+      
    // ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
    		@Override
    		public boolean idDuplicateCheck(String userid) throws SQLException {
@@ -505,6 +509,39 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 
+
+
+		//로그인시 access_level 이 0인지 1인지 알아오는 메소드(관리자인지 일반회원인지 확인)
+		@Override
+		public int getAccessLevelByUserId(String user_id) throws SQLException {
+
+			 int access_level = -1; // 기본값 (존재하지 않거나 오류 시)
+			 
+			try {
+		        conn = ds.getConnection();
+
+		        String sql = "SELECT access_level FROM tbl_user WHERE user_id = ? AND is_withdrawn = 0";
+
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, user_id);
+
+		        rs = pstmt.executeQuery();
+
+		        if (rs.next()) {
+		            access_level = rs.getInt("access_level");
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return access_level;
+		}
+
+
+
+
+
 		
 		// 회원 존재 여부를 확인하는 메소드
 		@Override
@@ -583,6 +620,11 @@ public class MemberDAO_imple implements MemberDAO {
 			
 		}// end of public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException------------
 
+
+
+
+
+
 		@Override
 		public void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception {
 			try {
@@ -624,10 +666,138 @@ public class MemberDAO_imple implements MemberDAO {
 		    }
 			
 		}
+		
+
+
+		// 회원 목록 조회 메서드d
+		@Override
+		public List<MemberVO> getMemberList(String searchType, String searchWord, int offset, int limit) throws SQLException {
+		    List<MemberVO> memberList = new ArrayList<>();
+
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = " SELECT user_name, mobile, email, fk_grade_no "
+		                   + " FROM tbl_user "
+		                   + " WHERE user_id != 'admin' ";
+
+		        if (searchWord != null && !searchWord.trim().isEmpty()) {
+		            if ("user_name".equals(searchType)) {
+		                sql += " AND user_name LIKE ? ";
+		            } else if ("email".equals(searchType)) {
+		                try {
+		                    searchWord = aes.encrypt(searchWord);  // 암호화
+		                } catch (GeneralSecurityException | UnsupportedEncodingException e) {
+		                    e.printStackTrace();
+		                    searchWord = ""; // 예외 시 빈 문자열로 처리
+		                }
+		                sql += " AND email = ? ";  // 정확한 일치 비교
+		            }
+		        }
+
+		        sql += " ORDER BY user_name ASC "
+		             + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ";
+
+		        pstmt = conn.prepareStatement(sql);
+
+		        if (searchWord != null && !searchWord.trim().isEmpty()) {
+		            if ("email".equals(searchType)) {
+		                pstmt.setString(1, searchWord); // 이메일은 정확히 일치하므로 % 붙이지 않음
+		                pstmt.setInt(2, offset);
+		                pstmt.setInt(3, limit);
+		            } else {
+		                pstmt.setString(1, "%" + searchWord + "%"); // 이름 검색은 LIKE 사용
+		                pstmt.setInt(2, offset);
+		                pstmt.setInt(3, limit);
+		            }
+		        } else {
+		            pstmt.setInt(1, offset);
+		            pstmt.setInt(2, limit);
+		        }
+
+
+		        rs = pstmt.executeQuery();
+
+		        while (rs.next()) {
+		            MemberVO member = new MemberVO();
+
+		            member.setUser_name(rs.getString("user_name"));
+
+		            try {
+		                member.setMobile(aes.decrypt(rs.getString("mobile")));
+		                member.setEmail(aes.decrypt(rs.getString("email")));
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		                member.setMobile(rs.getString("mobile"));
+		                member.setEmail(rs.getString("email"));
+		            }
+
+		            member.setFk_grade_no(rs.getString("fk_grade_no"));
+
+		            memberList.add(member);
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return memberList;
+		}
+
+		   
+		
+		// 회원 총 개수 조회 메서드
+		@Override
+		public int getMemberTotalCount(String searchType, String searchWord) throws SQLException {
+		    int totalCount = 0;
+
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = " SELECT COUNT(*) AS totalCount FROM tbl_user WHERE user_id != 'admin' ";
+
+		        if(searchWord != null && !searchWord.trim().isEmpty()) {
+		            if("user_name".equals(searchType)) {
+		                sql += " AND user_name LIKE ? ";
+		            } else if("email".equals(searchType)) {
+		                sql += " AND email LIKE ? ";
+		            }
+		        }
+
+		        pstmt = conn.prepareStatement(sql);
+
+		        if(searchWord != null && !searchWord.trim().isEmpty()) {
+		            pstmt.setString(1, "%" + searchWord + "%");
+		        }
+
+		        rs = pstmt.executeQuery();
+
+		        if(rs.next()) {
+		            totalCount = rs.getInt("totalCount");
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return totalCount;
+		}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 
 
 }
+
 
 
 
