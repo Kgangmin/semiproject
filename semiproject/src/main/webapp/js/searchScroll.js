@@ -4,7 +4,7 @@ $(function(){
   let startIndex = 1;
   let loading    = false;
 
-  // dateRangePicker 초기화 (검색폼 아래)
+/*  // dateRangePicker 초기화 (검색폼 아래)
   $('#dateRangePicker').daterangepicker({
     locale: {
       format:    'YYYY-MM-DD',
@@ -20,7 +20,7 @@ $(function(){
     $('#dateRangePicker')
       .after(`<small id="dateCount" class="text-muted ml-2">총 ${days}박</small>`);
   });
-
+*/
   // 최초 로드
   loadStays();
 
@@ -62,9 +62,9 @@ $(function(){
 			                        평점: ${s.stay_score.toFixed(1)}  
 			                        · 조회수: ${s.views}
 			                      </p>
-			                      <a href="${ctxPath}/stayDetail.hb?stay_no=${s.stay_no}"
+			                      <a href="${ctxPath}/stayDetail.hb?stay_no=${s.stay_no}&checkin=${encodeURIComponent(checkin)}&checkout=${encodeURIComponent(checkout)}"
 			                         class="btn btn-sm btn-primary">상세보기</a>
-			  					<a href="${ctxPath}/stayDetail.hb?stay_no=${s.stay_no}"
+			  					<a href="${ctxPath}/stayDetail.hb?stay_no=${s.stay_no}&checkin=${encodeURIComponent(checkin)}&checkout=${encodeURIComponent(checkout)}"
 			  					   class="stretched-link"></a>
 			                    </div>
 			                  </div>
