@@ -31,7 +31,6 @@ public interface MemberDAO {
 	//유저의 이메일을 변경하는 메소드 
 	int changeEmailMember(Map<String, String> paramap) throws SQLException;
 	
-
 	// 아이디찾기
 	String findUserid(Map<String, String> paraMap) throws SQLException;
 
@@ -41,7 +40,7 @@ public interface MemberDAO {
 	// 비밀번호 변경하기
 	int pwdUpdate(Map<String, String> paraMap) throws SQLException;
 
-	//입력한 비밀번호가 맞는지 확인하는 메소드
+	// 입력한 비밀번호가 맞는지 확인하는 메소드
 	boolean checkPassword(String user_id, String currentPwd) throws SQLException;
 
 	// 회원 존재 여부를 확인하는 메소드
@@ -51,6 +50,8 @@ public interface MemberDAO {
 	boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException;
 
 	
+	//유저 총 결제금액·포인트 보정 및 등급 업데이트
+	void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception;
 
 
 	

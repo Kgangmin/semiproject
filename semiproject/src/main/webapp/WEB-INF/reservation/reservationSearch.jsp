@@ -106,7 +106,8 @@
         applyLabel: '적용',
         cancelLabel: '취소'
       },
-      opens: 'center'
+      opens: 'center',
+      minDate:  moment().startOf('day')
     }, function(start, end) {
         // 선택된 날짜 범위의 총 일수(포함) 계산
         var days = end.diff(start, 'days') + 1;

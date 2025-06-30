@@ -15,6 +15,17 @@
 %>
 
 <jsp:include page="/WEB-INF/header1.jsp" />
+<style>
+.card-img-top {
+  width: 100%;        /* 가로는 카드 너비에 딱 맞추고 */
+  height: 200px;      /* 원하는 높이로 고정 */
+  object-fit: cover;  /* 이미지 비율을 유지하며 잘려서 채워줌 */
+}
+ #stayContainer .col-md-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+ }
+</style>
 
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>

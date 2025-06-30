@@ -34,6 +34,8 @@ select * from TBL_STAY_EXTRAIMG;
 select * from TBL_STAY;
 select * from TBL_ROOM;
 select * from TBL_USER;
+select * from tbl_reservation
+order by reserv_date;
 
 
 insert into tbl_user_grade(grade_no, grade_name, grade_cutoff, pointrate) values(1, 'VVIP', 100000000, 0.08);      
