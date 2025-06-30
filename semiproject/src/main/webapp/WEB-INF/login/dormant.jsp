@@ -20,6 +20,17 @@
 <script src="<%=ctxPath%>/jquery-ui-1.13.1.custom/jquery-ui.min.js"></script>
 <script>
 
+$(function() {
+	
+    $('.btn-certificate').click(function() {
+      $('#action').val('send');
+    });
+    
+    $('.btn-ok').click(function() {
+      $('#action').val('verify');
+    });
+    
+});
 
 </script>  
   <style>
@@ -44,21 +55,29 @@
 <div class="container">
     <h2>휴면 해제</h2>
 
-    <form name="DormantFrm" method="post" action="<%= ctxPath %>/dormant.hb">  
-        <label for="user_name">성명</label>
-        <input type="text" id="user_name" name="user_name" >		
-        <label for="mobile">휴대폰번호</label>
-        <input type="text" id="mobile" name="mobile" >
-        <div class="button-group">
-        	<button type="submit" class="btn-certificate" value="send">인증번호 받기</button>
+    <form name="DormantFrm" method="post" action="<%= ctxPath %>/login/dormant.hb">  
+	    <input type="hidden" id="action" name="action" value="">
+	    
+	    <label for="user_name">아이디</label>
+	    <input type="text" id="user_id" name="user_id" value="<%= request.getParameter("user_id") != null ? request.getParameter("user_id") : "" %>" >
+	    
+	    <label for="user_name">성명</label>
+	    <input type="text" id="user_name" name="user_name" value="<%= request.getParameter("user_name") != null ? request.getParameter("user_name") : "" %>" >		
+	    
+	    <label for="mobile">휴대폰번호</label>
+	    <input type="text" id="mobile" name="mobile" value="<%= request.getParameter("mobile") != null ? request.getParameter("mobile") : "" %>" >
+	    
+	    <div class="button-group">
+	    	<button type="submit" class="btn-certificate">인증번호 받기</button>
 		</div>
-        <label for="input_number" style="<%= showCertInput ? "" : "display:none;" %>">인증번호입력</label>
-		<input type="text" id="input_number" name="input_number" style="<%= showCertInput ? "" : "display:none;" %>">
-
+	    
+	    <label for="input_number" style="<%= showCertInput ? "" : "display:none;" %>">인증번호입력</label>
+		<input type="text" id="input_number" name="input_number" maxlength="5" autocomplete="off" style="<%= showCertInput ? "" : "display:none;" %>">
+	
 		<div class="button-group" style="<%= showCertInput ? "" : "display:none;" %>">
-		    <button type="submit" class="btn-ok" name="btn-ok" value="verify">확인</button>          
+		    <button type="submit" class="btn-ok">확인</button>          
 		</div>
-    </form>
+	</form>
 </div>
 </body>
 </html>
