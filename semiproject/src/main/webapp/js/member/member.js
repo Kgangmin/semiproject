@@ -7,7 +7,7 @@ $('#loadMoreBtn').on('click', function () {
         url: `${ctxPath}/loadMoreWishlist.hb`,
         type: 'GET',
         data: {
-            user_id: userId,
+            
             offset: offset,
             limit: limit
         },
@@ -40,9 +40,13 @@ $('#loadMoreBtn').on('click', function () {
             alert('데이터를 불러오는데 실패했습니다.');
         }
     });
-});
+});//END $('#loadMoreBtn').on('click', function ()
 	
-});	
+
+
+
+
+});	//END $(function()
 
 
 

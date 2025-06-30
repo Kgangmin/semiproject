@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import common.controller.AbstractController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import member.domain.MemberVO;
 import myshop.domain.StayVO;
 import myshop.domain.WishVo;
 import myshop.model.WishDAO;
@@ -20,7 +21,8 @@ public class LoadMoreWishlist extends AbstractController {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		 if (super.checkLogin(request)) {
 			 // 로그인이 되었다면
-			  String userId = request.getParameter("user_id");
+			 	MemberVO loginUser = (MemberVO) request.getSession().getAttribute("loginUser");
+		        String userId = loginUser.getUser_id(); // ✅ 이걸로만 사용자 식별
 		        int offset = Integer.parseInt(request.getParameter("offset"));
 		        int limit = Integer.parseInt(request.getParameter("limit"));
 

@@ -10,6 +10,10 @@
     const userId = '${loginUser.user_id}';
     let offset = 6;
     const limit = 6;
+    
+    document.getElementById("goReservationPageBtn")?.addEventListener("click", function() {
+        location.href = ctxPath + "/reservationList.hb?user_id=" + userId;
+    });	
 </script>
 <script type="text/javascript" src="<%= ctx_Path%>/js/member/member.js"></script>
 
@@ -135,33 +139,29 @@
 		            </c:otherwise>
 		        </c:choose>
 		    </div>
-		    <button id="loadMoreBtn">더보기</button>
+		    <button id="loadMoreBtn">찜 더보기</button>
 		</div>
-        <div class="reservation-history">
-            <h3>예약내역</h3>
-            <%-- 
-                서블릿에서 예약 목록(List<ReservationDTO>)을 request 객체에 담아 전달했다고 가정합니다.
-                List<ReservationDTO> reservationList = ...;
-                request.setAttribute("reservationList", reservationList);
-            --%>
-            <div class="reservation-list">
-                <c:choose>
-                    <c:when test="${not empty reservationList}">
-                        <%-- JSTL의 forEach를 사용하여 목록을 반복 출력 --%>
-                        <c:forEach var="reservation" items="${reservationList}">
-                            <div class="reservation-item">
-                                <p><strong>예약 번호:</strong> ${reservation.id}</p>
-                                <p><strong>예약 내용:</strong> ${reservation.serviceName}</p>
-                                <p><strong>예약 날짜:</strong> ${reservation.reservationDate}</p>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p>예약 내역이 없습니다.</p>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </div>
+		<div class="reservation-history">
+		    <h3>예약내역</h3>
+		    <button id="goReservationPageBtn">예약 더보기</button>
+		    <div class="reservation-list">
+		        <c:choose>
+		            <c:when test="${not empty nextReservation}">
+		                <div class="reservation-item">
+		                    <p><strong>예약 번호:</strong> ${nextReservation.fk_user_id}</p>
+		                    <p><strong>숙소 이름:</strong> ${nextReservation.serviceName}</p>
+		                    <p><strong>객실 이름:</strong> ${wish.stayVO.stay_name}</p>
+		                    <p><strong>예약 날짜:</strong> ${nextReservation.checkin_date} ~ ${nextReservation.checkout_date}</p>
+		                </div>
+		            </c:when>
+		            <c:otherwise>
+		                <p>예약 내역이 없습니다.</p>
+		            </c:otherwise>
+		        </c:choose>
+		    </div>
+		</div>
+
+
 
     </div>
      
