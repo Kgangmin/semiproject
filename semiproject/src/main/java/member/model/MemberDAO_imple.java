@@ -510,6 +510,7 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 
+
 		//로그인시 access_level 이 0인지 1인지 알아오는 메소드(관리자인지 일반회원인지 확인)
 		@Override
 		public int getAccessLevelByUserId(String user_id) throws SQLException {
@@ -538,7 +539,9 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 
 
-		
+
+
+
 		
 		// 회원 존재 여부를 확인하는 메소드
 		@Override
@@ -575,20 +578,35 @@ public class MemberDAO_imple implements MemberDAO {
 		
 		// 인증번호 일치 시 휴면 해제 처리(is_active=0)
 		@Override
-		public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException {
+		public boolean updateUserIsActive(String login_ip, String sessionUser_id, String sessionuser_name, String sessionMobile) throws SQLException {
 			
 			boolean result = false;
 		    
 		    try {
 		        conn = ds.getConnection();
 		        
-		        String sql = "UPDATE tbl_user SET is_active = 0 WHERE user_name = ? AND mobile = ?";
+		        String sql = "UPDATE tbl_user SET is_active = 0 WHERE user_id = ? and user_name = ? AND mobile = ? ";
 		        
 		        pstmt = conn.prepareStatement(sql);
-		        pstmt.setString(1, sessionuser_name);
-		        pstmt.setString(2, aes.encrypt(sessionMobile));  // AES 암호화된 값으로 전달
+		        pstmt.setString(1, sessionUser_id);
+		        pstmt.setString(2, sessionuser_name);
+		        pstmt.setString(3, aes.encrypt(sessionMobile));  // AES 암호화된 값으로 전달
 		        
 		        int n = pstmt.executeUpdate();
+		        
+		        if(n == 1) {
+		        	
+		        	sql = " insert into tbl_login_history(fk_user_id, login_records, login_ip) "
+	        			+ " values(? ,sysdate, ?) ";
+		        	
+		        	 pstmt = conn.prepareStatement(sql);
+		        	 
+		        	 pstmt.setString(1, sessionUser_id);
+		        	 pstmt.setString(2, login_ip);
+		        	 
+		        	 pstmt.executeUpdate();
+		        	 
+		        }
 		        
 		        result = n > 0;  // 한 건 이상 업데이트 되었으면 성공
 		        
@@ -601,6 +619,10 @@ public class MemberDAO_imple implements MemberDAO {
 		    return result;
 			
 		}// end of public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException------------
+
+
+
+
 
 
 		@Override
@@ -643,11 +665,11 @@ public class MemberDAO_imple implements MemberDAO {
 		        close();
 		    }
 			
+		}
 		
 
-		}
 
-		// 회원 목록 조회 메서드
+		// 회원 목록 조회 메서드d
 		@Override
 		public List<MemberVO> getMemberList(String searchType, String searchWord, int offset, int limit) throws SQLException {
 		    List<MemberVO> memberList = new ArrayList<>();
@@ -771,6 +793,9 @@ public class MemberDAO_imple implements MemberDAO {
 		
 		
 		
+
+
+
 }
 
 

@@ -50,7 +50,7 @@ public class ReserveRoom extends AbstractController {
                               .filter(r -> r.getRoom_no().equals(roomNo))
                               .findFirst()
                               .orElseThrow(() -> new IllegalArgumentException("Invalid room_no"));
-        System.out.println("▶ ReserveRoom: stayNo=" + stayNo + ", roomNo=" + roomNo);
+        //System.out.println("▶ ReserveRoom: stayNo=" + stayNo + ", roomNo=" + roomNo);
 
         // 날짜 계산
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");

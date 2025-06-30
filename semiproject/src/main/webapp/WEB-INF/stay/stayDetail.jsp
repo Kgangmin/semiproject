@@ -112,7 +112,7 @@
         <div class="list-group-item d-flex align-items-center mb-4">
           <!-- 썸네일 -->
           <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
-               class="img-thumbnail"
+               class="img-thumbnail img-modal"
                style="width:200px; height:150px; object-fit:cover;" />
           <!-- 등급·가격 -->
           <div class="ml-3 flex-grow-1">
@@ -159,7 +159,7 @@
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content bg-transparent border-0">
-      <img src="" id="modalImage" class="img-fluid" alt="확대 이미지" style="max-height:95vh; max-width:95vw;" />
+      <img src="#" id="modalImage" class="img-fluid" alt="확대 이미지" style="max-height:95vh; max-width:95vw;" />
     </div>
   </div>
 </div>

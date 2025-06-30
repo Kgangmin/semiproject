@@ -54,7 +54,7 @@ public interface MemberDAO {
 
 
 	// 인증번호 일치 시 휴면 해제 처리(is_active=0)
-	boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException;
+	boolean updateUserIsActive(String login_ip, String sessionUser_id, String sessionuser_name, String sessionMobile) throws SQLException;
 
 	
 
