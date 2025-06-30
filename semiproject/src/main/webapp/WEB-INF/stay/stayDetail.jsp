@@ -8,12 +8,12 @@
     String checkin   = (String) request.getAttribute("checkin");
     String checkout  = (String) request.getAttribute("checkout");
     
-   String currentUri   = request.getRequestURI();   // 예: /semiproject/stayDetail.jsp
-   String currentQuery   = request.getQueryString();   // 예: stay_no=1
+	String currentUri	= request.getRequestURI();	// 예: /semiproject/stayDetail.jsp
+	String currentQuery	= request.getQueryString();	// 예: stay_no=1
 
     // 기본 탭 설정: 처음 진입했거나 stayDetail일 경우 Home을 active
-    boolean isHomeActive   = currentUri.contains("stayDetail.jsp") || currentQuery == null;
-    boolean isReviewActive   = currentUri.contains("reviewStay.jsp");
+    boolean isHomeActive	= currentUri.contains("stayDetail.jsp") || currentQuery == null;
+    boolean isReviewActive	= currentUri.contains("reviewStay.jsp");
 %>
 <jsp:include page="/WEB-INF/header1.jsp" />
 
