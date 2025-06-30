@@ -306,14 +306,8 @@ public class ReviewDAO_imple implements ReviewDAO
 			{
 				double avg = rs.getDouble(2);
 				
-				if(avg % 1 == 0)
-				{	//	평점 평균이 .00 인 정수로 떨어지는 경우
-					averageScore = String.valueOf((int)avg);
-				}
-				else
-				{	//	평점 평균을 소숫점 첫 째자리 까지만 보여주기
-					averageScore = String.format("%.1f", avg);
-				}
+				//	평점 평균을 소숫점 첫 째자리 까지만 보여주기
+				averageScore = String.format("%.1f", avg);
 			}
 		}
 		finally
