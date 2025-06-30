@@ -62,9 +62,10 @@ public class RoomDAO_imple implements RoomDAO
         {
         	conn = ds.getConnection();
 
-        	String sql = " SELECT	room_extraimg_no, fk_room_no, room_extraimg_no_filename "
+        	String sql = " SELECT	room_extraimg_no, fk_room_no, room_extraimg_filename "
 	                   + " FROM		tbl_room_extraimg "
-	                   + " WHERE	fk_room_no = ? ORDER BY stay_extraimg_no ";
+	                   + " WHERE	fk_room_no = ? "
+	                   + " ORDER BY room_extraimg_no ";
             
         	pstmt = conn.prepareStatement(sql);
         	pstmt.setString(1, roomNo);
@@ -75,7 +76,7 @@ public class RoomDAO_imple implements RoomDAO
         		RoomimgVO img = new RoomimgVO();
         		img.setRoom_extraimg_no(rs.getString("room_extraimg_no"));
         		img.setFk_room_no(rs.getString("fk_room_no"));
-        		img.setRoom_extraimg_filename(rs.getString("stay_extraimg_filename"));
+        		img.setRoom_extraimg_filename(rs.getString("room_extraimg_filename"));
         		roomImgList.add(img);
         	}
         }

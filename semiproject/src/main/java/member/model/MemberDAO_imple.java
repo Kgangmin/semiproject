@@ -508,6 +508,7 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 
 
+
 		//로그인시 access_level 이 0인지 1인지 알아오는 메소드(관리자인지 일반회원인지 확인)
 		@Override
 		public int getAccessLevelByUserId(String user_id) throws SQLException {
@@ -577,7 +578,56 @@ public class MemberDAO_imple implements MemberDAO {
 		
 
 
-	}
+	
+
+		@Override
+		public void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception {
+			try {
+		        // 1) 커넥션 가져오기
+		        conn = ds.getConnection();
+
+		        // 2) tbl_user 총 결제금액·포인트 업데이트
+		        String updateSql = " UPDATE tbl_user u SET " +
+		        				   "  total_payment = total_payment + ?, " +
+		        				   "  point = point - ? + FLOOR(? * ( " +
+		        				   "    SELECT pointrate FROM tbl_user_grade g " +
+		        				   "    WHERE g.grade_no = u.fk_grade_no " +
+		        				   "  )) " +
+		        				   " WHERE user_id = ? ";
+		        pstmt = conn.prepareStatement(updateSql);
+		        pstmt.setInt(1, finalPay);    // 결제금액만큼 total_payment 증가
+		        pstmt.setInt(2, usedPoint);   // 사용 포인트 차감
+		        pstmt.setInt(3, finalPay);    // 보너스 포인트 = finalPay * pointrate
+		        pstmt.setString(4, userId);
+		        pstmt.executeUpdate();
+		        pstmt.close();
+
+		        // 3) 등급 커트라인에 따라 fk_grade_no 갱신
+		        String gradeSql =
+		            " UPDATE tbl_user u SET fk_grade_no = ( " +
+		            "  SELECT grade_no FROM (" +
+		            "    SELECT grade_no, ROW_NUMBER() OVER (ORDER BY grade_cutoff DESC) rn " +
+		            "    FROM tbl_user_grade " +
+		            "    WHERE grade_cutoff <= u.total_payment " +
+		            "  ) WHERE rn = 1 " +
+		            " ) WHERE user_id = ? ";
+		        pstmt = conn.prepareStatement(gradeSql);
+		        pstmt.setString(1, userId);
+		        pstmt.executeUpdate();
+
+		    } finally {
+		        // 사용한 자원 모두 반납
+		        close();
+		    }
+			
+		
+
+		}
+		
+		
+}
+
+
 
 
 

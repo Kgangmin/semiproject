@@ -45,8 +45,13 @@ public interface MemberDAO {
 	//입력한 비밀번호가 맞는지 확인하는 메소드
 	boolean checkPassword(String user_id, String currentPwd) throws SQLException;
 
+
 	//로그인시 access_level 이 0인지 1인지 알아오는 메소드(관리자인지 일반회원인지 확인)
 	int getAccessLevelByUserId(String user_id) throws SQLException;
+
+	//유저 총 결제금액·포인트 보정 및 등급 업데이트
+	void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception;
+
 
 	// 간단한 회원정보를 가져오는 메소드 (관리자페이지에 구현)
 	List<MemberVO> getMemberList() throws SQLException;
