@@ -3,14 +3,35 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="stayDetailUrl" value="${pageContext.request.contextPath}/stayDetail.hb" />
 <%
-    String ctxPath   = request.getContextPath();
-    String period    = (String) request.getAttribute("period");
-    String checkin   = (String) request.getAttribute("checkin");
-    String checkout  = (String) request.getAttribute("checkout");
-    
-	String currentUri	= request.getRequestURI();	// 예: /semiproject/stayDetail.jsp
-	String currentQuery	= request.getQueryString();	// 예: stay_no=1
+    String ctxPath  = request.getContextPath();
 
+	// 1) searchScroll.js 에서 넘긴 checkin/checkout
+	String paramCheckin  = request.getParameter("checkin");
+	String paramCheckout = request.getParameter("checkout");
+
+	// 1-1) URL 파라미터로 넘어온 period 읽기
+    String period   = request.getParameter("period");
+    // 3) 우선순위: checkin+checkout 이 있으면 period 갱신
+    if (paramCheckin != null && !paramCheckin.isEmpty()
+     && paramCheckout!= null && !paramCheckout.isEmpty()) {
+        period = paramCheckin + "~" + paramCheckout;
+    }
+
+    // 4) period 가 여전히 비어 있으면 오늘~내일로 기본
+    if (period == null || period.trim().isEmpty()) {
+        java.time.LocalDate today = java.time.LocalDate.now();
+        period    = today.toString() + "~" + today.plusDays(1).toString();
+    }
+
+    // 5) "YYYY-MM-DD~YYYY-MM-DD" 분리
+    String[] parts   = period.split("~");
+    String checkin  = parts[0].trim();
+    String checkout = parts.length>1 ? parts[1].trim() : "";
+
+    // 3) view data already in request: stay, extraImgList, roomList, nights, wishlistExists, stay.latitude, stay.longitude
+
+    String currentUri = request.getRequestURI();	// 예: /semiproject/stayDetail.jsp
+    String currentQuery	= request.getQueryString();	// 예: stay_no=1
     // 기본 탭 설정: 처음 진입했거나 stayDetail일 경우 Home을 active
     boolean isHomeActive	= currentUri.contains("stayDetail.jsp") || currentQuery == null;
     boolean isReviewActive	= currentUri.contains("reviewStay.jsp");
@@ -95,7 +116,7 @@
            class="form-control"
            placeholder="기간 선택"
            readonly
-           value="${period != null ? period : ''}" />
+           value="<%= period %>" />
     <small id="dateCount" class="form-text text-muted mt-1">
       <c:if test="${nights > 0}">
   		<p>총 ${nights}박</p>
@@ -112,7 +133,7 @@
         <div class="list-group-item d-flex align-items-center mb-4">
           <!-- 썸네일 -->
           <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
-               class="img-thumbnail"
+               class="img-thumbnail img-modal"
                style="width:200px; height:150px; object-fit:cover;" />
           <!-- 등급·가격 -->
           <div class="ml-3 flex-grow-1">
@@ -134,11 +155,8 @@
       </c:when>
       <%--  2) 로그인 된 경우 --%>
       <c:otherwise>
-        <a href="<%=ctxPath%>/reservation/reserveRoom.hb?stay_no=${param.stay_no}&room_no=${room.room_no}&checkin=${checkin}&checkout=${checkout}"
-           class="btn btn-primary btn-sm ml-3"
-           <c:if test="${empty checkin}">
-             onclick="alert('먼저 기간을 선택하세요'); return false;"
-           </c:if>>
+        <a href="<%=ctxPath%>/reservation/reserveRoom.hb?stay_no=${param.stay_no}&room_no=${room.room_no}&checkin=<%=checkin%>&checkout=<%=checkout%>"
+           class="btn btn-primary btn-sm ml-3">
           예약하기
         </a>
       </c:otherwise>
@@ -159,14 +177,11 @@
 <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content bg-transparent border-0">
-      <img src="" id="modalImage" class="img-fluid" alt="확대 이미지" style="max-height:95vh; max-width:95vw;" />
+      <img src="#" id="modalImage" class="img-fluid" alt="확대 이미지" style="max-height:95vh; max-width:95vw;" />
     </div>
   </div>
 </div>
-<script>
-  var ctxPath = '${ctxPath}';
-  var stayNo  = '${param.stay_no}';
-</script>
+
 
 <!-- 1) kakao SDK 불러오기 (JS키 + libraries) -->
 <script
@@ -195,12 +210,15 @@
 
 //daterangepicker
   $(function() {
-	  var stayDetailUrl = '${stayDetailUrl}';
-	    var stayNo  = '${param.stay_no}';
-	    var checkin = '${checkin}';
-	    var checkout= '${checkout}';
+	  var stayDetailUrl = '<%=ctxPath%>/stayDetail.hb';
+	   var stayNo   = '<%=request.getParameter("stay_no")%>';
+	    var checkin = '<%=checkin%>';
+	    var checkout = '<%=checkout%>';
 
-	    var opts = {
+	    // input에도 초기값 다시 설정
+	    $('#stayDate').val(checkin + '~' + checkout);
+	    
+	    $('#stayDate').daterangepicker({
 	      locale: {
 	        format:     'YYYY-MM-DD',
 	        separator:  '~',
@@ -210,31 +228,23 @@
 	      },
 	      opens: 'center',
 	      minDate:  moment(), 
-	    };
-
-	    if (checkin && checkout) {
-	      opts.startDate = moment(checkin, 'YYYY-MM-DD');
-	      opts.endDate   = moment(checkout, 'YYYY-MM-DD');
-	    } else {
-	      opts.startDate = moment();
-	      opts.endDate   = moment().add(1, 'days');
-	    }
-
-	    $('#stayDate').daterangepicker(opts, function(start, end){
+	      startDate: moment(checkin,  'YYYY-MM-DD'),
+	      endDate:   moment(checkout, 'YYYY-MM-DD')
+	    },function(start, end){
 	    	// 선택한 체크인 날짜가 오늘 이전이면 경고
 	        if (start.isBefore(moment(), 'day')) {
 	          alert('오늘 이후 날짜만 선택 가능합니다.');
-	          // 입력값 초기화
-	          $('#stayDate').val('');
+
 	          return;
 	        }
 	      var period = start.format('YYYY-MM-DD') + '~' + end.format('YYYY-MM-DD');
-	      var target = stayDetailUrl
-	                     + '?stay_no=' + stayNo
-	                     + '&period='   + encodeURIComponent(period);
-	      //console.log('Redirect to:', target);
-	      window.location.href = target;
+	      	window.location.href = stayDetailUrl
+          	+ '?stay_no=' + stayNo
+          	+ '&period='   + encodeURIComponent(period);
 	    });
+
+
+	    
     
  // 3) Image modal on click
     $('.img-modal').on('click', function() {

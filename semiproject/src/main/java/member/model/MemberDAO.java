@@ -1,6 +1,7 @@
 package member.model;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import member.domain.MemberVO;
@@ -46,16 +47,30 @@ public interface MemberDAO {
 	// 회원 존재 여부를 확인하는 메소드
 	boolean isUserExists(String user_name, String mobile) throws SQLException;
 
-	// 인증번호 일치 시 휴면 해제 처리(is_active=0)
-	boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException;
 
-	
+
+	//로그인시 access_level 이 0인지 1인지 알아오는 메소드(관리자인지 일반회원인지 확인)
+	int getAccessLevelByUserId(String user_id) throws SQLException;
+
+
+	// 인증번호 일치 시 휴면 해제 처리(is_active=0)
+	boolean updateUserIsActive(String login_ip, String sessionUser_id, String sessionuser_name, String sessionMobile) throws SQLException;
+
 	//유저 총 결제금액·포인트 보정 및 등급 업데이트
 	void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception;
 
+	// 90일 뒤에 비밀번호 변경
+	void updateLastPwdUpdate(String user_id) throws SQLException;
 
+
+	// 회원 목록 조회 메서드
+	List<MemberVO> getMemberList(String searchType, String searchWord, int offset, int limit) throws Exception;
 	
-
+	
+	// 회원 총 개수 조회 메서드
+	int getMemberTotalCount(String searchType, String searchWord) throws SQLException;
+	
+	
 	
 	
 	
