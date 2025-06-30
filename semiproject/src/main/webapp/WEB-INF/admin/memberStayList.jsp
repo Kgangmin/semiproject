@@ -18,9 +18,9 @@
         <select name="memberSearchType" id="memberSearchType" class="form-control mr-2">
             <option value="user_name">회원명</option>
             <option value="email">이메일</option>
-            <option value="user_id">아이디</option>
+            
         </select>
-        <input type="text" name="memberKeyword" class="form-control mr-2" placeholder="검색어 입력" />
+        <input type="text" name="memberSearchWord" class="form-control mr-2" placeholder="검색어 입력" />
         <button type="submit" class="btn btn-primary">검색</button>
     </form>
 
@@ -45,11 +45,24 @@
         </tbody>
     </table>
 
+        <!-- 회원목록 페이징 -->
+		<c:if test="${totalPage != null && totalPage > 1}">
+		    <ul class="pagination justify-content-center ">
+		      <c:forEach var="i" begin="1" end="${totalPage}">
+		        <li class="page-item ${i == currentPage ? 'active' : ''}">
+		          <a class="page-link" href="manage.hb?page=${i}&memberSearchType=${param.memberSearchType}&memberSearchWord=${param.memberSearchWord}">${i}</a>
+		        </li>
+		      </c:forEach>
+		    </ul>
+
+		</c:if>
+		
+
     <h2 class="my-4">호텔 목록</h2>
 
     <form method="get" action="manage.hb" class="form-inline mb-3">
-        <label for="stayKeyword" class="mr-2">검색:</label>
-        <input type="text" name="stayKeyword" id="stayKeyword" class="form-control mr-2" placeholder="호텔명으로 검색" />
+        <label for="staySearchWord" class="mr-2">검색:</label>
+        <input type="text" name="staySearchWord" id="staySearchWord" class="form-control mr-2" placeholder="호텔명으로 검색" />
         <button type="submit" class="btn btn-primary">검색</button>
     </form>
 
@@ -73,6 +86,18 @@
             </c:forEach>
         </tbody>
     </table>
+
+<!-- 호텔 페이징 -->
+<c:if test="${stayTotalPage != null && stayTotalPage > 1}">
+  <ul class="pagination justify-content-center">
+    <c:forEach var="i" begin="1" end="${stayTotalPage}">
+      <li class="page-item ${i == stayCurrentPage ? 'active' : ''}">
+        <a class="page-link" href="manage.hb?stayPage=${i}&staySearchWord=${staySearchWord}">${i}</a>
+      </li>
+    </c:forEach>
+  </ul>
+</c:if>
+
 
 </div>
 

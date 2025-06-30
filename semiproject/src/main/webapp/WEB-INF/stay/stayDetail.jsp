@@ -7,6 +7,13 @@
     String period    = (String) request.getAttribute("period");
     String checkin   = (String) request.getAttribute("checkin");
     String checkout  = (String) request.getAttribute("checkout");
+    
+	String currentUri	= request.getRequestURI();	// 예: /semiproject/stayDetail.jsp
+	String currentQuery	= request.getQueryString();	// 예: stay_no=1
+
+    // 기본 탭 설정: 처음 진입했거나 stayDetail일 경우 Home을 active
+    boolean isHomeActive	= currentUri.contains("stayDetail.jsp") || currentQuery == null;
+    boolean isReviewActive	= currentUri.contains("reviewStay.jsp");
 %>
 <jsp:include page="/WEB-INF/header1.jsp" />
 
@@ -53,6 +60,21 @@
     </a>
   </div>
 </div>
+   <!-- 숙박업소 정보 / 해당 숙박업소 리뷰목록 뷰 선택 탭 -->
+   <div>
+      <ul class="nav nav-pills nav-justified nav-tabs">
+         <li class="nav-item">
+            <a class="nav-link <%= isHomeActive ? "active" : "" %>" href="<%=ctxPath%>/stayDetail.hb?stay_no=${stay.stay_no}">
+               Room Info
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link <%= isReviewActive ? "active" : "" %>" href="<%=ctxPath%>/reviewStay.hb?stay_no=${stay.stay_no}">
+               Review
+            </a>
+         </li>
+      </ul>
+   </div>
     <div class="mt-2">
         <p>${stay.stay_info}</p>
         <p>연락처: ${stay.stay_tel}</p>

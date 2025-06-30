@@ -265,7 +265,7 @@ public class MemberDAO_imple implements MemberDAO {
             close();
          }        
          
-         System.out.println("[DEBUG] VO 최종 is_active 값: " + member.getIs_active());
+     //  System.out.println("[DEBUG] VO 최종 is_active 값: " + member.getIs_active());
          return member;
       }// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
 
@@ -509,6 +509,7 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 
+
 		//로그인시 access_level 이 0인지 1인지 알아오는 메소드(관리자인지 일반회원인지 확인)
 		@Override
 		public int getAccessLevelByUserId(String user_id) throws SQLException {
@@ -537,48 +538,70 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 
 
-		// 간단한 회원정보를 가져오는 메소드 (관리자페이지에 구현)
-		public List<MemberVO> getMemberList() throws SQLException {
+		
+		
+		// 회원 존재 여부를 확인하는 메소드
+		@Override
+		public boolean isUserExists(String user_name, String mobile) throws SQLException {
 			
-		    List<MemberVO> memberList = new ArrayList<>();
+			boolean isUserExist = false;
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select * "
+						   + " from tbl_user "
+						   + " where is_active = 1 and user_name= ? and mobile = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, user_name);
+				pstmt.setString(2, aes.encrypt(mobile));
+				
+				rs = pstmt.executeQuery();
+				
+				isUserExist = rs.next();
+				
+				
+			} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+			} finally {
+				close();
+			}
+			
+			return isUserExist;
+		}// end of public boolean isUserExists(String user_name, String mobile) throws SQLException------------------
 
+
+		
+		// 인증번호 일치 시 휴면 해제 처리(is_active=0)
+		@Override
+		public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException {
+			
+			boolean result = false;
+		    
 		    try {
 		        conn = ds.getConnection();
-
-		        String sql = " SELECT user_name, mobile, email, fk_grade_no "
-		                   + " FROM tbl_user "
-		                   + " WHERE user_id != 'admin' "
-		                   + " ORDER BY user_name ASC";
-
+		        
+		        String sql = "UPDATE tbl_user SET is_active = 0 WHERE user_name = ? AND mobile = ?";
+		        
 		        pstmt = conn.prepareStatement(sql);
-		        rs = pstmt.executeQuery();
-
-		        while (rs.next()) {
-		            MemberVO member = new MemberVO();
-		            member.setUser_name(rs.getString("user_name"));
-
-		            try {
-		                member.setMobile(aes.decrypt(rs.getString("mobile")));
-		                member.setEmail(aes.decrypt(rs.getString("email")));
-		            } catch (Exception e) {
-		                e.printStackTrace();	                
-		            }
-
-		            member.setFk_grade_no(rs.getString("fk_grade_no"));
-
-		            memberList.add(member);
-		        }
-
+		        pstmt.setString(1, sessionuser_name);
+		        pstmt.setString(2, aes.encrypt(sessionMobile));  // AES 암호화된 값으로 전달
+		        
+		        int n = pstmt.executeUpdate();
+		        
+		        result = n > 0;  // 한 건 이상 업데이트 되었으면 성공
+		        
+		    } catch (Exception e) {
+		        e.printStackTrace();
 		    } finally {
 		        close();
 		    }
+		    
+		    return result;
+			
+		}// end of public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException------------
 
-		    return memberList;
-		}
-		
-
-
-	
 
 		@Override
 		public void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception {
@@ -623,10 +646,132 @@ public class MemberDAO_imple implements MemberDAO {
 		
 
 		}
+
+		// 회원 목록 조회 메서드
+		@Override
+		public List<MemberVO> getMemberList(String searchType, String searchWord, int offset, int limit) throws SQLException {
+		    List<MemberVO> memberList = new ArrayList<>();
+
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = " SELECT user_name, mobile, email, fk_grade_no "
+		                   + " FROM tbl_user "
+		                   + " WHERE user_id != 'admin' ";
+
+		        if (searchWord != null && !searchWord.trim().isEmpty()) {
+		            if ("user_name".equals(searchType)) {
+		                sql += " AND user_name LIKE ? ";
+		            } else if ("email".equals(searchType)) {
+		                try {
+		                    searchWord = aes.encrypt(searchWord);  // 암호화
+		                } catch (GeneralSecurityException | UnsupportedEncodingException e) {
+		                    e.printStackTrace();
+		                    searchWord = ""; // 예외 시 빈 문자열로 처리
+		                }
+		                sql += " AND email = ? ";  // 정확한 일치 비교
+		            }
+		        }
+
+		        sql += " ORDER BY user_name ASC "
+		             + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ";
+
+		        pstmt = conn.prepareStatement(sql);
+
+		        if (searchWord != null && !searchWord.trim().isEmpty()) {
+		            if ("email".equals(searchType)) {
+		                pstmt.setString(1, searchWord); // 이메일은 정확히 일치하므로 % 붙이지 않음
+		                pstmt.setInt(2, offset);
+		                pstmt.setInt(3, limit);
+		            } else {
+		                pstmt.setString(1, "%" + searchWord + "%"); // 이름 검색은 LIKE 사용
+		                pstmt.setInt(2, offset);
+		                pstmt.setInt(3, limit);
+		            }
+		        } else {
+		            pstmt.setInt(1, offset);
+		            pstmt.setInt(2, limit);
+		        }
+
+
+		        rs = pstmt.executeQuery();
+
+		        while (rs.next()) {
+		            MemberVO member = new MemberVO();
+
+		            member.setUser_name(rs.getString("user_name"));
+
+		            try {
+		                member.setMobile(aes.decrypt(rs.getString("mobile")));
+		                member.setEmail(aes.decrypt(rs.getString("email")));
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		                member.setMobile(rs.getString("mobile"));
+		                member.setEmail(rs.getString("email"));
+		            }
+
+		            member.setFk_grade_no(rs.getString("fk_grade_no"));
+
+		            memberList.add(member);
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return memberList;
+		}
+
+		   
+		
+		// 회원 총 개수 조회 메서드
+		@Override
+		public int getMemberTotalCount(String searchType, String searchWord) throws SQLException {
+		    int totalCount = 0;
+
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = " SELECT COUNT(*) AS totalCount FROM tbl_user WHERE user_id != 'admin' ";
+
+		        if(searchWord != null && !searchWord.trim().isEmpty()) {
+		            if("user_name".equals(searchType)) {
+		                sql += " AND user_name LIKE ? ";
+		            } else if("email".equals(searchType)) {
+		                sql += " AND email LIKE ? ";
+		            }
+		        }
+
+		        pstmt = conn.prepareStatement(sql);
+
+		        if(searchWord != null && !searchWord.trim().isEmpty()) {
+		            pstmt.setString(1, "%" + searchWord + "%");
+		        }
+
+		        rs = pstmt.executeQuery();
+
+		        if(rs.next()) {
+		            totalCount = rs.getInt("totalCount");
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return totalCount;
+		}
+
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 }
-
 
 
 

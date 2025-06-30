@@ -1,5 +1,7 @@
 package myshop.domain;
 
+import member.domain.MemberVO;
+
 public class ReservationVO {
 
 	private String reserv_no;		// 예약 번호
@@ -94,6 +96,4 @@ public class ReservationVO {
 	public void setRoomvo(RoomVO roomvo) {
 		this.roomvo = roomvo;
 	}
-	
-    
 }

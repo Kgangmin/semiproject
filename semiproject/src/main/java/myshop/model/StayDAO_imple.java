@@ -493,37 +493,89 @@ public class StayDAO_imple implements StayDAO {
 	    }
 
 
-	    // 간단한 숙소 정보 가져오는 메서드(관리자페이지에서 조회)
+	    //  숙소 정보 가져오는 메서드(관리자페이지에서 조회)
 		@Override
-		public List<StayVO> getStayList() throws SQLException {
+		public List<StayVO> getStayList(String searchWord, int offset, int limit) throws SQLException {
 			
-			List<StayVO> stayList = new ArrayList<>();
+			  List<StayVO> stayList = new ArrayList<>();
+			    
+			    try {
+			        conn = ds.getConnection();
+
+			        String sql = " SELECT stay_no, stay_name, stay_tel, stay_score "
+			                   + " FROM tbl_stay ";
+			                   
+
+			        if (searchWord != null && !searchWord.trim().isEmpty()) {
+			            sql += " where stay_name like ? ";
+			        }
+
+			        sql += " ORDER BY TO_NUMBER(stay_no) ASC "
+			             + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ";
+
+			        pstmt = conn.prepareStatement(sql);
+			        
+
+					if (searchWord != null && !searchWord.trim().isEmpty()) {
+					    pstmt.setString(1, "%" + searchWord + "%");
+					    pstmt.setInt(2, offset);
+					    pstmt.setInt(3, limit);
+					} else {
+					    pstmt.setInt(1, offset);
+					    pstmt.setInt(2, limit);
+					}
+					 rs = pstmt.executeQuery();
+
+				        while (rs.next()) {
+				            StayVO stay = new StayVO();
+				            stay.setStay_no(rs.getString("stay_no"));
+				            stay.setStay_name(rs.getString("stay_name"));
+				            stay.setStay_tel(rs.getString("stay_tel"));
+				            stay.setStay_score(rs.getInt("stay_score"));
+
+				            stayList.add(stay);
+				        }
+				    } finally {
+				        close(); // 자원 반납 메서드 호출 (ResultSet, PreparedStatement, Connection)
+				    }
+
+				    return stayList;
+		}
+
+
+		@Override
+		public int getStayTotalCount(String searchWord) throws SQLException {
+		    int totalCount = 0;
 
 		    try {
 		        conn = ds.getConnection();
 
-		        String sql = " SELECT stay_no, stay_name, stay_tel, stay_score "
-		                   + " FROM tbl_stay "
-		                   + " ORDER BY to_number(stay_no) ASC";
+		        String sql = " select count(*) as totalCount from tbl_stay ";
 
-		        pstmt = conn.prepareStatement(sql);
-		        rs = pstmt.executeQuery();
-
-		        while (rs.next()) {
-		            StayVO stay = new StayVO();
-		            stay.setStay_no(rs.getString("stay_no"));
-		            stay.setStay_name(rs.getString("stay_name"));
-		            stay.setStay_tel(rs.getString("stay_tel"));
-		            stay.setStay_score(rs.getInt("stay_score"));
-
-		            stayList.add(stay);
+		        if (searchWord != null && !searchWord.trim().isEmpty()) {
+		            sql += " WHERE stay_name LIKE ? ";
 		        }
 
+		        pstmt = conn.prepareStatement(sql);
+
+		        if (searchWord != null && !searchWord.trim().isEmpty()) {
+		            pstmt.setString(1, "%" + searchWord + "%");
+		        }
+
+		        rs = pstmt.executeQuery();
+
+		        if (rs.next()) {
+		            totalCount = rs.getInt("totalCount");
+		        }
 		    } finally {
 		        close();
 		    }
 
-		    return stayList;
+		    return totalCount;
 		}
+
+
+
+	    
 
 }

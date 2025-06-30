@@ -1568,11 +1568,33 @@ set access_level = 1
 where user_id = 'admin';
 
 desc tbl_room_extraimg;
+desc tbl_stay_extraimg;
 
 select * from tbl_room_extraimg;
 
 SELECT *
-FROM tbl_room_extraimg;
-ORDER BY    TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '^\d+')),                             -- 앞 숫자
-  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '-(\d+)', 1, 1, NULL, 1)),           -- 중간 숫자
-  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, 'extraimg(\d+)', 1, 1, NULL, 1));    -- 마지막 숫자
+FROM tbl_room_extraimg
+ORDER BY
+  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '^\d+')),                             -- 앞번호
+  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, '-(\d+)', 1, 1, NULL, 1)),           -- 중간번호
+  TO_NUMBER(REGEXP_SUBSTR(room_extraimg_no, 'extraimg(\d+)', 1, 1, NULL, 1));    -- 끝번호
+  
+  
+desc tbl_room;
+
+desc tbl_review;
+
+select  fk_stay_no, room_no, review_no, reserv_score, review_contents, review_writedate, fk_reserv_no
+from
+(
+    select  *
+    from    
+    (   select  *
+        from    tbl_reservation A
+        join    tbl_review  B
+        on      A.reserv_no = B.fk_reserv_no
+        where   review_no = 1
+    )
+)   C
+join    tbl_room D
+on      C.fk_room_no = D.room_no;
