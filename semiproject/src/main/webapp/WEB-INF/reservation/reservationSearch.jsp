@@ -50,7 +50,7 @@
         </div>
         
         <!-- 버튼: 입력부 오른쪽, 수직 중앙 정렬 -->
-        <button type="submit" class="btn btn-primary align-self-center">검색</button>
+        <button type="submit" class="btn btn-primary align-self-center" style="height: 90px; margin-bottom: 20px">검색</button>
       </form>
     </div>
   </div>
