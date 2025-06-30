@@ -65,7 +65,7 @@
       <ul class="nav nav-pills nav-justified nav-tabs">
          <li class="nav-item">
             <a class="nav-link <%= isHomeActive ? "active" : "" %>" href="<%=ctxPath%>/stayDetail.hb?stay_no=${stay.stay_no}">
-               Info
+               Room Info
             </a>
          </li>
          <li class="nav-item">
