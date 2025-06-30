@@ -76,7 +76,7 @@ public class ReviewStay extends AbstractController
         request.setAttribute("extraImgList", extraImgs);
 		request.setAttribute("stayScore", stayScore);
 		request.setAttribute("roomGradeList", roomGradeList);
-		request.setAttribute("selectedGrade", roomGrade); // 선택 유지용
+		request.setAttribute("selectedGrade", roomGrade);	// 선택 유지용
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("totalPage", totalPage);
 		request.setAttribute("reviewList", reviewList);
