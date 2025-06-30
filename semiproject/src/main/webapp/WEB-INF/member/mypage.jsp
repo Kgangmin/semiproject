@@ -53,8 +53,7 @@
 		.more-link:hover {color: #000;}
     </style>
     
-    
-</head>
+
 
 
 

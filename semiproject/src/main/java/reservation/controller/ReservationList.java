@@ -31,7 +31,7 @@ public class ReservationList extends AbstractController {
 			String userid_check = request.getParameter("user_id"); // url 에 저장해둔 유저아이디
 			MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
 			String userid = loginUser.getUser_id();  // 로그인시 유저아이디
-			
+			System.out.println(userid);
 			if(!userid_check.equals(userid)) {
 				// 로그인시 유저아이디와 값이 다르다면
 			 	String message = "본인의 예약만 접근할 수 있습니다.";
@@ -46,41 +46,29 @@ public class ReservationList extends AbstractController {
 	        
 				
 			}
+
 			
-			
-			
-			request.setAttribute("loginUser", loginUser);
-			int offset = 0;
-			int limit = 6;
-			
-			// 사용자의 지금까지 모든예약 
-			ReservationVO nextReservation = rdao.selectNextReservation(userid);
-			request.setAttribute("nextReservation", nextReservation);
-			
-			if (nextReservation != null) {
-				// 방의 번호로 객실의 등급을 찾는 메소드 
-		        RoomVO room = roomdao.search_rgrade(nextReservation.getFk_room_no());
-		        // 방의 번호로 숙소 이름을 찾는 메소드 
-		        StayVO stay = sdao.search_stay_name(nextReservation.getFk_room_no());
-		        nextReservation.setRoomvo(room);
-		        nextReservation.setStayvo(stay);
-		    }
-			
-			
-			request.setAttribute("nextReservation", nextReservation);
-			
-			
-			
-		   
-			
+		    String status = request.getParameter("status"); // 예약 상태 필터
+		    // 모든 예약정보를 가져오는 메소드 
+		    List<ReservationVO> reservationList = rdao.getReservationList(userid, status);
+		    
+		    request.setAttribute("reservationList", reservationList);
+
+		    System.out.println("user_id param: " + userid_check);
+		    System.out.println("session user_id: " + userid);
+		    System.out.println("status param: " + status);
+		    System.out.println("reservationList size: " + reservationList.size());
+		    
+		    
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/reservation/reservationList.jsp");
+			
 			
 			
 		}
 		else {
 			// 로그인을 안 했으면
-			String message = "마이페이지를 보기 위해서는 로그인을 먼저해야 합니다";
+			String message = "예약을 보기 위해서는 로그인을 먼저해야 합니다";
 			String loc = "javascript:history.back()";
 			
 			request.setAttribute("message", message);

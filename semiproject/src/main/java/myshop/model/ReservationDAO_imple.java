@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -11,6 +14,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import myshop.domain.ReservationVO;
+import myshop.domain.RoomVO;
+import myshop.domain.StayVO;
 
 public class ReservationDAO_imple implements ReservationDAO {
 
@@ -128,6 +133,73 @@ public class ReservationDAO_imple implements ReservationDAO {
 	         return rvo;
 	     
 		}
+
+	// 모든 예약정보를 가져오는 메소드 
+	@Override
+	public List<ReservationVO> getReservationList(String userid, String status) throws SQLException{
+		 List<ReservationVO> list = new ArrayList<>();
+		 String sql = "";
+		 ReservationVO rvo = null;
+		 StayVO svo =null;
+		 RoomVO rmvo = null;
+	    	try {
+	             conn = ds.getConnection();
+	             
+	              sql += " SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no "
+	             		+ " FROM TBL_RESERVATION r JOIN TBL_ROOM rm ON r.fk_room_no = rm.room_no "
+	             		+ " JOIN TBL_STAY s ON rm.fk_stay_no = s.stay_no "
+	             		+ " LEFT JOIN TBL_REVIEW rv ON r.reserv_no = rv.fk_reserv_no "
+	             		+ " WHERE r.fk_user_id = ? ";
+	              
+	              // 상태 필터 추가
+	              if ("진행중".equals(status)) {
+	                  sql += " AND r.checkout_date > CURRENT_DATE ";
+	              } else if ("완료".equals(status)) {
+	                  sql += " AND r.checkout_date <= CURRENT_DATE ";
+	              }
+	              
+	              sql += " ORDER BY r.checkin_date DESC " ;
+	              
+	              pstmt = conn.prepareStatement(sql);
+	              pstmt.setString(1, userid);
+	             
+	             
+	             rs = pstmt.executeQuery();
+	             Date today = new Date(); 
+	             while (rs.next()) {
+	            	 rvo = new ReservationVO();
+
+	                 rvo.setReserv_no(rs.getString("reserv_no"));
+	                 rvo.setCheckin_date(rs.getString("checkin_date"));
+	                 rvo.setCheckout_date(rs.getString("checkout_date"));
+	                 rvo.setReserv_payment(rs.getInt("reserv_payment"));
+	                 rvo.setReview_written(rs.getString("review_no") != null); // 후기 작성 여부
+	                 
+	                 Date checkout = rs.getDate("checkout_date");
+	                 String c_status = checkout.after(today) ? "진행중" : "완료";
+	                 rvo.setReserv_status(c_status);
+	                 
+	                 svo = new StayVO();
+	                 svo.setStay_name(rs.getString("stay_name"));
+	                 svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	                 rvo.setStayvo(svo);
+	                 
+	                 rmvo = new RoomVO();
+	                 rmvo.setRoom_grade(rs.getString("room_grade"));
+	                 rvo.setRoomvo(rmvo);
+	                 
+	                 list.add(rvo); 
+	             }
+	             
+	         } finally {
+	             close();
+	         }
+
+		
+		 
+		 return list;
+		 
+	}
 
 
 	
