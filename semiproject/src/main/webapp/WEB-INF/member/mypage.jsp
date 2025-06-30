@@ -27,15 +27,10 @@
         .user-info a { color: #555; text-decoration: none; margin-left: 15px; font-size: 14px; }
         .points-reviews { border-top: 1px solid #eee; border-bottom: 1px solid #eee; margin-top: 30px; padding: 20px 0; }
         .points-reviews .item { display: flex; justify-content: space-between; padding: 10px 0; }
-        .reservation-history { margin-top: 30px; }
-        .reservation-list { border: 1px solid #ccc; min-height: 150px; padding: 20px; }
-        .reservation-item { padding: 10px; border-bottom: 1px solid #f0f0f0; }
-        .reservation-item:last-child { border-bottom: none; }
-        .user-links a {margin-left: 15px;color: #555;text-decoration: none;font-size: 14px;}
+		.user-links a {margin-left: 15px;color: #555;text-decoration: none;font-size: 14px;}
         .user-links a:first-child {margin-left: 0;}
         #point { font-weight: bold;}
-        
-		.wishlist-section {margin-top: 40px;}
+       	.wishlist-section {margin-top: 40px;}
 		.wishlist-grid {display: grid;grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));gap: 20px;margin-top: 20px;}
 		.wishlist-card {border: 1px solid #ddd;border-radius: 10px;overflow: hidden;background: #fff;box-shadow: 0 2px 5px rgba(0,0,0,0.05);transition: transform 0.2s;}
 		.wishlist-card:hover {transform: translateY(-5px);}
@@ -44,32 +39,18 @@
 		.wishlist-title {font-size: 16px;font-weight: bold;margin: 0 0 5px;}
 		.wishlist-price {color: #e91e63;font-weight: bold;margin: 0 0 5px;}
 		.wishlist-date {font-size: 12px;color: #777;}
-		
-		#loadMoreBtn {
-  display: block;
-  width: 150px;
-  margin: 30px auto 0;
-  padding: 12px 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: white;
-  background-color: #007BFF; /* 파란색 */
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 3px 6px rgba(0, 123, 255, 0.5);
-  transition: background-color 0.3s ease;
-}
-
-#loadMoreBtn:hover {
-  background-color: #0056b3; /* 좀 더 진한 파란색 */
-}
-
-#loadMoreBtn:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-  box-shadow: none;
-}
+		#loadMoreBtn { display: block; width: 150px; margin: 30px auto 0; padding: 12px 0; font-size: 16px; font-weight: 600; color: white; background-color: #007BFF; border: none; border-radius: 6px; cursor: pointer; box-shadow: 0 3px 6px rgba(0, 123, 255, 0.5); transition: background-color 0.3s ease; } 
+		#loadMoreBtn:hover { background-color: #0056b3; } 
+		#loadMoreBtn:disabled { background-color: #cccccc; cursor: not-allowed; box-shadow: none; } 
+		.better-card { border: 1px solid #ddd; padding: 20px; border-radius: 12px; background: #fafafa; margin-top: 20px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); } 
+		.stay-name { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #333; } 
+		.dates { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #555; } 
+		.label { font-weight: 500; margin-right: 6px; color: #777; } 
+		.dot { font-size: 20px; color: #bbb; margin: 0 10px; } 
+		.wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin-top: 20px; }
+		.reservation-history-header {display: flex; justify-content: space-between; align-items: center;}
+		.more-link {font-size: 15px;text-decoration: none;color: #777;font-weight: bold;transition: color 0.2s ease;}
+		.more-link:hover {color: #000;}
     </style>
     
     
@@ -117,6 +98,38 @@
             </div>
         </div>
 
+
+<div class="reservation-history">
+		    <div class="reservation-history-header">
+			    <h3>예약내역</h3>
+			    <a href="${pageContext.request.contextPath}/reservationList.hb?user_id=${loginUser.user_id}" class="more-link">></a>
+			</div> 
+		    <div class="reservation-list">
+		        <c:choose>
+		            <c:when test="${not empty nextReservation}">
+					    <div class="reservation-item better-card">
+					        <h3 class="stay-name">${nextReservation.stayvo.stay_name}</h3>
+					        <h6 class="stay-name" >${nextReservation.roomvo.room_grade}</h6>
+					        <div class="dates">
+					            <div>
+					                <span class="label">체크인</span>
+					                <span class="value">${nextReservation.checkin_date}</span>
+					            </div>
+					            <div class="dot">•</div>
+					            <div>
+					                <span class="label">체크아웃</span>
+					                <span class="value">${nextReservation.checkout_date}</span>
+					            </div>
+					        </div>
+					    </div>
+					</c:when>
+		            <c:otherwise>
+		                <p class="better-card	">예약 내역이 없습니다.</p>
+		            </c:otherwise>
+		        </c:choose>
+		    </div>
+		</div>
+
 		<div class="wishlist-section">
 		    <h3>찜한 숙소</h3>
 		    <div id="wishlistGrid" class="wishlist-grid">
@@ -141,26 +154,7 @@
 		    </div>
 		    <button id="loadMoreBtn">찜 더보기</button>
 		</div>
-		<div class="reservation-history">
-		    <h3>예약내역</h3>
-		    <button id="goReservationPageBtn">예약 더보기</button>
-		    <div class="reservation-list">
-		        <c:choose>
-		            <c:when test="${not empty nextReservation}">
-		                <div class="reservation-item">
-		                    <p><strong>예약 번호:</strong> ${nextReservation.fk_user_id}</p>
-		                    <p><strong>숙소 이름:</strong> ${nextReservation.serviceName}</p>
-		                    <p><strong>객실 이름:</strong> ${wish.stayVO.stay_name}</p>
-		                    <p><strong>예약 날짜:</strong> ${nextReservation.checkin_date} ~ ${nextReservation.checkout_date}</p>
-		                </div>
-		            </c:when>
-		            <c:otherwise>
-		                <p>예약 내역이 없습니다.</p>
-		            </c:otherwise>
-		        </c:choose>
-		    </div>
-		</div>
-
+		
 
 
     </div>

@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import myshop.domain.RoomVO;
 import myshop.domain.RoomimgVO;
 import myshop.domain.StayimgVO;
 
@@ -86,5 +87,35 @@ public class RoomDAO_imple implements RoomDAO
         }
         
         return roomImgList;
+	}
+	
+	// 방의 번호로 객실의 등급을 찾는 메소드 
+	@Override
+	public RoomVO search_rgrade(String fk_room_no) throws SQLException {
+		 RoomVO room = null;
+		
+		 try
+	        {
+	        	conn = ds.getConnection();
+
+	        	  String sql = "SELECT room_no, room_grade, fk_stay_no " +
+	                      " FROM tbl_room " +
+	                      " WHERE room_no = ?";
+	            
+	        	pstmt = conn.prepareStatement(sql);
+	        	pstmt.setString(1, fk_room_no);
+	        	rs = pstmt.executeQuery();
+
+	        	  if (rs.next()) {
+	                  room = new RoomVO();
+	                  room.setRoom_no(rs.getString("room_no"));
+	                  room.setRoom_grade(rs.getString("room_grade"));
+	                  room.setFk_stay_no(rs.getString("fk_stay_no"));
+	        	  }
+	        }finally{
+	            close();
+	        }
+	        
+	        return room;
 	}
 }

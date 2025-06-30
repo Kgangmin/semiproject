@@ -1,8 +1,14 @@
 package myshop.model;
 
+import java.sql.SQLException;
+
 import myshop.domain.ReservationVO;
 
 public interface ReservationDAO {
     // 예약을 insert하고 신규 reserv_no 반환
     String insertReservation(ReservationVO rv) throws Exception;
+    
+    
+ // 마이페이지에서 보여줄 가장 빠른시기에 가야할 예약
+ 	ReservationVO selectNextReservation(String userid) throws SQLException;
 }

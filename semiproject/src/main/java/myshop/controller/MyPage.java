@@ -18,8 +18,8 @@ import myshop.model.StayDAO;
 import myshop.model.StayDAO_imple;
 import myshop.model.WishDAO;
 import myshop.model.WishDAO_imple;
-import reservation.model.ReservationDAO;
-import reservation.model.ReservationDAO_imple;
+import myshop.model.ReservationDAO;
+import myshop.model.ReservationDAO_imple;
 
 
 public class MyPage extends AbstractController {
@@ -64,7 +64,21 @@ public class MyPage extends AbstractController {
 			// 마이페이지에서 보여줄 가장 빠른시기에 가야할 예약
 			ReservationVO nextReservation = rdao.selectNextReservation(userid);
 			request.setAttribute("nextReservation", nextReservation);
-		    
+			
+			if (nextReservation != null) {
+				// 방의 번호로 객실의 등급을 찾는 메소드 
+		        RoomVO room = roomdao.search_rgrade(nextReservation.getFk_room_no());
+		        // 방의 번호로 숙소 이름을 찾는 메소드 
+		        StayVO stay = sdao.search_stay_name(nextReservation.getFk_room_no());
+		        nextReservation.setRoomvo(room);
+		        nextReservation.setStayvo(stay);
+		    }
+			
+			
+			request.setAttribute("nextReservation", nextReservation);
+			
+			
+			
 		   
 			
 			super.setRedirect(false);
