@@ -53,6 +53,9 @@ public interface MemberDAO {
 	//유저 총 결제금액·포인트 보정 및 등급 업데이트
 	void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception;
 
+	// 90일 뒤에 비밀번호 변경
+	void updateLastPwdUpdate(String user_id) throws SQLException;
+
 
 	
 
