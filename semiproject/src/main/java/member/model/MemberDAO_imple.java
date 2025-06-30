@@ -504,6 +504,70 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 
 
+		
+		// 회원 존재 여부를 확인하는 메소드
+		@Override
+		public boolean isUserExists(String user_name, String mobile) throws SQLException {
+			
+			boolean isUserExist = false;
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select * "
+						   + " from tbl_user "
+						   + " where is_active = 1 and user_name= ? and mobile = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, user_name);
+				pstmt.setString(2, aes.encrypt(mobile));
+				
+				rs = pstmt.executeQuery();
+				
+				isUserExist = rs.next();
+				
+				
+			} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+				e.printStackTrace();
+			} finally {
+				close();
+			}
+			
+			return isUserExist;
+		}// end of public boolean isUserExists(String user_name, String mobile) throws SQLException------------------
+
+
+		
+		// 인증번호 일치 시 휴면 해제 처리(is_active=0)
+		@Override
+		public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException {
+			
+			boolean result = false;
+		    
+		    try {
+		        conn = ds.getConnection();
+		        
+		        String sql = "UPDATE tbl_user SET is_active = 0 WHERE user_name = ? AND mobile = ?";
+		        
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, sessionuser_name);
+		        pstmt.setString(2, aes.encrypt(sessionMobile));  // AES 암호화된 값으로 전달
+		        
+		        int n = pstmt.executeUpdate();
+		        
+		        result = n > 0;  // 한 건 이상 업데이트 되었으면 성공
+		        
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    } finally {
+		        close();
+		    }
+		    
+		    return result;
+			
+		}// end of public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException------------
+
+
 }
 
 

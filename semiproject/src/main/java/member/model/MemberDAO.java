@@ -44,6 +44,12 @@ public interface MemberDAO {
 	//입력한 비밀번호가 맞는지 확인하는 메소드
 	boolean checkPassword(String user_id, String currentPwd) throws SQLException;
 
+	// 회원 존재 여부를 확인하는 메소드
+	boolean isUserExists(String user_name, String mobile) throws SQLException;
+
+	// 인증번호 일치 시 휴면 해제 처리(is_active=0)
+	boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException;
+
 	
 
 
