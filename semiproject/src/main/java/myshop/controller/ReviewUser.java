@@ -1,0 +1,62 @@
+package myshop.controller;
+
+import java.util.List;
+
+import common.controller.AbstractController;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import member.domain.MemberVO;
+import myshop.domain.ReviewVO;
+import myshop.model.ReviewDAO;
+import myshop.model.ReviewDAO_imple;
+import myshop.model.StayDAO_imple;
+
+public class ReviewUser extends AbstractController
+{
+	private ReviewDAO rvdao	= null;
+	
+	public ReviewUser()
+	{
+		rvdao = new ReviewDAO_imple();
+	}
+	
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+        // 페이지번호 받아오기 (기본값: 1)
+        String pageStr = request.getParameter("page");
+        int currentPage = 1;
+        try
+        {
+            currentPage = Integer.parseInt(pageStr);
+        }
+        catch (Exception e){ }	//	아무값도 안가져오면 기본값 1(페이지)
+        
+        int sizePerPage = 1;	//	현재 리뷰데이터가 부족해서 1로 설정해뒀을 뿐 나중에 5로 수정해야 함
+        int offset = (currentPage - 1) * sizePerPage;
+        int totalReviewCount;
+		
+		
+		HttpSession session = request.getSession();
+        MemberVO user = (MemberVO) session.getAttribute("loginUser");
+        if (user == null)
+        {//	로그인 안 됐으면 로그인 페이지로 리다이렉트
+        	request.setAttribute("message", "로그인 정보가 없기때문에 로그인 화면으로 이동합니다.");
+        	request.setAttribute("loc", request.getContextPath() + "/login/login.hb");
+        	
+        	super.setRedirect(false);
+			super.setViewPage("/WEB-INF/msg.jsp");
+			return;
+        }
+        else
+        {
+        	String user_id = user.getUser_id();
+        	List<ReviewVO> reviewList = rvdao.selectAllReview(user_id, offset, sizePerPage);
+            request.setAttribute("user_id", user_id);	//	로그인 중인 user_id 넘겨주기
+            
+        	super.setRedirect(false);
+    		super.setViewPage("/WEB-INF/review/reviewUser.jsp");
+        }
+	}
+}

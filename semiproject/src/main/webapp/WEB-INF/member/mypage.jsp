@@ -27,6 +27,8 @@
         .user-info a { color: #555; text-decoration: none; margin-left: 15px; font-size: 14px; }
         .points-reviews { border-top: 1px solid #eee; border-bottom: 1px solid #eee; margin-top: 30px; padding: 20px 0; }
         .points-reviews .item { display: flex; justify-content: space-between; padding: 10px 0; }
+        .points-reviews .item a { display: flex; justify-content: space-between; width: 100%; color: inherit; }
+        .points-reviews .item a:hover { color: #007bff; }
 		.user-links a {margin-left: 15px;color: #555;text-decoration: none;font-size: 14px;}
         .user-links a:first-child {margin-left: 0;}
         #point { font-weight: bold;}
@@ -52,12 +54,6 @@
 		.more-link {font-size: 15px;text-decoration: none;color: #777;font-weight: bold;transition: color 0.2s ease;}
 		.more-link:hover {color: #000;}
     </style>
-    
-    
-</head>
-
-
-
 
 <body>
 
@@ -93,8 +89,10 @@
                 <span id="point">${loginUser.point}pt &nbsp;&nbsp;></span>
             </div>
             <div class="item">
-                <span>내 후기</span>
-                <span>></span>
+            	<a href="${pageContext.request.contextPath}/reviewUser.hb?user_id=${loginUser.user_id}">
+            		<span>내 후기</span>
+                	<span>></span>	
+            	</a>
             </div>
         </div>
 

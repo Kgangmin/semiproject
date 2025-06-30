@@ -138,9 +138,12 @@ public class ReviewDAO_imple implements ReviewDAO
 						+ " 			on		A.fk_reserv_no = B.reserv_no "
 						+ " 		)	C "
 						+ " 		join	tbl_room	D "
-						+ " 		on		C.fk_room_no = D.room_no "
-						+ " 		where 	fk_stay_no = ? "
-						+ " 	) data "
+						+ " 		on		C.fk_room_no = D.room_no ";
+						
+			if(stayNo.equals("")) {sql+=" 		where 	fk_stay_no = ? ";}
+			else if(stayNo.equals("")) {sql+=" 		where	fk_user_id = ? ";}
+						
+					sql	+=" 	) data "
 						+ " ) "
 						+ " where rn > ? and rn <= ? ";
 			
