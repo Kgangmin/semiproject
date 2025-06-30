@@ -80,8 +80,7 @@ insert into tbl_user(user_id, user_pwd, user_name, email, mobile, birthday, fk_g
 select * from tbl_user;
 
 commit;
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 
 --------------------------------------------------------------------------------
 
