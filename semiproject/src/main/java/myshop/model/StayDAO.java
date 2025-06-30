@@ -65,4 +65,7 @@ public interface StayDAO {
         String checkinDate,    // "YYYY-MM-DD"
         String checkoutDate    // "YYYY-MM-DD"
     ) throws SQLException;
+
+    // 방의 번호로 숙소 이름을 찾는 메소드 
+	StayVO search_stay_name(String fk_room_no) throws SQLException;
 }

@@ -523,4 +523,33 @@ public class StayDAO_imple implements StayDAO {
 	        }
 	        return roomList;
 	    }
+
+	    // 방의 번호로 숙소 이름을 찾는 메소드 
+		@Override
+		public StayVO search_stay_name(String fk_room_no) throws SQLException {
+	        StayVO stay = null;
+	        
+	        try {
+	            conn = ds.getConnection();
+	            
+	            String sql = " SELECT s.stay_no, s.stay_name " +
+	                    " FROM tbl_stay s JOIN tbl_room r ON s.stay_no = r.fk_stay_no " +
+	                    " WHERE r.room_no = ?";
+	            
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, fk_room_no);
+	            
+	            rs = pstmt.executeQuery();
+	            
+	            if (rs.next()) {
+	                stay = new StayVO();
+	                stay.setStay_no(rs.getString("stay_no"));
+	                stay.setStay_name(rs.getString("stay_name"));
+	            }
+	        } finally {
+	            close();
+	        }
+	        return stay;
+	    
+		}
 }
