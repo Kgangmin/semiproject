@@ -115,7 +115,7 @@ function renderStars(score)
 	  	<ul class="nav nav-pills nav-justified nav-tabs">
 			<li class="nav-item">
 				<a class="nav-link <%= isHomeActive ? "active" : "" %>" href="<%=ctxPath%>/stayDetail.hb?stay_no=${stay.stay_no}">
-					Info
+					Room Info
 				</a>
 			</li>
 			<li class="nav-item">
@@ -142,7 +142,7 @@ function renderStars(score)
 	
 	
     
-    <!-- 5-2. 리뷰 목록 -->
+    <!-- 5-2. 리뷰 목록 (각 리뷰에 들어가있는 컨텐츠 순서는 나중에 수정/보완) -->
     <div class="mt-4">
     	<h4>리뷰 목록</h4>
     	<c:if test="${empty reviewList}">
@@ -182,7 +182,7 @@ function renderStars(score)
     <c:set var="currentPage" value="${currentShowPageNo}" />
 	<c:set var="totalPage" value="${totalPage}" />
 	
-	<c:if test="${totalPage > 1}">
+	<c:if test="${totalPage > 1}">	<!-- 페이징처리 할 만큼 데이터가 없을경우 페이지바 비활성화 -->
 		<div class="mt-4 d-flex justify-content-center">
 			<ul class="pagination">
 				<!-- 처음(First) 버튼 -->

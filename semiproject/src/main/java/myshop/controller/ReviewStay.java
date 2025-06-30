@@ -27,10 +27,10 @@ public class ReviewStay extends AbstractController
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		String stayNo = request.getParameter("stay_no");		//	숙소 번호
-		String roomGrade = request.getParameter("room_grade");	//	객실 등급
+		String stayNo		= request.getParameter("stay_no");		//	숙소 번호
+		String roomGrade	= request.getParameter("room_grade");	//	객실 등급
 		
-        StayVO stay = sdao.selectStay(stayNo);					//	숙소 정보
+        StayVO stay			= sdao.selectStay(stayNo);				//	숙소 정보
         //	추가 이미지
         List<StayimgVO> extraImgs = sdao.selectExtraImages(stayNo);
         
@@ -45,7 +45,7 @@ public class ReviewStay extends AbstractController
         }
         catch (Exception e){ }	//	아무값도 안가져오면 기본값 1(페이지)
         
-        int sizePerPage = 1;
+        int sizePerPage = 1;	//	현재 리뷰데이터가 부족해서 1로 설정해뒀을 뿐 나중에 5로 수정해야 함
         int offset = (currentPage - 1) * sizePerPage;
         int totalReviewCount;
         
