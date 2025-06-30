@@ -47,7 +47,7 @@ public interface MemberDAO {
 	boolean isUserExists(String user_name, String mobile) throws SQLException;
 
 	// 인증번호 일치 시 휴면 해제 처리(is_active=0)
-	boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException;
+	boolean updateUserIsActive(String login_ip, String sessionUser_id, String sessionuser_name, String sessionMobile) throws SQLException;
 
 	
 	//유저 총 결제금액·포인트 보정 및 등급 업데이트
