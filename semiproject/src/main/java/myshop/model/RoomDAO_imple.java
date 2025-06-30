@@ -87,6 +87,7 @@ public class RoomDAO_imple implements RoomDAO
         
         return roomImgList;
 	}
+	
 
 	//	객실 정보를 조회하는 메소드
 	@Override
@@ -122,5 +123,37 @@ public class RoomDAO_imple implements RoomDAO
     		close();
     	}
     	return rvo;
+	}
+	// 방의 번호로 객실의 등급을 찾는 메소드 
+	@Override
+	public RoomVO search_rgrade(String fk_room_no) throws SQLException {
+		 RoomVO room = null;
+		
+		 try
+	        {
+	        	conn = ds.getConnection();
+
+	        	  String sql = "SELECT room_no, room_grade, fk_stay_no " +
+	                      " FROM tbl_room " +
+	                      " WHERE room_no = ?";
+	            
+	        	pstmt = conn.prepareStatement(sql);
+	        	pstmt.setString(1, fk_room_no);
+	        	rs = pstmt.executeQuery();
+
+	        	  if (rs.next()) {
+	                  room = new RoomVO();
+	                  room.setRoom_no(rs.getString("room_no"));
+	                  room.setRoom_grade(rs.getString("room_grade"));
+	                  room.setFk_stay_no(rs.getString("fk_stay_no"));
+	        	  }
+	        }finally{
+	            close();
+	        }
+	        
+	        return room;
+
+
+
 	}
 }

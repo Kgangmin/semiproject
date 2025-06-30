@@ -85,6 +85,50 @@ public class ReservationDAO_imple implements ReservationDAO {
 	    }
 	    return newNo;
 	}
+		
+	// 예약 제일 빠른 예약 한건을 가져오는 메소드 
+	@Override
+	public ReservationVO selectNextReservation(String userid) throws SQLException {
+			ReservationVO rvo = null;
+	        
+	    	try {
+	             conn = ds.getConnection();
+	             
+	             String sql = " SELECT * "
+	             		+ " FROM (\r\n"
+	             		+ "    SELECT * "
+	             		+ "    FROM tbl_reservation "
+	             		+ "    WHERE fk_user_id = ? "
+	             		+ "      AND checkin_date >= SYSDATE "
+	             		+ "    ORDER BY checkin_date ASC "
+	             		+ " ) "
+	             		+ "WHERE ROWNUM = 1 ";
+	             
+	             pstmt = conn.prepareStatement(sql);
+	             pstmt.setString(1, userid);
+	             
+	             
+	             rs = pstmt.executeQuery();
+
+	             if (rs.next()) {
+	            	 rvo = new ReservationVO();
+	            	 rvo.setReserv_no(rs.getString("reserv_no"));
+	            	 rvo.setFk_user_id(rs.getString("fk_user_id"));
+	            	 rvo.setFk_room_no(rs.getString("fk_room_no"));
+	            	 rvo.setReserv_payment(rs.getInt("reserv_payment"));
+	            	 rvo.setSpent_point(rs.getInt("spent_point"));
+	            	 rvo.setCheckin_date(rs.getString("checkin_date"));
+	            	 rvo.setCheckout_date(rs.getString("checkout_date"));
+	            	 rvo.setReserv_date(rs.getString("reserv_date"));
+	             }
+	             
+	         } finally {
+	             close();
+	         }
+	         return rvo;
+	     
+		}
+
 
 	
 }

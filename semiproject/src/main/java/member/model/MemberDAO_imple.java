@@ -541,20 +541,35 @@ public class MemberDAO_imple implements MemberDAO {
 		
 		// 인증번호 일치 시 휴면 해제 처리(is_active=0)
 		@Override
-		public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException {
+		public boolean updateUserIsActive(String login_ip, String sessionUser_id, String sessionuser_name, String sessionMobile) throws SQLException {
 			
 			boolean result = false;
 		    
 		    try {
 		        conn = ds.getConnection();
 		        
-		        String sql = "UPDATE tbl_user SET is_active = 0 WHERE user_name = ? AND mobile = ?";
+		        String sql = "UPDATE tbl_user SET is_active = 0 WHERE user_id = ? and user_name = ? AND mobile = ? ";
 		        
 		        pstmt = conn.prepareStatement(sql);
-		        pstmt.setString(1, sessionuser_name);
-		        pstmt.setString(2, aes.encrypt(sessionMobile));  // AES 암호화된 값으로 전달
+		        pstmt.setString(1, sessionUser_id);
+		        pstmt.setString(2, sessionuser_name);
+		        pstmt.setString(3, aes.encrypt(sessionMobile));  // AES 암호화된 값으로 전달
 		        
 		        int n = pstmt.executeUpdate();
+		        
+		        if(n == 1) {
+		        	
+		        	sql = " insert into tbl_login_history(fk_user_id, login_records, login_ip) "
+	        			+ " values(? ,sysdate, ?) ";
+		        	
+		        	 pstmt = conn.prepareStatement(sql);
+		        	 
+		        	 pstmt.setString(1, sessionUser_id);
+		        	 pstmt.setString(2, login_ip);
+		        	 
+		        	 pstmt.executeUpdate();
+		        	 
+		        }
 		        
 		        result = n > 0;  // 한 건 이상 업데이트 되었으면 성공
 		        
