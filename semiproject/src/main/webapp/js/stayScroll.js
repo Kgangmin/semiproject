@@ -2,7 +2,7 @@ $(function(){
   const lenStay = 6;     // 한 번에 로드할 개수 (3열*2행)
   let start   = 1;
   let loading = false;
-  let selectedCategory = ''; // 선택된 카테고리명 저장
+  let selectedCategory = new URLSearchParams(window.location.search).get('category') || ''; // 선택된 카테고리명 저장
 
   loadStays();
 
@@ -20,16 +20,17 @@ $(function(){
   $(document).on('click', '.list-group-item', function(e)
   {
 	window.scrollTo({ top: 0 });	//	해당 카테고리를 보여주는 페이지를 띄울 때 항상 스크롤이 맨 위로가게 설정
-	start=1;
 	e.preventDefault();
 	
+	loading = true;
+	start=1;
 	$('#stayContainer').empty(); // 기존 숙소 목록 초기화
 	$('#endMessage').text('');
 	
 	const value = $(this).data('value');
 	//	console.log(value);
 	//	카테고리 값 설정
-	if($(this).text=='전체')
+	if($(this).text().trim() === '전체')
 	{	//	사이드바 목록에서 전체를 선택하였을 경우
 		selectedCategory = '';
 	}

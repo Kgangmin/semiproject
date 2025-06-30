@@ -1,8 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ page import="myshop.model.StayDAO_imple, myshop.model.StayDAO" %>
+<%@ page import="myshop.domain.CategoryVO" %>
+<%@ page import="java.util.List" %>
+
 <%
     String ctxPath = request.getContextPath();
+
+	if (request.getAttribute("categoryList") == null)
+	{
+		StayDAO sdao = new StayDAO_imple();
+    	try
+    	{
+			List<CategoryVO> categoryList = sdao.getCategoryList();
+			request.setAttribute("categoryList", categoryList);
+		}
+    	catch (Exception e)
+    	{
+			e.printStackTrace();  // 에러 로그 출력
+		}
+}
 %>
 
 <!DOCTYPE html>
@@ -84,9 +103,13 @@
     </button>
   </div>
   <div class="list-group list-group-flush">
-    <a href="#" class="list-group-item list-group-item-action">전체</a>
+    <a href="<%=ctxPath%>/index.hb" class="list-group-item list-group-item-action">전체</a>
   	<c:forEach var="cvo" items="${requestScope.categoryList}">
-  		<a href="#" class="list-group-item list-group-item-action" data-value="${cvo.stay_category_no}">${cvo.stay_category_name}</a>
+  		<a	href="<%=ctxPath%>/index.hb?category=${cvo.stay_category_no}"
+   			class="list-group-item list-group-item-action"
+   			data-value="${cvo.stay_category_no}">
+   			${cvo.stay_category_name}
+		</a>
   	</c:forEach>
   </div>
 </div>

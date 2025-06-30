@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import myshop.domain.CategoryVO;
 import myshop.domain.RoomVO;
 import myshop.domain.StayVO;
 import myshop.domain.StayimgVO;
@@ -96,13 +97,15 @@ public class StayDAO_imple implements StayDAO {
 	            		   + " ( "
 	            		   + "  SELECT ROWNUM AS rn, s.* FROM "
 	            		   + " ( " 
-	            		   + "    SELECT * FROM tbl_stay ORDER BY stay_no " 
-	            		   + " ) s WHERE ROWNUM <= ?  and fk_stay_category_no = ? " 
+	            		   + "    SELECT * FROM tbl_stay"
+	            		   + "    WHERE fk_stay_category_no = ? "
+	            		   + "    ORDER BY stay_no " 
+	            		   + " ) s WHERE ROWNUM <= ? " 
 	            		   + " ) WHERE rn >= ? ";
 		        pstmt = conn.prepareStatement(sql);
 		        
-		        pstmt.setInt(1, start + len - 1);
-		        pstmt.setString(2, category);
+		        pstmt.setString(1, category);
+		        pstmt.setInt(2, start + len - 1);
 		        pstmt.setInt(3, start);
 		        
 		        
@@ -124,6 +127,35 @@ public class StayDAO_imple implements StayDAO {
 		    }
 
 		    return list;
+		}
+		
+		//	카테고리 리스트를 알아온다.
+		@Override
+		public List<CategoryVO> getCategoryList() throws SQLException
+		{
+			List<CategoryVO> categoryList = new ArrayList<>();
+		    
+		    try
+		    {
+		    	conn = ds.getConnection();
+		    	
+		    	String sql = "SELECT stay_category_no, stay_category_name FROM tbl_stay_category ORDER BY stay_category_no ASC";
+		    	pstmt = conn.prepareStatement(sql);
+		    	rs = pstmt.executeQuery();
+		        
+		    	while (rs.next())
+		    	{
+		    		CategoryVO cvo = new CategoryVO();
+		    		cvo.setStay_category_no(rs.getString("stay_category_no"));
+		    		cvo.setStay_category_name(rs.getString("stay_category_name"));
+		    		categoryList.add(cvo);
+		        }
+		    }
+		    finally
+		    {
+		    	close();
+		    }
+		    return categoryList;
 		}
 
 
@@ -520,5 +552,4 @@ public class StayDAO_imple implements StayDAO {
 	        return stay;
 	    
 		}
-
 }
