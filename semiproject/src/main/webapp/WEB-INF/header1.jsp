@@ -141,13 +141,26 @@
         </c:if>
         <!-- 로그인 후 -->
         <c:if test="${not empty sessionScope.loginUser}">
+        
+        <!-- 일반회원일때 -->
+          <c:if test="${sessionScope.loginUser.access_level == 0}">
           <li class="nav-item">
-            <a class="nav-link" href="<%= ctxPath%>/myPage.hb?user_id=${loginUser.user_id}">마이페이지</a>
+            <a class="nav-link" href="<%=ctxPath%>/myPage.hb?user_id=${loginUser.user_id}">마이페이지</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<%=ctxPath%>/login/logout.hb">로그아웃</a>
           </li>
-        </c:if>
+          </c:if>
+         <!-- 관리자일때(access_level == 1) -->
+          <c:if test="${sessionScope.loginUser.access_level == 1}">
+         	 <li class="nav-item">
+	     		 <a class="nav-link" href="<%=ctxPath%>/admin/manage.hb">관리자페이지</a>
+	 		 </li>
+	   		 <li class="nav-item">
+	   		   <a class="nav-link" href="<%=ctxPath%>/login/logout.hb">로그아웃</a>
+	   		 </li>
+          </c:if>
+       </c:if>
       </ul>
     </div>
   </nav>
