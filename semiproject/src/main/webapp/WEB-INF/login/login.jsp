@@ -39,6 +39,10 @@ $(function(){
 	
 	
 });// end of $(function(){})----------------------------------
+
+
+
+
 </script>
 
   <div class="container">
@@ -108,7 +112,7 @@ $(function(){
   <%-- ****** 비밀번호 찾기 Modal 시작 ****** --%>
   <div class="modal fade" id="passwdFind">
 	 <div class="modal-dialog">
-	      <div class="modal-content">
+	      <div class="modal-content" style="margin: auto;">
 	      
 	        <!-- Modal header -->
 	        <div class="modal-header">
@@ -133,9 +137,66 @@ $(function(){
 	 </div>
   </div>
   <%-- ****** 비밀번호 찾기 Modal 끝 ****** --%>
+  
+  
+  <%-- 비밀번호 변경권고 Modal 시작 --%>
+  <div id="pwdModal" style="display:none;">
+ 	 <p>비밀번호를 변경한지 3개월이 지났습니다.</p>
+  		<button id="btnYes">지금 변경하기</button>
+ 		<button id="btnNo">90일 뒤에 변경하기</button>
+  </div> 
+  <%-- 비밀번호 변경권고 Modal 끝 --%>
 
 
 
 
 <jsp:include page="/WEB-INF/footer1.jsp" />
+
+<!-- 비밀번호 변경 모달 -->
+<c:if test="${showPwdModal}">
+  <div class="modal fade" id="pwdChangeModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">비밀번호 변경 안내</h5>
+        </div>
+        <div class="modal-body">
+          <p>비밀번호를 마지막으로 변경한 지 3개월(90일) 이상 경과하였습니다.<br/>
+             지금 바로 변경하시겠습니까?</p>
+        </div>
+        <div class="modal-footer">
+          <!-- 즉시 변경 -->
+          <button type="button" class="btn btn-primary" id="changeNowBtn">
+            지금 변경하기
+          </button>
+          <!-- 90일 뒤 알림 -->
+          <button type="button" class="btn btn-secondary" id="changeLaterBtn">
+            90일 뒤에 변경하기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+      // 모달 자동 오픈
+      $('#pwdChangeModal').modal('show');
+
+      // 즉시 변경 클릭 → 비밀번호 변경 페이지로 이동
+      $('#changeNowBtn').click(function(){
+        window.location.href = '<%=ctx_Path%>/changePwd.hb?userid=${requestScope.user_id}';
+      });
+
+      // 나중에 변경 클릭 → 모달 닫고, DB에 마지막 변경일을 현재로 업데이트(90일 후 다시 노출되지 않도록)
+      $('#changeLaterBtn').click(function(){
+        $.post('<%=ctx_Path%>/login/remindPwdChange.hb', {}, function(){
+          $('#pwdChangeModal').modal('hide');
+          window.location.href = '<%=ctx_Path%>/index.hb';
+        })
+        
+      });
+    });
+  </script>
+</c:if>
 

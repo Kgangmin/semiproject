@@ -56,10 +56,11 @@ public interface MemberDAO {
 	// 인증번호 일치 시 휴면 해제 처리(is_active=0)
 	boolean updateUserIsActive(String login_ip, String sessionUser_id, String sessionuser_name, String sessionMobile) throws SQLException;
 
-	
-
 	//유저 총 결제금액·포인트 보정 및 등급 업데이트
 	void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception;
+
+	// 90일 뒤에 비밀번호 변경
+	void updateLastPwdUpdate(String user_id) throws SQLException;
 
 
 	// 회원 목록 조회 메서드

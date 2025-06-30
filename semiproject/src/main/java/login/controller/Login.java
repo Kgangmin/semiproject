@@ -62,27 +62,20 @@ public class Login extends AbstractController {
             	    
             	    return; // 메소드 종료 
             	}
-                if(loginUser.isRequirePwdChange()) {
-					// 휴면이 아니면서 비밀번호를 변경한지 3개월 이상된 경우 
-					
-					String message = "비밀번호를 변경하신지 3개월이 지났습니다.암호를 변경해주는 페이지로 이동합니다.";
-					String loc = request.getContextPath()+"/index.hb";
-					// 원래는 위와같이 index.up 이 아니라 암호를 변경하는 페이지로 URL을 잡아주어야 한다.!!
-					
-					request.setAttribute("message", message);
-					request.setAttribute("loc", loc);
-					
-					super.setRedirect(false);
-					super.setViewPage("/WEB-INF/msg.jsp");
-					
-					return; // 메소드 종료 
-				}
+               
                 else {
                 
 	                // 로그인 성공 시 세션에 사용자 정보 저장
 	                HttpSession session = request.getSession();
 	                session.setAttribute("loginUser", loginUser);
-	
+	                
+	                if(loginUser.isRequirePwdChange()) { // 휴면이 아니면서 비밀번호를 변경한지 3개월 이상된 경우
+						 
+	                     // JSP에서 모달 띄우라고 flag 전달
+	                     request.setAttribute("showPwdModal", true);
+
+	                     return; // 종료
+					}
 	                // 메인 페이지로 이동
 	                super.setRedirect(true);
 	                super.setViewPage(request.getContextPath() + "/index.hb");
