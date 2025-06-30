@@ -1,11 +1,14 @@
 package member.model;
 
+
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.naming.Context;
@@ -267,6 +270,7 @@ public class MemberDAO_imple implements MemberDAO {
       }// end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
 
       
+      
    // ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
    		@Override
    		public boolean idDuplicateCheck(String userid) throws SQLException {
@@ -504,7 +508,76 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 
 
-}
+		//로그인시 access_level 이 0인지 1인지 알아오는 메소드(관리자인지 일반회원인지 확인)
+		@Override
+		public int getAccessLevelByUserId(String user_id) throws SQLException {
+
+			 int access_level = -1; // 기본값 (존재하지 않거나 오류 시)
+			 
+			try {
+		        conn = ds.getConnection();
+
+		        String sql = "SELECT access_level FROM tbl_user WHERE user_id = ? AND is_withdrawn = 0";
+
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, user_id);
+
+		        rs = pstmt.executeQuery();
+
+		        if (rs.next()) {
+		            access_level = rs.getInt("access_level");
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return access_level;
+		}
+
+
+		// 간단한 회원정보를 가져오는 메소드 (관리자페이지에 구현)
+		public List<MemberVO> getMemberList() throws SQLException {
+			
+		    List<MemberVO> memberList = new ArrayList<>();
+
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = " SELECT user_name, mobile, email, fk_grade_no "
+		                   + " FROM tbl_user "
+		                   + " WHERE user_id != 'admin' "
+		                   + " ORDER BY user_name ASC";
+
+		        pstmt = conn.prepareStatement(sql);
+		        rs = pstmt.executeQuery();
+
+		        while (rs.next()) {
+		            MemberVO member = new MemberVO();
+		            member.setUser_name(rs.getString("user_name"));
+
+		            try {
+		                member.setMobile(aes.decrypt(rs.getString("mobile")));
+		                member.setEmail(aes.decrypt(rs.getString("email")));
+		            } catch (Exception e) {
+		                e.printStackTrace();	                
+		            }
+
+		            member.setFk_grade_no(rs.getString("fk_grade_no"));
+
+		            memberList.add(member);
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return memberList;
+		}
+		
+
+
+	}
 
 
 

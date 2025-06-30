@@ -62,5 +62,7 @@ public interface StayDAO {
         String checkoutDate    // "YYYY-MM-DD"
     ) throws SQLException;
     
+    // 간단한 숙소 정보 가져오는 메서드(관리자페이지에서 조회)
+    List<StayVO> getStayList() throws SQLException;
     
 }

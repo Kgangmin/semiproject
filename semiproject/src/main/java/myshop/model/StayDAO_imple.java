@@ -492,4 +492,38 @@ public class StayDAO_imple implements StayDAO {
 	        return roomList;
 	    }
 
+
+	    // 간단한 숙소 정보 가져오는 메서드(관리자페이지에서 조회)
+		@Override
+		public List<StayVO> getStayList() throws SQLException {
+			
+			List<StayVO> stayList = new ArrayList<>();
+
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = " SELECT stay_no, stay_name, stay_tel, stay_score "
+		                   + " FROM tbl_stay "
+		                   + " ORDER BY to_number(stay_no) ASC";
+
+		        pstmt = conn.prepareStatement(sql);
+		        rs = pstmt.executeQuery();
+
+		        while (rs.next()) {
+		            StayVO stay = new StayVO();
+		            stay.setStay_no(rs.getString("stay_no"));
+		            stay.setStay_name(rs.getString("stay_name"));
+		            stay.setStay_tel(rs.getString("stay_tel"));
+		            stay.setStay_score(rs.getInt("stay_score"));
+
+		            stayList.add(stay);
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return stayList;
+		}
+
 }

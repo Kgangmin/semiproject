@@ -129,7 +129,7 @@
          <!-- 관리자일때(access_level == 1) -->
           <c:if test="${sessionScope.loginUser.access_level == 1}">
          	 <li class="nav-item">
-	     		 <a class="nav-link" href="<%=ctxPath%>/admin.hb">관리자페이지</a>
+	     		 <a class="nav-link" href="<%=ctxPath%>/admin/manage.hb">관리자페이지</a>
 	 		 </li>
 	   		 <li class="nav-item">
 	   		   <a class="nav-link" href="<%=ctxPath%>/login/logout.hb">로그아웃</a>
