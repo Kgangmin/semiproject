@@ -9,6 +9,8 @@ public class RoomVO {
 	    private int price_per_night;    // 1박 가격
 	    private String room_info;       // 객실 설명
 	    
+	    private StayVO svo;
+	    
 		public String getRoom_no() {
 			return room_no;
 		}
@@ -55,5 +57,13 @@ public class RoomVO {
 		
 		public void setRoom_info(String room_info) {
 			this.room_info = room_info;
+		}
+
+		public StayVO getSvo() {
+			return svo;
+		}
+
+		public void setSvo(StayVO svo) {
+			this.svo = svo;
 		}
 }
