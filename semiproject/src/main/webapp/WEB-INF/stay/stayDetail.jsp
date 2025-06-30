@@ -101,16 +101,26 @@
             </p>
           </div>
           <!-- 예약하기 -->
-          <a href="<%=ctxPath%>/reservation/reserveRoom.hb?stay_no=${param.stay_no}
-                     &room_no=${room.room_no}
-                     &checkin=${checkin}
-                     &checkout=${checkout}"
-             class="btn btn-primary btn-sm ml-3"
-             <c:if test="${empty checkin}">
-               onclick="alert('먼저 기간을 선택하세요'); return false;"
-             </c:if>>
-            예약하기
-          </a>
+          <c:choose>
+      <%-- 1) 로그인 안 된 경우 --%>
+      <c:when test="${empty sessionScope.loginUser}">
+        <a href="javascript:void(0);"
+           class="btn btn-primary btn-sm ml-3"
+           onclick="if (confirm('로그인이 필요합니다. 로그인 하시겠습니까?')) { window.location.href='<%=ctxPath%>/login/login.hb'; } else { history.back(); }">
+          예약하기
+        </a>
+      </c:when>
+      <%--  2) 로그인 된 경우 --%>
+      <c:otherwise>
+        <a href="<%=ctxPath%>/reservation/reserveRoom.hb?stay_no=${param.stay_no}&room_no=${room.room_no}&checkin=${checkin}&checkout=${checkout}"
+           class="btn btn-primary btn-sm ml-3"
+           <c:if test="${empty checkin}">
+             onclick="alert('먼저 기간을 선택하세요'); return false;"
+           </c:if>>
+          예약하기
+        </a>
+      </c:otherwise>
+    </c:choose>
         </div>
       </c:forEach>
       <c:if test="${empty roomList}">
@@ -173,9 +183,11 @@
 	        format:     'YYYY-MM-DD',
 	        separator:  '~',
 	        applyLabel: '적용',
-	        cancelLabel:'취소'
+	        cancelLabel:'취소',
+	        
 	      },
-	      opens: 'center'
+	      opens: 'center',
+	      minDate:  moment(), 
 	    };
 
 	    if (checkin && checkout) {
@@ -187,11 +199,18 @@
 	    }
 
 	    $('#stayDate').daterangepicker(opts, function(start, end){
+	    	// 선택한 체크인 날짜가 오늘 이전이면 경고
+	        if (start.isBefore(moment(), 'day')) {
+	          alert('오늘 이후 날짜만 선택 가능합니다.');
+	          // 입력값 초기화
+	          $('#stayDate').val('');
+	          return;
+	        }
 	      var period = start.format('YYYY-MM-DD') + '~' + end.format('YYYY-MM-DD');
 	      var target = stayDetailUrl
 	                     + '?stay_no=' + stayNo
 	                     + '&period='   + encodeURIComponent(period);
-	      console.log('Redirect to:', target);
+	      //console.log('Redirect to:', target);
 	      window.location.href = target;
 	    });
     

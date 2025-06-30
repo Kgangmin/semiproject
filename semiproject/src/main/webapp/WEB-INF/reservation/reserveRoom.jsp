@@ -4,112 +4,141 @@
 <%
     String ctxPath = request.getContextPath();
 %>
-
 <jsp:include page="/WEB-INF/header1.jsp" />
 
-<!-- daterangepicker CSS & JS -->
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1/daterangepicker.min.js"></script>
-
-<div class="container my-4">
-    <!-- 1. 객실 이미지 캐러셀 -->
-    <div id="roomCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            <!-- 메인 썸네일 -->
-            <div class="carousel-item active">
-                <img src="<%=ctxPath%>/images/${stay.stay_thumbnail}" class="d-block w-100 img-modal" alt="메인 이미지">
-            </div>
-            <!-- 추가 이미지 -->
-            <c:forEach var="img" items="${extraImgList}">
-                <div class="carousel-item">
-                    <img src="<%=ctxPath%>/images/${img.stay_extraimg_no_filename}" class="d-block w-100 img-modal" alt="추가 이미지">
-                </div>
-            </c:forEach>
+<div class="container my-5">
+  <!-- 1. 이미지 캐러셀 -->
+  <div id="roomCarousel" class="carousel slide mb-4" data-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
+             class="d-block w-100" alt="메인 이미지">
+      </div>
+      <c:forEach var="img" items="${extraImgs}">
+        <div class="carousel-item">
+          <img src="<%=ctxPath%>/images/${img.room_extraimg_filename}"
+               class="d-block w-100" alt="추가 이미지">
         </div>
-        <a class="carousel-control-prev" href="#stayCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#stayCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+      </c:forEach>
     </div>
-
-    <!-- 2. 숙소 기본 정보 -->
-   <div class="mt-4 d-flex align-items-center">
-  <h2 class="mb-0">${stay.stay_name}</h2>
-  <div class="ml-auto">
-    <a href="<%=ctxPath%>/wishlistToggle.hb?stay_no=${stay.stay_no}">
-      <img
-        src="<%=ctxPath%>/images/${wishlistExists ? '찜한버튼.png' : '찜버튼.png'}"
-        style="width:32px; height:32px; cursor:pointer;"
-        alt="찜 버튼"/>
+    <a class="carousel-control-prev" href="#roomCarousel" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#roomCarousel" role="button" data-slide="next">
+      <span class="carousel-control-next-icon"></span>
     </a>
   </div>
-</div>
-    <div class="mt-2">
-        <p>${stay.stay_info}</p>
-        <p>연락처: ${stay.stay_tel}</p>
-        <p>평점: <strong>${stay.stay_score}</strong> · 조회수: <strong>${stay.views}</strong></p>
-    </div>
 
-    <!-- 3. 지도 영역 -->
-    <div class="mt-4">
-        <h5>찾아오시는 길</h5>
-        <div id="map" style="width: 500px; height: 400px;"></div>
-    </div>
+  <!-- 2. 숙소명·객실 등급 -->
+  <h2>${stay.stay_name}</h2>
+  <h4 class="text-secondary">${room.room_grade}</h4>
+  <hr/>
 
-    <!-- 4. 날짜 선택 -->
-    <div class="mb-3">
-    <label for="stayDate">체크인 날짜 선택</label>
-            <input type="text"
-                   id="stayDate"
-                   name="stayDate"
-                   class="form-control"
-                   placeholder="체크인 날짜 선택"
-                   readonly
-                   style="width: 100%;" >
-                   <strong id="dateCount" class="form-text text-muted mt-1"></strong>
-          </div>
+  <!-- 3. 날짜·요금 -->
+  <p>체크인: <strong>${checkin}</strong>　체크아웃: <strong>${checkout}</strong></p>
+  <p class="text-right">
+    총 <strong>${nights}</strong>박　
+    상품 금액: <strong><fmt:formatNumber value="${productAmount}" pattern="#,##0"/>원</strong>
+  </p>
+  <hr/>
 
+  <!-- 4. 예약자 정보 -->
+  <h5>예약자 정보</h5>
+  <p>이름: ${sessionScope.loginUser.user_name}</p>
+  <p>연락처: ${sessionScope.loginUser.mobile}</p>
+  <hr/>
 
-   <!-- 5. 객실 목록 (한 줄에 한 개씩) -->
-	<div class="mt-5">
-	  <h5>객실 정보</h5>
-	  <div class="list-group">
-	    <c:forEach var="room" items="${roomList}">
-	      <div class="list-group-item d-flex align-items-center mb-5">
-	        
-	        <!-- 5-1) 왼쪽: 객실 썸네일 -->
-	        <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
-	             class="img-thumbnail img-modal"
-	             style="width:200px; height:150px; object-fit:cover;"
-	             alt="객실 사진">
-	        
-	        <!-- 5-2) 가운데: 등급, 가격 -->
-	        <div class="ml-3 flex-grow-1">
-	          <h6 class="mb-1">${room.room_grade}</h6>
-	          <p class="mb-0">
-	            1박당: 
-	            <fmt:formatNumber value="${room.price_per_night}" pattern="#,##0"/>
-	            원
-	          </p>
-	        </div>
-	        
-	        <!-- 5-3) 오른쪽: 예약 버튼 -->
-	        <a href="<%=ctxPath%>/reserveRoom?stay_no=${stay.stay_no}"
-	               + "&room_no=${room.room_no}&date=${param.stayDate}"
-	           class="btn btn-primary btn-sm ml-3">
-	          예약하기
-	        </a>
-	      
-	      </div>
-	    </c:forEach>
-	  </div>
-	</div>
+  <!-- 5. 포인트 사용 -->
+  <h5>포인트 사용</h5>
+  <p>보유 포인트: <strong id="balancePoint">${sessionScope.loginUser.point}</strong>원</p>
+  <div class="form-inline mb-3">
+    <input type="number" id="usePointInput" class="form-control mr-2" min="0"
+           placeholder="사용할 포인트">
+    <button class="btn btn-outline-primary" id="applyPointBtn">적용</button>
+  </div>
+  <hr/>
+
+  <!-- 6. 결제하기 -->
+  <h5>결제하기</h5>
+  <p>상품 금액: <fmt:formatNumber value="${productAmount}" pattern="#,##0"/>원</p>
+  <p>포인트 사용액: <strong id="usedPointDisplay">0</strong>원</p>
+  <p class="font-weight-bold">
+    최종 결제금액: <span id="finalPayDisplay"><fmt:formatNumber value="${productAmount}" pattern="#,##0"/></span>원
+  </p>
+  <button class="btn btn-primary btn-lg btn-block" id="payBtn">결제하기</button>
 </div>
 
 <jsp:include page="/WEB-INF/footer1.jsp" />
+
+<!-- Iamport JS -->
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+<script>
+	const productAmount = ${productAmount};
+
+	function updateFinal(usedPoint){
+	  const finalPay = productAmount - usedPoint;
+	  $('#finalPayDisplay').text(finalPay.toLocaleString());
+	}
+	
+	$('#applyPointBtn').click(function(e){
+	  e.preventDefault();
+	  // 1) 입력값(쉼표 없는 순수 숫자)
+	  let usePoint = Number($('#usePointInput').val()) || 0;
+	  // 2) 보유포인트 검사 (balancePoint도 쉼표 제거)
+	  const balancePoint = Number($('#balancePoint').text().replace(/,/g, ''));
+	  if (usePoint > balancePoint) {
+	    alert('보유 포인트가 부족합니다');
+	    return;
+	  }
+	  // 3) 화면에 표시
+	  $('#usedPointDisplay').text(usePoint.toLocaleString());
+	  // 4) 바로 계산
+	  updateFinal(usePoint);
+	});
+
+  $('#payBtn').click(function(){
+    IMP.init('imp00266003');  // PortOne(Iamport) 가맹점 식별코드
+    const usedPoint = Number($('#usedPointDisplay').text().replace(/,/g,''));
+    const finalPay  = productAmount - usedPoint;
+
+    IMP.request_pay({
+      pg:      'html5_inicis',
+      pay_method: 'card',
+      merchant_uid: 'resv_' + new Date().getTime(),
+      name:       '${stay.stay_name} ${room.room_grade}',
+      amount:     100,  // 실제 결제 금액은 무조건100원으로 설정
+      buyer_name: '${sessionScope.loginUser.user_name}',
+      buyer_email: '${sessionScope.loginUser.email}',
+      buyer_tel:  '${sessionScope.loginUser.mobile}'
+    }, function(rsp) {
+    	console.log('▶ IMP callback:', rsp);
+      if (rsp.success) {
+    	  const usedPoint = Number($('#usedPointDisplay').text().replace(/,/g,''));
+    	    const finalPay  = productAmount - usedPoint;
+    	    console.log('▶ About to send AJAX:', {
+    	      usedPoint, finalPay, room_no: '${room.room_no}'
+    	    });
+        // 서버에 결제 완료 통보
+        $.post('${pageContext.request.contextPath}/reservation/paymentComplete.hb', {
+          room_no:    '${room.room_no}',
+          checkin:    '${checkin}',
+          checkout:   '${checkout}',
+          productAmount: productAmount,
+          usedPoint:  usedPoint,
+          finalPay:   finalPay,
+          merchant_uid: rsp.merchant_uid,
+          imp_uid:    rsp.imp_uid
+        }, function(res) {
+          if (res.status === 'success') {
+            alert('결제 및 예약이 완료되었습니다.');
+            location.href = '${pageContext.request.contextPath}/reservation/confirmation.hb?reserv_no=' + res.reserv_no;
+          } else {
+            alert('결제는 완료되었으나 서버 처리 중 오류가 발생했습니다.');
+          }
+        }, 'json');
+      } else {
+        alert('결제에 실패했습니다: ' + rsp.error_msg);
+      }
+    });
+  });
+</script>

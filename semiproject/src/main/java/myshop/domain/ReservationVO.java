@@ -11,6 +11,9 @@ public class ReservationVO {
     private String checkout_date;	// 체크아웃 날짜
     private String reserv_date;		// 예약한 날짜(결제한날짜)
     
+    // 부모테이블
+    private StayVO stayvo;
+    private RoomVO roomvo;
     
 	public String getReserv_no() {
 		return reserv_no;
@@ -74,6 +77,22 @@ public class ReservationVO {
 	
 	public void setReserv_date(String reserv_date) {
 		this.reserv_date = reserv_date;
+	}
+
+	public StayVO getStayvo() {
+		return stayvo;
+	}
+
+	public void setStayvo(StayVO stayvo) {
+		this.stayvo = stayvo;
+	}
+
+	public RoomVO getRoomvo() {
+		return roomvo;
+	}
+
+	public void setRoomvo(RoomVO roomvo) {
+		this.roomvo = roomvo;
 	}
 	
     
