@@ -36,7 +36,7 @@ public class ReservationDetail extends AbstractController {
 				String reserv_no = request.getParameter("reserv_no");// url 에 저장해둔 예약번호
 				if(!userid_check.equals(userid)) {
 					// 로그인시 유저아이디와 값이 다르다면
-				 	String message = "본인의 마이페이지만 접근할 수 있습니다.";
+				 	String message = "본인의 예약만 접근할 수 있습니다.";
 		            String loc = request.getContextPath() + "/index.hb";
 
 		            request.setAttribute("message", message);
@@ -66,7 +66,7 @@ public class ReservationDetail extends AbstractController {
 			}
 			else {
 				// 로그인을 안 했으면
-				String message = "마이페이지를 보기 위해서는 로그인을 먼저해야 합니다";
+				String message = "예약을 보기 위해서는 로그인을 먼저해야 합니다";
 				String loc = "javascript:history.back()";
 				
 				request.setAttribute("message", message);

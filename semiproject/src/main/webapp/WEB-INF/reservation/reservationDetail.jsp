@@ -13,8 +13,10 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; line-
 .label { display: inline-block; min-width: 100px; font-weight: 600; color: #374151; } 
 .value { margin-bottom: 12px; color: #1f2937; } 
 .image-preview { width: 100%; max-height: 280px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 1px 5px rgba(0,0,0,0.1); } 
-.btn-action { background-color: #2563eb; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-size: 0.95em; font-weight: 500; text-decoration: none; margin-left: 10px; transition: 0.2s; } 
+.btn-action { background-color: #2563eb; color: white !important; border: none; padding: 10px 16px; border-radius: 8px; font-size: 0.95em; font-weight: 500; text-decoration: none; margin-left: 10px; transition: 0.2s; } 
 .btn-action:hover { background-color: #1d4ed8; }
+
+
 </style>
 
 <div class="container">
@@ -69,7 +71,7 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; line-
     <div class="section" style="text-align: right;">
         <a href="<%= ctxPath %>/reservationList.hb?user_id=${loginUser.user_id}" class="btn-action">목록으로</a>
         <a href="<%= ctxPath %>/reservationCancel.hb?reserv_no=${reservation.reserv_no}"
-           class="btn-action" onclick="return confirm('정말 예약을 취소하시겠습니까?')">예약 취소</a>
+           class="btn-action" >예약 취소</a>
     </div>
 </div>
 

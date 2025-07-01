@@ -83,8 +83,9 @@
 				           <button class="btn-action disabled">✔ 후기 작성 완료</button>
 				       </c:when>
 				       <c:otherwise>
-				           <form method="post" action="${ctxPath}/review/write" style="display: inline;">
+				           <form method="post" action="<%= ctxPath%>/reviewWrite.hb" style="display: inline;">
 				               <input type="hidden" name="reserv_id" value="${rvo.reserv_no}" />
+				                <input type="hidden" name="user_id" value="${loginUser.user_id}" />
 				               <button type="submit" class="btn-action">이용후기 작성하기</button>
 				           </form>
 				       </c:otherwise>
