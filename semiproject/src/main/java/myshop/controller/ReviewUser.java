@@ -10,7 +10,6 @@ import member.domain.MemberVO;
 import myshop.domain.ReviewVO;
 import myshop.model.ReviewDAO;
 import myshop.model.ReviewDAO_imple;
-import myshop.model.StayDAO_imple;
 
 public class ReviewUser extends AbstractController
 {
@@ -24,6 +23,10 @@ public class ReviewUser extends AbstractController
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		HttpSession session = request.getSession();
+        MemberVO user = (MemberVO) session.getAttribute("loginUser");
+        
+        
         // 페이지번호 받아오기 (기본값: 1)
         String pageStr = request.getParameter("page");
         int currentPage = 1;
@@ -37,9 +40,7 @@ public class ReviewUser extends AbstractController
         int offset = (currentPage - 1) * sizePerPage;
         int totalReviewCount;
 		
-		
-		HttpSession session = request.getSession();
-        MemberVO user = (MemberVO) session.getAttribute("loginUser");
+        List<ReviewVO> reviewList;
         if (user == null)
         {//	로그인 안 됐으면 로그인 페이지로 리다이렉트
         	request.setAttribute("message", "로그인 정보가 없기때문에 로그인 화면으로 이동합니다.");
@@ -52,11 +53,18 @@ public class ReviewUser extends AbstractController
         else
         {
         	String user_id = user.getUser_id();
-        	List<ReviewVO> reviewList = rvdao.selectAllReview(user_id, offset, sizePerPage);
+        	reviewList = rvdao.selectAllReview(null, user_id, offset, sizePerPage);
+        	totalReviewCount = rvdao.countAllReview(null, user_id);
+        	int totalPage = (int)Math.ceil((double)totalReviewCount / sizePerPage);
+        	
             request.setAttribute("user_id", user_id);	//	로그인 중인 user_id 넘겨주기
-            
-        	super.setRedirect(false);
-    		super.setViewPage("/WEB-INF/review/reviewUser.jsp");
+    		request.setAttribute("currentPage", currentPage);
+    		request.setAttribute("totalPage", totalPage);
+            request.setAttribute("reviewList", reviewList);
         }
+
+        
+    	super.setRedirect(false);
+		super.setViewPage("/WEB-INF/review/reviewUser.jsp");
 	}
 }

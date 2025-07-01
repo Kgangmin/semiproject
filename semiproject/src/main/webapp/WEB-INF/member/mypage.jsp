@@ -89,7 +89,7 @@
                 <span id="point">${loginUser.point}pt &nbsp;&nbsp;></span>
             </div>
             <div class="item">
-            	<a href="${pageContext.request.contextPath}/reviewUser.hb?user_id=${loginUser.user_id}">
+            	<a href="${pageContext.request.contextPath}/reviewUser.hb?user_id=${loginUser.user_id}&page=1">
             		<span>내 후기</span>
                 	<span>></span>	
             	</a>
