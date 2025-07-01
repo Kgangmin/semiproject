@@ -16,7 +16,7 @@ public class ReservationVO {
     // 부모테이블
     private StayVO stayvo;
     private RoomVO roomvo;
-    
+    private boolean review_written;
 	public String getReserv_no() {
 		return reserv_no;
 	}
@@ -96,4 +96,24 @@ public class ReservationVO {
 	public void setRoomvo(RoomVO roomvo) {
 		this.roomvo = roomvo;
 	}
+
+	public boolean isReview_written() {
+		return review_written;
+	}
+
+	public void setReview_written(boolean review_written) {
+		this.review_written = review_written;
+	}
+	private String reserv_status;
+	
+	public String getReserv_status() {
+		return reserv_status;
+	}
+
+	public void setReserv_status(String reserv_status) {
+		this.reserv_status = reserv_status;
+	}
+
+
+	
 }
