@@ -21,6 +21,7 @@
     .status-box {padding: 5px 10px;border-radius: 20px;font-size: 0.9em;font-weight: bold;text-align: center;min-width: 80px;}
 	.status-progress {background-color: #dbeafe; /* 연한 파랑 */color: #1d4ed8; /* 진한 파랑 */border-radius: 20% }
 	.status-complete {background-color: #ecfdf5; /* 연한 초록 */color: #059669; /* 진한 초록 */border-radius: 20% }
+	
 	.reservation-card:hover {  transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.1);}
 
 </style>
@@ -75,7 +76,7 @@
                 </div>
 				</a>	
                <div class="reservation-actions">
-				   <button class="btn-action">예약 확인/변경하기</button>
+				   <button class="btn-action" onclick="location.href='<%= ctxPath%>/reservationDetail.hb?reserv_no=${rvo.reserv_no}&user_id=${loginUser.user_id}'">예약 확인/변경하기</button>
 				
 				   <c:choose>
 				       <c:when test="${rvo.review_written}">

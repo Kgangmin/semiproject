@@ -15,4 +15,7 @@ public interface ReservationDAO {
 
  	// 모든 예약정보를 가져오는 메소드 
 	List<ReservationVO> getReservationList(String userid, String status) throws SQLException;
+
+	// 모든 예약정보와 객실 숙소 정보를 가져오는 메소드
+	ReservationVO getReservationDetail(String reserv_no) throws SQLException;
 }

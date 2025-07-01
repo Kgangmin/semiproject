@@ -104,7 +104,7 @@
 <div class="reservation-history">
 		    <div class="reservation-history-header">
 			    <h3>예약내역</h3>
-			    <a href="${pageContext.request.contextPath}/reservationList.hb?user_id=${loginUser.user_id}" class="more-link">></a>
+			    <a href="<%= ctx_Path %>/reservationList.hb?user_id=${loginUser.user_id}" class="more-link">></a>
 			</div> 
 		    <div class="reservation-list">
 		        <c:choose>
