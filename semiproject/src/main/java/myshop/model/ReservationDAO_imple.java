@@ -95,22 +95,24 @@ public class ReservationDAO_imple implements ReservationDAO {
 	@Override
 	public ReservationVO selectNextReservation(String userid) throws SQLException {
 			ReservationVO rvo = null;
-	        
+	        StayVO svo = null;
 	    	try {
 	             conn = ds.getConnection();
 	             
-	             String sql = " SELECT * "
-	             		+ " FROM (\r\n"
-	             		+ "    SELECT * "
-	             		+ "    FROM tbl_reservation "
-	             		+ "    WHERE fk_user_id = ? "
-	             		+ "      AND checkin_date >= SYSDATE "
-	             		+ "    ORDER BY checkin_date ASC "
-	             		+ " ) "
-	             		+ "WHERE ROWNUM = 1 ";
-	             
-	             pstmt = conn.prepareStatement(sql);
-	             pstmt.setString(1, userid);
+	             String sql = "SELECT * "
+	                     + "FROM ( "
+	                     + "    SELECT r.*, s.stay_no "
+	                     + "    FROM tbl_reservation r "
+	                     + "    JOIN tbl_room rm ON r.fk_room_no = rm.room_no "
+	                     + "    JOIN tbl_stay s ON rm.fk_stay_no = s.stay_no "
+	                     + "    WHERE r.fk_user_id = ? "
+	                     + "      AND r.checkin_date >= SYSDATE "
+	                     + "    ORDER BY r.checkin_date ASC "
+	                     + ") "
+	                     + "WHERE ROWNUM = 1";
+
+	          pstmt = conn.prepareStatement(sql);
+	          pstmt.setString(1, userid);
 	             
 	             
 	             rs = pstmt.executeQuery();
@@ -125,6 +127,11 @@ public class ReservationDAO_imple implements ReservationDAO {
 	            	 rvo.setCheckin_date(rs.getString("checkin_date"));
 	            	 rvo.setCheckout_date(rs.getString("checkout_date"));
 	            	 rvo.setReserv_date(rs.getString("reserv_date"));
+	            	 
+	            	 svo = new StayVO();
+	            	 svo.setStay_no(rs.getString("stay_no"));
+	            	 
+	            	 rvo.setStayvo(svo);
 	             }
 	             
 	         } finally {
