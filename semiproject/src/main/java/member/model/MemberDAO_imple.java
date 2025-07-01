@@ -473,7 +473,7 @@ public class MemberDAO_imple implements MemberDAO {
 			try {
 		        conn = ds.getConnection();
 
-		        String sql = "SELECT access_level FROM tbl_user WHERE user_id = ? AND is_withdrawn = 0";
+		        String sql = " select access_level from tbl_user where user_id = ? and is_withdrawn = 0";
 
 		        pstmt = conn.prepareStatement(sql);
 		        pstmt.setString(1, user_id);
@@ -622,119 +622,134 @@ public class MemberDAO_imple implements MemberDAO {
 		
 
 
-		// 회원 목록 조회 메서드d
+		// 회원 목록 조회 메서드
 		@Override
 		public List<MemberVO> getMemberList(String searchType, String searchWord, int offset, int limit) throws SQLException {
-		    List<MemberVO> memberList = new ArrayList<>();
+		    List<MemberVO> memberList = new ArrayList<>();  // 결과를 담을 리스트 생성
 
 		    try {
+		        
 		        conn = ds.getConnection();
 
-		        String sql = " SELECT user_name, mobile, email, fk_grade_no "
-		                   + " FROM tbl_user "
-		                   + " WHERE user_id != 'admin' ";
+		        
+		        String sql = " select user_name, mobile, email, fk_grade_no, user_id "
+		                   + " from tbl_user "
+		                   + " where user_id != 'admin' ";
 
+		        // 검색어가 있으면 조건 추가
 		        if (searchWord != null && !searchWord.trim().isEmpty()) {
-		            if ("user_name".equals(searchType)) {
-		                sql += " AND user_name LIKE ? ";
-		            } else if ("email".equals(searchType)) {
+		            if ("user_name".equals(searchType)) {  
+		                // 이름 검색일 경우, 부분일치(Like) 조건 추가
+		                sql += " and user_name like ? ";
+		            } else if ("email".equals(searchType)) {  
+		                // 이메일 검색일 경우, 암호화 처리 후 정확히 일치하는 조건 추가
 		                try {
-		                    searchWord = aes.encrypt(searchWord);  // 암호화
+		                    searchWord = aes.encrypt(searchWord);  
 		                } catch (GeneralSecurityException | UnsupportedEncodingException e) {
 		                    e.printStackTrace();
-		                    searchWord = ""; // 예외 시 빈 문자열로 처리
+		                    searchWord = ""; // 암호화 실패시 빈 문자열 처리
 		                }
-		                sql += " AND email = ? ";  // 정확한 일치 비교
+		                sql += " and email = ? ";  // 정확한 일치 검색 조건
 		            }
 		        }
 
-		        sql += " ORDER BY user_name ASC "
-		             + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ";
+		        //  페이징 처리 (이름 오름차순 정렬)
+		        sql += " order by user_name ASC "
+		             + " offset ? rows fetch next ? rows only ";
 
 		        pstmt = conn.prepareStatement(sql);
 
+		        
 		        if (searchWord != null && !searchWord.trim().isEmpty()) {
 		            if ("email".equals(searchType)) {
-		                pstmt.setString(1, searchWord); // 이메일은 정확히 일치하므로 % 붙이지 않음
-		                pstmt.setInt(2, offset);
-		                pstmt.setInt(3, limit);
+		                pstmt.setString(1, searchWord);  // 암호화된 이메일로 정확 일치
+		                pstmt.setInt(2, offset);          // 페이징 시작 위치
+		                pstmt.setInt(3, limit);           // 페이징 조회 개수
 		            } else {
-		                pstmt.setString(1, "%" + searchWord + "%"); // 이름 검색은 LIKE 사용
+		                pstmt.setString(1, "%" + searchWord + "%");  // 이름은 like 검색이므로 % 사용
 		                pstmt.setInt(2, offset);
 		                pstmt.setInt(3, limit);
 		            }
 		        } else {
+		            // 검색어 없으면 페이징 파라미터만 세팅
 		            pstmt.setInt(1, offset);
 		            pstmt.setInt(2, limit);
 		        }
 
-
 		        rs = pstmt.executeQuery();
 
+		       
 		        while (rs.next()) {
-		            MemberVO member = new MemberVO();
+		            MemberVO member = new MemberVO();  
 
 		            member.setUser_name(rs.getString("user_name"));
 
 		            try {
+		                // 암호화된 데이터는 복호화해서 저장
 		                member.setMobile(aes.decrypt(rs.getString("mobile")));
 		                member.setEmail(aes.decrypt(rs.getString("email")));
 		            } catch (Exception e) {
 		                e.printStackTrace();
+		                // 복호화 실패 시 DB에 있는 원본 값을 그대로 저장 (예외 처리)
 		                member.setMobile(rs.getString("mobile"));
 		                member.setEmail(rs.getString("email"));
 		            }
 
 		            member.setFk_grade_no(rs.getString("fk_grade_no"));
-
+		            member.setUser_id(rs.getString("user_id"));
+		            
 		            memberList.add(member);
 		        }
 
 		    } finally {
 		        close();
 		    }
-
 		    return memberList;
 		}
+
 
 		   
 		
 		// 회원 총 개수 조회 메서드
 		@Override
 		public int getMemberTotalCount(String searchType, String searchWord) throws SQLException {
-		    int totalCount = 0;
+		    int totalCount = 0;  // 회원 수를 저장할 변수
 
 		    try {
 		        conn = ds.getConnection();
 
-		        String sql = " SELECT COUNT(*) AS totalCount FROM tbl_user WHERE user_id != 'admin' ";
+		        String sql = " select count(*) as totalCount from tbl_user where user_id != 'admin' ";
 
+		        //  검색어가 있으면 조건 추가
 		        if(searchWord != null && !searchWord.trim().isEmpty()) {
 		            if("user_name".equals(searchType)) {
-		                sql += " AND user_name LIKE ? ";
+		                // 이름 검색일 때 부분일치 조건 추가
+		                sql += " and user_name like ? ";
 		            } else if("email".equals(searchType)) {
-		                sql += " AND email LIKE ? ";
+		                // 이메일 검색일 때 부분일치 조건 추가
+		                sql += " and email = ? ";
 		            }
 		        }
-
+		        
 		        pstmt = conn.prepareStatement(sql);
 
 		        if(searchWord != null && !searchWord.trim().isEmpty()) {
 		            pstmt.setString(1, "%" + searchWord + "%");
 		        }
-
+       
 		        rs = pstmt.executeQuery();
-
+	        
 		        if(rs.next()) {
-		            totalCount = rs.getInt("totalCount");
+		            totalCount = rs.getInt("totalCount");  // count(*) 결과를 읽음
 		        }
 
 		    } finally {
 		        close();
 		    }
-
+    
 		    return totalCount;
 		}
+
 
 		
 		
@@ -768,6 +783,59 @@ public class MemberDAO_imple implements MemberDAO {
 			}
 			
 		}// end of public void updateLastPwdUpdate(String user_id) throws SQLException------------
+
+
+		// user_id로 회원상세정보 가져오는 메서드
+		@Override
+		public MemberVO getMemberByUserId(String user_id) throws SQLException {
+			
+		    MemberVO member = null;
+
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = " SELECT user_id, user_name, email, mobile, birthday, total_payment, fk_grade_no, "
+		                   + " point, register_date, last_pwd_update, is_withdrawn, is_active, access_level "
+		                   + " FROM tbl_user "
+		                   + " WHERE user_id = ? ";
+
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, user_id);
+		        rs = pstmt.executeQuery();
+
+		        if(rs.next()) {
+		            member = new MemberVO();
+
+		            member.setUser_id(rs.getString("user_id"));
+		            member.setUser_name(rs.getString("user_name"));
+
+		            // 이메일, 전화번호는 복호화 처리
+		            try {
+		                member.setEmail(aes.decrypt(rs.getString("email")));
+		                member.setMobile(aes.decrypt(rs.getString("mobile")));
+		            } catch (Exception e) {
+		                e.printStackTrace();
+		                member.setEmail(rs.getString("email"));
+		                member.setMobile(rs.getString("mobile"));
+		            }
+
+		            member.setBirthday(rs.getString("birthday"));
+		            member.setTotal_payment(rs.getInt("total_payment"));
+		            member.setFk_grade_no(rs.getString("fk_grade_no"));
+		            member.setPoint(rs.getInt("point"));
+		            member.setRegister_date(rs.getString("register_date"));
+		            member.setLast_pwd_update(rs.getString("last_pwd_update"));
+		            member.setIs_withdrawn(rs.getInt("is_withdrawn"));
+		            member.setIs_active(rs.getInt("is_active"));
+		            member.setAccess_level(rs.getInt("access_level"));
+		        }
+		    } finally {
+		        close();
+		    }
+
+		    return member;
+		}
+
 
 
 

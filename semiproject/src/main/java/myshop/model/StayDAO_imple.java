@@ -576,6 +576,7 @@ public class StayDAO_imple implements StayDAO {
 		}
 
 
+		// 호텔 총 개수 조회 (검색어)
 		@Override
 		public int getStayTotalCount(String searchWord) throws SQLException {
 		    int totalCount = 0;

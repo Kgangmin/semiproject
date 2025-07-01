@@ -1,6 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<jsp:include page="/WEB-INF/header1.jsp" />
+
+
+
+<script>
+$(document).ready(function() {
+    // data-userid 속성이 있는 모든 tr에 클릭 이벤트 바인딩
+    $("tr[data-userid]").click(function() {
+    	var user_id = $(this).attr("data-userid");
+        if(user_id) {
+            window.location.href = "<%=request.getContextPath()%>/admin/memberOneDetail.hb?user_id=" + user_id;
+        } else {
+            alert("회원 ID가 없습니다.");
+        }
+    });
+});
+</script>
+
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -35,7 +54,7 @@
         </thead>
         <tbody>
             <c:forEach var="member" items="${memberList}">
-                <tr>
+                <tr data-userid="${member.user_id}" >
                     <td>${member.user_name}</td>
                     <td>${member.email}</td>
                     <td>${member.mobile}</td>
@@ -58,7 +77,7 @@
 		</c:if>
 		
 
-    <h2 class="my-4">호텔 목록</h2>
+    <h2 class="my-4">숙소 목록</h2>
 
     <form method="get" action="manage.hb" class="form-inline mb-3">
         <label for="staySearchWord" class="mr-2">검색:</label>
@@ -105,3 +124,4 @@
 <script src="<%=request.getContextPath()%>/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
