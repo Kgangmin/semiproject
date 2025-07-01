@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%-- JSTL(JSP Standard Tag Library)을 사용하기 위한 선언. 목록(예약내역) 표시에 유용합니다. --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <% String ctx_Path = request.getContextPath(); %>
 
 <jsp:include page="../header1.jsp" />
@@ -53,6 +54,8 @@
 		.reservation-history-header {display: flex; justify-content: space-between; align-items: center;}
 		.more-link {font-size: 15px;text-decoration: none;color: #777;font-weight: bold;transition: color 0.2s ease;}
 		.more-link:hover {color: #000;}
+		.reservation-list:hover {  transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.1);}
+		
     </style>
 
 <body>
@@ -106,19 +109,21 @@
 		        <c:choose>
 		            <c:when test="${not empty nextReservation}">
 					    <div class="reservation-item better-card">
-					        <h3 class="stay-name">${nextReservation.stayvo.stay_name}</h3>
-					        <h6 class="stay-name" >${nextReservation.roomvo.room_grade}</h6>
-					        <div class="dates">
-					            <div>
-					                <span class="label">체크인</span>
-					                <span class="value">${nextReservation.checkin_date}</span>
-					            </div>
-					            <div class="dot">•</div>
-					            <div>
-					                <span class="label">체크아웃</span>
-					                <span class="value">${nextReservation.checkout_date}</span>
-					            </div>
-					        </div>
+					    	<a href="<%= ctx_Path %>/stayDetail.hb?stay_no=${nextReservation.stayvo.stay_no}">
+						        <h3 class="stay-name">${nextReservation.stayvo.stay_name}</h3>
+						        <h6 class="stay-name" >${nextReservation.roomvo.room_grade}</h6>
+						        <div class="dates">
+						            <div>
+						                <span class="label">체크인</span>
+						                <span class="value">${fn:substring(nextReservation.checkin_date, 0, 10)}</span>
+						            </div>
+						            <div class="dot">•</div>
+						            <div>
+						                <span class="label">체크아웃</span>
+						                <span class="value">${fn:substring(nextReservation.checkout_date, 0, 10)}</span>
+						            </div>
+						        </div>
+					        </a>
 					    </div>
 					</c:when>
 		            <c:otherwise>

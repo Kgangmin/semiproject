@@ -14,6 +14,10 @@
     String checkin  = dates.length > 0 ? dates[0].trim() : "";
     String checkout = dates.length > 1 ? dates[1].trim() : "";
 %>
+<%
+  // keyword가 비어있으면 기본값으로 "숙소명 또는 지역명"을 설정
+  String displayKeyword = (keyword == null || keyword.trim().isEmpty()) ? "숙소명 또는 지역명" : keyword;
+%>
 
 <jsp:include page="/WEB-INF/header1.jsp" />
 
@@ -30,7 +34,7 @@
         method="get"
         class="form-inline mb-4">
     <input type="text" name="keyword"
-           value=<c:out value="${keyword}"/>
+           value="<%= displayKeyword %>"
            class="form-control mr-2"
            placeholder="숙소명 또는 지역명"
            style="width:250px;" />
