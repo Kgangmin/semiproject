@@ -8,6 +8,8 @@
     String ctxPath = request.getContextPath();
 %>
 
+<script type="text/javascript" src="<%= ctxPath%>/js/member/memberEdit.js"></script>
+
 
 <jsp:include page="header1.jsp" />
 <style>
@@ -111,6 +113,64 @@
 	
 	<!-- stayScroll.js 로드 -->
 	<script src="<%= ctxPath %>/js/stayScroll.js"></script>
+	
+
+
+
+
+
+<jsp:include page="/WEB-INF/footer1.jsp" />
+
+<!-- 비밀번호 변경 모달 -->
+<c:if test="${sessionScope.showPwdModal}">
+  <% session.removeAttribute("showPwdModal"); %>
+
+  <div class="modal fade" id="pwdChangeModal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">비밀번호 변경 안내</h5>
+        </div>
+        <div class="modal-body">
+          <p>비밀번호를 마지막으로 변경한 지 3개월(90일) 이상 경과하였습니다.<br/>
+             지금 바로 변경하시겠습니까?</p>
+        </div>
+        <div class="modal-footer">
+          <!-- 즉시 변경 -->
+          <button type="button" class="btn btn-primary" id="changeNowBtn">
+            지금 변경하기
+          </button>
+          <!-- 90일 뒤 알림 -->
+          <button type="button" class="btn btn-secondary" id="changeLaterBtn">
+            90일 뒤에 변경하기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+      $('#pwdChangeModal').modal('show');
+
+      $('#changeNowBtn').click(function(){
+        window.open(
+          '<%=ctxPath%>/changePwd.hb?user_id=${sessionScope.loginUser.user_id}',
+          '비밀번호변경',
+          'width=500,height=600,resizable=no'
+        );
+        $('#pwdChangeModal').modal('hide');
+      });
+
+      $('#changeLaterBtn').click(function(){
+        $.post('<%=ctxPath%>/login/remindPwdChange.hb', {}, function(){
+          $('#pwdChangeModal').modal('hide');
+          window.location.href = '<%=ctxPath%>/index.hb';
+        });
+      });
+    });
+  </script>
+</c:if>
 	
 
 

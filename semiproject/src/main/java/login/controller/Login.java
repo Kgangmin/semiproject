@@ -70,11 +70,13 @@ public class Login extends AbstractController {
 	                session.setAttribute("loginUser", loginUser);
 	                
 	                if(loginUser.isRequirePwdChange()) { // 휴면이 아니면서 비밀번호를 변경한지 3개월 이상된 경우
-						 
+	                							 
 	                     // JSP에서 모달 띄우라고 flag 전달
-	                     request.setAttribute("showPwdModal", true);
+	                	session.setAttribute("showPwdModal", true);
 
-	                     return; // 종료
+	                	super.setRedirect(true);
+	                    super.setViewPage(request.getContextPath() + "/index.hb");
+	                    return;
 					}
 	                // 메인 페이지로 이동
 	                super.setRedirect(true);

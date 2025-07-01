@@ -53,6 +53,7 @@ public class ChangePasswordEnd extends AbstractController {
 			else {
 				//System.out.println("비밀번호가 같지않다");
 				int update_pwd = mdao.pwdUpdate(paraMap);
+
 				
 				if(update_pwd == 1) {
 					String message = "비밀번호 번경성공";
