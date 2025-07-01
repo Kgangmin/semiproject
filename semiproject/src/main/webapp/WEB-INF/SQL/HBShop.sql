@@ -37,6 +37,10 @@ select * from TBL_USER;
 select * from tbl_reservation
 order by reserv_date;
 
+delete TBL_STAY 
+where stay_name = 'HB하우스';
+
+commit;
 
 insert into tbl_user_grade(grade_no, grade_name, grade_cutoff, pointrate) values(1, 'VVIP', 100000000, 0.08);      
 insert into tbl_user_grade(grade_no, grade_name, grade_cutoff, pointrate) values(2, 'VIP', 10000000, 0.05);
@@ -80,6 +84,7 @@ insert into tbl_user(user_id, user_pwd, user_name, email, mobile, birthday, fk_g
 select * from tbl_user;
 
 commit;
+
 
 
 --------------------------------------------------------------------------------

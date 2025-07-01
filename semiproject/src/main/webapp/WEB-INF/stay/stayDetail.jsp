@@ -127,7 +127,15 @@
 
    <!-- 4. 객실 목록 -->
   <div class="mt-5">
-    <h5>객실 정보</h5>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+    <h5 class="mb-0">객실 정보</h5>
+    <c:if test="${sessionScope.loginUser.access_level == 1}">
+      <a href="<%=ctxPath%>/admin/roomRegister.hb?stay_no=${stay.stay_no}"
+         class="btn btn-sm btn-success text-dark">
+        객실등록하기
+      </a>
+    </c:if>
+  </div>
     <div class="list-group">
       <c:forEach var="room" items="${roomList}">
         <div class="list-group-item d-flex align-items-center mb-4">
@@ -156,7 +164,7 @@
       <%--  2) 로그인 된 경우 --%>
       <c:otherwise>
         <a href="<%=ctxPath%>/reservation/reserveRoom.hb?stay_no=${param.stay_no}&room_no=${room.room_no}&checkin=<%=checkin%>&checkout=<%=checkout%>"
-           class="btn btn-primary btn-sm ml-3">
+           class="btn btn-primary btn-sm ml-3 text-dark">
           예약하기
         </a>
       </c:otherwise>

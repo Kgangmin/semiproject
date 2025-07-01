@@ -78,4 +78,17 @@ public interface StayDAO {
     // 방의 번호로 숙소 이름을 찾는 메소드 
 	StayVO search_stay_name(String fk_room_no) throws SQLException;
 
+	// stayNo값 읽어오기
+	String getNextStayNo() throws SQLException;
+
+	// tbl_stay 에 새 숙소 정보를 insert하는 메소드
+	int insertStay(StayVO svo) throws SQLException;
+
+	// tbl_stay_extraimg 에 추가 이미지 정보 insert 하는 메소드
+	int insertExtraImage(StayimgVO img) throws SQLException;
+	
+	
+	
+	
+
 }
