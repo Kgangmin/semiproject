@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%-- JSTL(JSP Standard Tag Library)을 사용하기 위한 선언. 목록(예약내역) 표시에 유용합니다. --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <% String ctx_Path = request.getContextPath(); %>
 
 <jsp:include page="../header1.jsp" />
@@ -112,12 +113,12 @@
 					        <div class="dates">
 					            <div>
 					                <span class="label">체크인</span>
-					                <span class="value">${nextReservation.checkin_date}</span>
+					                <span class="value">${fn:substring(nextReservation.checkin_date, 0, 10)}</span>
 					            </div>
 					            <div class="dot">•</div>
 					            <div>
 					                <span class="label">체크아웃</span>
-					                <span class="value">${nextReservation.checkout_date}</span>
+					                <span class="value">${fn:substring(nextReservation.checkout_date, 0, 10)}</span>
 					            </div>
 					        </div>
 					    </div>

@@ -145,7 +145,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	    	try {
 	             conn = ds.getConnection();
 	             
-	              sql += " SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no "
+	              sql += " SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no, s.stay_no "
 	             		+ " FROM TBL_RESERVATION r JOIN TBL_ROOM rm ON r.fk_room_no = rm.room_no "
 	             		+ " JOIN TBL_STAY s ON rm.fk_stay_no = s.stay_no "
 	             		+ " LEFT JOIN TBL_REVIEW rv ON r.reserv_no = rv.fk_reserv_no "
@@ -182,6 +182,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	                 svo = new StayVO();
 	                 svo.setStay_name(rs.getString("stay_name"));
 	                 svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	                 svo.setStay_no(rs.getString("stay_no"));
 	                 rvo.setStayvo(svo);
 	                 
 	                 rmvo = new RoomVO();

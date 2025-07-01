@@ -18,32 +18,48 @@
 	.status-complete {color: green;font-weight: bold;font-size: 0.9em;}
 	.no-data {padding: 30px;text-align: center; font-size: 1.1em;color: gray;}
     .reservation-date { font-size: 0.9em;color: #666;}
+    .status-box {padding: 5px 10px;border-radius: 20px;font-size: 0.9em;font-weight: bold;text-align: center;min-width: 80px;}
+	.status-progress {background-color: #dbeafe; /* 연한 파랑 */color: #1d4ed8; /* 진한 파랑 */border-radius: 20% }
+	.status-complete {background-color: #ecfdf5; /* 연한 초록 */color: #059669; /* 진한 초록 */border-radius: 20% }
+	.reservation-card:hover {  transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.1);}
+
 </style>
 
 <div class="container mt-5">
-	<form method="get" action="${ctxPath}/reservationList.hb">
+	<form method="get" action="<%= ctxPath%>/reservationList.hb">
 	  <input type="hidden" name="user_id" value="${loginUser.user_id}" />
 	  
 	  <label for="statusFilter"><strong>예약 상태</strong></label>
 	  <select name="status" onchange="this.form.submit()">
-	    <option value="" <c:if test="${param.status == ''}">selected</c:if>>전체</option>
+	    <option value="" <c:if test="${empty param.status}">selected</c:if>>전체</option>
 	    <option value="진행중" <c:if test="${param.status == '진행중'}">selected</c:if>>진행중</option>
 	    <option value="완료" <c:if test="${param.status == '완료'}">selected</c:if>>완료</option>
 	  </select>
 	</form>
 	    
-	</form>
+	
     <h2 class="mb-4">예약내역</h2>
 
     <c:if test="${not empty requestScope.reservationList}">
         <c:forEach var="rvo" items="${requestScope.reservationList}" varStatus="status">
             <div class="reservation-card">
+            	<a class="clean-link" href="<%= ctxPath %>/stayDetail.hb?stay_no=${rvo.stayvo.stay_no}">
                 <div class="reservation-header">
-                    <div>ID ${rvo.reserv_no}</div>
-                    <div class="status-complete">${rvo.reserv_status}</div>
-                </div>
+				    <div>ID ${rvo.reserv_no}</div>
+				    <div class="status-box">
+				        <c:choose>
+				            <c:when test="${rvo.reserv_status == '진행중'}">
+				                <span class="status-progress">진행중</span>
+				            </c:when>
+				            <c:otherwise>
+				                <span class="status-complete">완료</span>
+				            </c:otherwise>
+				        </c:choose>
+				    </div>
+				</div>
 
                 <div class="reservation-info">
+                 
                     <img src="${pageContext.request.contextPath}/images/${rvo.stayvo.stay_thumbnail}" />
 
                     <div class="reservation-details">
@@ -55,23 +71,24 @@
 						</div>
                         <div>총 결제액: <fmt:formatNumber value="${rvo.reserv_payment}" pattern="#,###" />원</div>
                     </div>
+                  
                 </div>
-
-                <div class="reservation-actions">
-                    <button class="btn-action">예약 확인/변경하기</button>
-
-                    <c:choose>
-                        <c:when test="${rvo.review_written}">
-                            <button class="btn-action disabled">✔ 후기 작성 완료</button>
-                        </c:when>
-                        <c:otherwise>
-                            <form method="post" action="${ctxPath}/review/write">
-                                <input type="hidden" name="reserv_id" value="${rvo.reserv_no}" />
-                                <button type="submit" class="btn-action">이용후기 작성하기</button>
-                            </form>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
+				</a>	
+               <div class="reservation-actions">
+				   <button class="btn-action">예약 확인/변경하기</button>
+				
+				   <c:choose>
+				       <c:when test="${rvo.review_written}">
+				           <button class="btn-action disabled">✔ 후기 작성 완료</button>
+				       </c:when>
+				       <c:otherwise>
+				           <form method="post" action="${ctxPath}/review/write" style="display: inline;">
+				               <input type="hidden" name="reserv_id" value="${rvo.reserv_no}" />
+				               <button type="submit" class="btn-action">이용후기 작성하기</button>
+				           </form>
+				       </c:otherwise>
+				   </c:choose>
+				</div>
             </div>
         </c:forEach>
     </c:if>

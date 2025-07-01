@@ -31,7 +31,7 @@ public class ReservationList extends AbstractController {
 			String userid_check = request.getParameter("user_id"); // url 에 저장해둔 유저아이디
 			MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
 			String userid = loginUser.getUser_id();  // 로그인시 유저아이디
-			System.out.println(userid);
+			
 			if(!userid_check.equals(userid)) {
 				// 로그인시 유저아이디와 값이 다르다면
 			 	String message = "본인의 예약만 접근할 수 있습니다.";
@@ -53,12 +53,6 @@ public class ReservationList extends AbstractController {
 		    List<ReservationVO> reservationList = rdao.getReservationList(userid, status);
 		    
 		    request.setAttribute("reservationList", reservationList);
-
-		    System.out.println("user_id param: " + userid_check);
-		    System.out.println("session user_id: " + userid);
-		    System.out.println("status param: " + status);
-		    System.out.println("reservationList size: " + reservationList.size());
-		    
 		    
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/reservation/reservationList.jsp");
