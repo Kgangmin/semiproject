@@ -576,6 +576,7 @@ public class StayDAO_imple implements StayDAO {
 		}
 
 
+		// 호텔 총 개수 조회 (검색어)
 		@Override
 		public int getStayTotalCount(String searchWord) throws SQLException {
 		    int totalCount = 0;
@@ -621,8 +622,8 @@ public class StayDAO_imple implements StayDAO {
 	            conn = ds.getConnection();
 	            
 	            String sql = " SELECT s.stay_no, s.stay_name " +
-	                    " FROM tbl_stay s JOIN tbl_room r ON s.stay_no = r.fk_stay_no " +
-	                    " WHERE r.room_no = ?";
+	                    	 " FROM tbl_stay s JOIN tbl_room r ON s.stay_no = r.fk_stay_no " +
+	                    	 " WHERE r.room_no = ? ";
 	            
 	            pstmt = conn.prepareStatement(sql);
 	            pstmt.setString(1, fk_room_no);
@@ -640,5 +641,86 @@ public class StayDAO_imple implements StayDAO {
 	        return stay;
 	    
 		}
+		
+		
+		// stayNo값 읽어오기
+		@Override
+		public String getNextStayNo() throws SQLException {
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " SELECT seq_stayNo.nextval AS no FROM dual ";
+			  
+				pstmt = conn.prepareStatement(sql);
+				rs   = pstmt.executeQuery();
+			  
+				rs.next();
+				return rs.getString("no");
+			  
+				} finally {
+					close();
+				}
+		}
+
+		   
+		  
+		// tbl_stay 에 새 숙소 정보를 insert하는 메소드
+	    @Override
+	    public int insertStay(StayVO svo) throws SQLException {
+	        String sql =
+	            "INSERT INTO tbl_stay (" +
+	            "  stay_no, stay_name, fk_stay_category_no, stay_thumbnail," +
+	            "  stay_info, stay_tel, latitude, longitude," +
+	            "  postcode, address, detailaddress, extraaddress" +
+	            ") VALUES (" +
+	            "  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?" +
+	            ")";
+	        try {
+	            conn = ds.getConnection();
+	            pstmt = conn.prepareStatement(sql);
+	          
+	            pstmt.setString(1, svo.getStay_no());
+	            pstmt.setString(2, svo.getStay_name());
+	            pstmt.setString(3, svo.getFk_stay_category_no());
+	            pstmt.setString(4, svo.getStay_thumbnail());
+	            pstmt.setString(5, svo.getStay_info());
+	            pstmt.setString(6, svo.getStay_tel());
+	            pstmt.setDouble(7, svo.getLatitude());
+	            pstmt.setDouble(8, svo.getLongitude());
+	            pstmt.setString(9, svo.getPostcode());
+	            pstmt.setString(10, svo.getAddress());
+	            pstmt.setString(11, svo.getDetailaddres());
+	            pstmt.setString(12, svo.getExtraaddress());
+	            return pstmt.executeUpdate();
+	        } finally {
+	            close();
+	        }
+	    }
+
+		    
+		// tbl_stay_extraimg 에 추가 이미지 정보 insert 하는 메소드
+	    @Override
+	    public int insertExtraImage(StayimgVO img) throws SQLException {
+	        String sql =
+	            " INSERT INTO tbl_stay_extraimg (" +
+	            "  stay_extraimg_no, fk_stay_no, stay_extraimg_no_filename" +
+	            " ) VALUES (?,?,?)";
+	        try {
+	            conn = ds.getConnection();
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, img.getStay_extraimg_no());
+	            pstmt.setString(2, img.getFk_stay_no());
+	            pstmt.setString(3, img.getStay_extraimg_no_filename());
+	            return pstmt.executeUpdate();
+	        } finally {
+	            close();
+	        }
+	    }
+
+		
+		
+		
+		
 
 }

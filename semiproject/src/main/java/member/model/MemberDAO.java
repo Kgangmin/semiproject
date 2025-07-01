@@ -69,6 +69,9 @@ public interface MemberDAO {
 	
 	// 회원 총 개수 조회 메서드
 	int getMemberTotalCount(String searchType, String searchWord) throws SQLException;
+
+	// user_id로 회원상세정보 가져오는 메서드
+	MemberVO getMemberByUserId(String user_id) throws SQLException;
 	
 	
 	
