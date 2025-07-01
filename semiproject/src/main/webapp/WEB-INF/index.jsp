@@ -171,8 +171,3 @@
     });
   </script>
 </c:if>
-	
-
-
-
-<jsp:include page="footer1.jsp" />

@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%
+    String ctxPath = request.getContextPath();
+%>
+
+<!-- CSS 연결 -->
+<link rel="stylesheet" type="text/css" href="<%=ctxPath%>/css/footer/scroll_control.css" />
+
 <!-- scroll control buttons -->
 <div id="scroll-control">
 	<button class="scroll-btn" id="btn-up" title="맨 위로">↑</button>
@@ -19,64 +26,8 @@
     <p>쌍용교육센터 우수한 형제자매들</p>
   </footer>
 
+<!-- JS 연결 -->
+<script src="<%=ctxPath%>/js/scroll_control.js"></script>
+
 </body>
 </html>
-
-<style>
-	#scroll-control
-	{
-		position: fixed;
-		bottom: 40px;
-		right: 30px;
-		z-index: 9999;
-		display: flex;
-		flex-direction: column;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-		border-radius: 12px;
-		overflow: hidden;
-		backdrop-filter: blur(2px);
-	}
-
-	.scroll-btn
-	{
-		width: 48px;
-		height: 40px;
-		background-color: rgba(13, 110, 253, 0.09); /* primary 색상 기반 */
-		color: rgba(13, 110, 253, 0.3);
-		border: none;
-		font-size: 20px;
-		cursor: pointer;
-		transition: all 0.25s ease;
-	}
-
-	.scroll-btn:hover
-	{
-		background-color: rgba(13, 110, 253, 0.9);
-		color: white;
-	}
-
-	.scroll-btn-top
-	{
-		border-radius: 12px 12px 0 0;
-		box-shadow: inset 0 -6px 8px -6px rgba(13, 110, 253, 0.2);
-	}
-
-	.scroll-btn-bottom
-	{
-		border-radius: 0 0 12px 12px;
-	}
-	
-</style>
-
-<!-- 스크립트 -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('btn-up').addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    document.getElementById('btn-down').addEventListener('click', function () {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    });
-  });
-</script>
