@@ -106,7 +106,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	                     + "    JOIN tbl_room rm ON r.fk_room_no = rm.room_no "
 	                     + "    JOIN tbl_stay s ON rm.fk_stay_no = s.stay_no "
 	                     + "    WHERE r.fk_user_id = ? "
-	                     + "      AND r.checkin_date >= SYSDATE "
+	                     + "      AND r.checkout_date >= SYSDATE "
 	                     + "    ORDER BY r.checkin_date ASC "
 	                     + ") "
 	                     + "WHERE ROWNUM = 1";
