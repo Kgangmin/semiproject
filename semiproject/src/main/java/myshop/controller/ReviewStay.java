@@ -52,8 +52,8 @@ public class ReviewStay extends AbstractController
         List<ReviewVO> reviewList;
         if (roomGrade == null || roomGrade.equals("all"))
         {//	숙박업소 번호에 해당하는 모든 리뷰정보를 조회
-    		reviewList = rvdao.selectAllReview(stayNo, offset, sizePerPage);
-    		totalReviewCount = rvdao.countAllReview(stayNo);
+    		reviewList = rvdao.selectAllReview(stayNo, null, offset, sizePerPage);
+    		totalReviewCount = rvdao.countAllReview(stayNo, null);
     		roomGrade = "all"; // 선택 값 유지용
     	}
         else

@@ -57,6 +57,17 @@ function renderStars(score)
 		font-size: 1rem;
 		line-height: 1;
 	}
+	
+	<%-- 1페이지 또는 마지막페이지일 경우 버튼 비활성화 가시성 강조 --%>
+	.pagination .page-item.disabled .page-link
+	{
+		pointer-events: none;
+		background-color: #e9ecef;
+		color: #6c757d !important;
+		border-color: #dee2e6;
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
 </style>
 
 <jsp:include page="/WEB-INF/header1.jsp" />
@@ -179,8 +190,9 @@ function renderStars(score)
     </div>
     
     <!-- 5-3 페이징 -->
-    <c:set var="currentPage" value="${currentShowPageNo}" />
-	<c:set var="totalPage" value="${totalPage}" />
+    <c:set var="currentPage" value="${currentPage}" />
+	<c:set var="prevPage" value="${currentPage - 1 < 1 ? 1 : currentPage - 1}" />
+	<c:set var="nextPage" value="${currentPage + 1 > totalPage ? totalPage : currentPage + 1}" />
 	
 	<c:if test="${totalPage > 1}">	<!-- 페이징처리 할 만큼 데이터가 없을경우 페이지바 비활성화 -->
 		<div class="mt-4 d-flex justify-content-center">
@@ -194,7 +206,7 @@ function renderStars(score)
 	
 				<!-- 이전(Previous) 버튼 -->
 				<li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-					<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=${currentPage - 1}">
+					<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=${prevPage}">
 						<i class="fas fa-angle-left"></i>
 					</a>
 				</li>
@@ -208,7 +220,7 @@ function renderStars(score)
 	
 				<!-- 다음(Next) 버튼 -->
 				<li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
-					<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=${currentPage + 1}">
+					<a class="page-link" href="reviewStay.hb?stay_no=${stay.stay_no}&room_grade=${selectedGrade}&page=${nextPage}">
 						<i class="fas fa-angle-right"></i>
 					</a>
 				</li>

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -57,7 +58,7 @@ public class ReviewDAO_imple implements ReviewDAO
 	
 	//	페이징 처리를 위한 해당 숙소의 모든 리뷰 수
 	@Override
-	public int countAllReview(String stayNo) throws SQLException
+	public int countAllReview(String stayno, String user_id) throws SQLException
 	{
 		int count = 0;
 		try
@@ -67,11 +68,13 @@ public class ReviewDAO_imple implements ReviewDAO
 	        String sql = " select	count(*) "
 	                   + " from		tbl_review A "
 	                   + " join		tbl_reservation B ON A.fk_reserv_no = B.reserv_no "
-	                   + " join		tbl_room C ON B.fk_room_no = C.room_no "
-	                   + " where	fk_stay_no = ? ";
+	                   + " join		tbl_room C ON B.fk_room_no = C.room_no ";
+	        if(stayno != null && !stayno.isEmpty())			{sql+=" 		where 	fk_stay_no = ? ";}
+			else if(user_id != null && !user_id.isEmpty())	{sql+=" 		where	fk_user_id = ? ";}
 	        
 	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, stayNo);
+	        if(stayno != null && !stayno.isEmpty())			{pstmt.setString(1, stayno);}
+	        else if(user_id != null && !user_id.isEmpty())	{pstmt.setString(1, user_id);}
 	        
 	        rs = pstmt.executeQuery();
 	        
@@ -116,7 +119,7 @@ public class ReviewDAO_imple implements ReviewDAO
 	
 	//	숙박업소 번호에 해당하는 모든 리뷰정보를 조회
 	@Override
-	public List<ReviewVO> selectAllReview(String stayNo, int offset, int sizePerPage) throws SQLException
+	public List<ReviewVO> selectAllReview(String stayno, String user_id, int offset, int sizePerPage) throws SQLException
 	{
 		List<ReviewVO> reviewList = new ArrayList<>();
 		
@@ -138,14 +141,19 @@ public class ReviewDAO_imple implements ReviewDAO
 						+ " 			on		A.fk_reserv_no = B.reserv_no "
 						+ " 		)	C "
 						+ " 		join	tbl_room	D "
-						+ " 		on		C.fk_room_no = D.room_no "
-						+ " 		where 	fk_stay_no = ? "
-						+ " 	) data "
+						+ " 		on		C.fk_room_no = D.room_no ";
+
+			
+			if(stayno != null && !stayno.isEmpty())			{sql+=" 		where 	fk_stay_no = ? ";}
+			else if(user_id != null && !user_id.isEmpty())	{sql+=" 		where	fk_user_id = ? ";}
+						
+					sql	+=" 	) data "
 						+ " ) "
 						+ " where rn > ? and rn <= ? ";
 			
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, stayNo);
+			if(stayno != null && !stayno.isEmpty())			{pstmt.setString(1, stayno);}
+			else if(user_id != null && !user_id.isEmpty())	{pstmt.setString(1, user_id);}
 	        pstmt.setInt(2, offset);
 	        pstmt.setInt(3, offset + sizePerPage);
 			
@@ -356,5 +364,56 @@ public class ReviewDAO_imple implements ReviewDAO
 		}
 		
 		return roomGradeList;
+	}
+
+	// 리뷰 테이블에 있는 특정 리뷰의 내용 변경하기
+	@Override
+	public int updateReview(Map<String, String> paraMap) throws SQLException
+	{
+		int n = 0;
+		
+		try
+		{
+			conn = ds.getConnection();
+			
+			String sql	= " update tbl_review set review_contents = ? "
+						+ " where review_no = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, paraMap.get("review_contents"));
+			pstmt.setString(2, paraMap.get("review_no"));
+			
+			n = pstmt.executeUpdate();
+		}
+		finally
+		{
+			close();
+		}
+		return n;
+	}
+
+	//	리뷰 테이블에서 특정 리뷰를 지우기
+	@Override
+	public int deleteReview(String review_no) throws SQLException
+	{
+		int n = 0;
+		
+		try
+		{
+			conn = ds.getConnection();
+			
+			String sql	= " delete from tbl_review "
+						+ " where review_no = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, review_no);
+			
+			n = pstmt.executeUpdate();
+		}
+		finally
+		{
+			close();
+		}
+		return n;
 	}
 }
