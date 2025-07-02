@@ -8,9 +8,6 @@
     String ctxPath = request.getContextPath();
 %>
 
-<script type="text/javascript" src="<%= ctxPath%>/js/member/memberEdit.js"></script>
-
-
 <jsp:include page="header1.jsp" />
 <style>
 .card-img-top {
