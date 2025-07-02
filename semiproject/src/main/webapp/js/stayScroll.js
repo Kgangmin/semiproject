@@ -11,7 +11,7 @@ $(function(){
     if($(window).scrollTop() + $(window).height() 
        >= $(document).height() - 100) {
       loading = true;
-	  console.log(start, lenStay, selectedCategory);
+	  //console.log(start, lenStay, selectedCategory);
       loadStays();
     }
   });

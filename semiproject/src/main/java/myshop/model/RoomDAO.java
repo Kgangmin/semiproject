@@ -17,4 +17,13 @@ public interface RoomDAO
 
 	// 방의 번호로 객실의 등급을 찾는 메소드 
 	public RoomVO search_rgrade(String fk_room_no) throws SQLException;
+	
+    // stay_no별 다음 순서의 room_no 반환하는 메소드 (예: "45-1","45-2",…)
+    String getNextRoomNo(String stayNo) throws SQLException;
+
+    // tbl_room에 객실 정보 insert 하는 메소드
+    int insertRoom(RoomVO rvo) throws SQLException;
+
+    // tbl_room_extraimg에 추가 이미지 insert 하는 메소드
+    int insertExtraImage(RoomimgVO evo) throws SQLException;
 }
