@@ -416,4 +416,35 @@ public class ReviewDAO_imple implements ReviewDAO
 		}
 		return n;
 	}
+	// 리뷰를 등록하는 메소드 
+	@Override
+	public int insertReview(String content, Double rating, String reserv_no) throws SQLException {
+
+		int insert_result = 0;
+	    try {
+	        // 1) 커넥션 가져오기
+	        conn = ds.getConnection();
+
+	        // 3) 예약 정보 INSERT
+	        String insertSql = " insert into tbl_review(REVIEW_NO,RESERV_SCORE,REVIEW_CONTENTS ,REVIEW_WRITEDATE,FK_RESERV_NO) "
+	        					+ " values ( ? , ? , ? , sysdate , ?)  ";
+	        pstmt = conn.prepareStatement(insertSql);
+	        pstmt.setString(1, "RV000021");
+	        pstmt.setDouble(2, rating);
+	        pstmt.setString(3, content);
+	        pstmt.setString(4, reserv_no);
+	       
+	        pstmt.executeUpdate();
+	        
+	        if(rs.next()) {
+	        	insert_result = 1;
+	        }
+	        
+
+	    } finally {
+	        // 사용한 자원 모두 반납
+	        close();
+	    }
+	    return insert_result;
+	}
 }

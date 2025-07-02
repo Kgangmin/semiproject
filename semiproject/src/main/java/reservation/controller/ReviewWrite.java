@@ -27,49 +27,95 @@ public class ReviewWrite extends AbstractController {
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		if(super.checkLogin(request)) {
-			HttpSession session = request.getSession();
-			String reserv_no = request.getParameter("reserv_no");
-			String userid_check = request.getParameter("user_id"); // url 에 저장해둔 유저아이디
-			MemberVO loginUser = (MemberVO) session.getAttribute("loginUser"); // 로그인시 유저정보
-			String userid = loginUser.getUser_id();  // 로그인시 유저아이디
+		String method = request.getMethod();
 		
-			if( userid_check == null || !userid.equals(userid_check)) {
-				// 비정상적인 접근 
-			 	String message = "비정상적인 접근입니다.";
-	            String loc = request.getContextPath() + "/index.hb";
+		if("GET".equalsIgnoreCase(method)) {
+			if(super.checkLogin(request)) {
+				HttpSession session = request.getSession();
+				String reserv_no = request.getParameter("reserv_no");
+				String userid_check = request.getParameter("user_id"); // url 에 저장해둔 유저아이디
+				MemberVO loginUser = (MemberVO) session.getAttribute("loginUser"); // 로그인시 유저정보
+				String userid = loginUser.getUser_id();  // 로그인시 유저아이디
+			
+				if( userid_check == null || !userid.equals(userid_check)) {
+					// 비정상적인 접근 
+				 	String message = "비정상적인 접근입니다.";
+		            String loc = request.getContextPath() + "/index.hb";
+		
+		            request.setAttribute("message", message);
+		            request.setAttribute("loc", loc);
+		
+		            super.setRedirect(false);
+		            super.setViewPage("/WEB-INF/msg.jsp");
+		            return;
+		        
+					
+				}
+				request.setAttribute("loginUser", loginUser);
 	
-	            request.setAttribute("message", message);
-	            request.setAttribute("loc", loc);
-	
-	            super.setRedirect(false);
-	            super.setViewPage("/WEB-INF/msg.jsp");
-	            return;
-	        
-				
+				super.setRedirect(false);
+				super.setViewPage("/WEB-INF/reservation/reviewWrite.jsp");
+			
+			
 			}
-			request.setAttribute("loginUser", loginUser);
-
-			super.setRedirect(false);
-			super.setViewPage("/WEB-INF/reservation/reviewWrite.jsp");
-		
-		
+			else {
+				// 로그인을 안 했으면
+				String message = "후기작성을 보기 위해서는 로그인을 먼저해야 합니다";
+				String loc = "javascript:history.back()";
+				
+				request.setAttribute("message", message);
+				request.setAttribute("loc", loc);
+				
+				super.setRedirect(false);
+				super.setViewPage("/WEB-INF/msg.jsp");
+			}	
 		}
 		else {
-			// 로그인을 안 했으면
-			String message = "후기작성을 보기 위해서는 로그인을 먼저해야 합니다";
-			String loc = "javascript:history.back()";
 			
-			request.setAttribute("message", message);
-			request.setAttribute("loc", loc);
+			if(super.checkLogin(request)) {
+				HttpSession session = request.getSession();
+				String reserv_no = request.getParameter("reserv_no");
+				MemberVO loginUser = (MemberVO) session.getAttribute("loginUser"); // 로그인시 유저정보
+				String userid = loginUser.getUser_id();  // 로그인시 유저아이디
+				String content = request.getParameter("content");						
+				Double rating = Double.parseDouble(request.getParameter("rating"));
 			
-			super.setRedirect(false);
-			super.setViewPage("/WEB-INF/msg.jsp");
-		}	
-	
-		
+				request.setAttribute("user_id", userid);
+				// 리뷰를 등록하는 메소드 
+				int n = rvdao.insertReview(content,rating,reserv_no);
+				String message = "";
+		        String loc = request.getContextPath() + "/reservationList.hb?user_id="+userid;
+		        
+				
+				if(n != 1) {
+					message="리뷰 등록이 실패했습니다";
+					
+				}
+				else {
+					message="리뷰 등록 성공!~~~~";
+				}
+				
+				
+
+		        request.setAttribute("message", message);
+		        request.setAttribute("loc", loc);
+
+		        super.setRedirect(false);
+		        super.setViewPage("/WEB-INF/msg.jsp");
+				
+			
+			
+					
+				}
+				
+			
+			}
+			
+			
+			
+		}
 		
 	
 	}
 
-}
+

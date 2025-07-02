@@ -65,10 +65,26 @@ window.onload = function() {
 		
 		if(selectedRating == 0){
 			alert("리뷰를 등록할려면 별점을 먼저 체크 해주세요 ")
-			
+			return false;
 		}
 		
-		
+		const text = $('#content').val().trim();
+		//alert(text.length);
+		if(text != "") { 
+   			
+			if(text.length > 200){
+				alert(" 후기는 200 글자 이내로만 입력 가능합니다  ")
+				return false;
+			}
+			
+			
+			
+		}
+		else{
+			alert(" 후기는 1글자 이상 입력해야 합니다 ")
+			return false;	
+		}
+
 	});
 	
 	

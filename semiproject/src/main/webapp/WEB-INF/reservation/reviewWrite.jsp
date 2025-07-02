@@ -29,7 +29,7 @@
 <div class="review-container">
     <h2>리뷰 작성</h2>
 
-    <form action="${ctxPath}/reviewWrite.hb" method="post" enctype="multipart/form-data">
+    <form action="${requestScope.referer}" method="post" >
         <input type="hidden" name="reserv_no" value="${reservation.reserv_no}" />
         <input type="hidden" name="rating" id="rating" required />
 
@@ -48,7 +48,7 @@
             <label for="content">리뷰 내용</label>
             <textarea name="content" id="content" placeholder="숙소에 대한 솔직한 후기를 남겨주세요." required></textarea>
         </div>
-
+	
 
         <button type="submit" id= "review_register" class="btn-submit">리뷰 등록</button>
     </form>
