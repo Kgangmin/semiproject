@@ -129,6 +129,7 @@
   <div class="mt-5">
     <div class="d-flex justify-content-between align-items-center mb-2">
     <h5 class="mb-0">객실 정보</h5>
+    <%-- 로그인한 사용자가 관리자일 경우 객실등록하기 버튼 생성 --%>
     <c:if test="${sessionScope.loginUser.access_level == 1}">
       <a href="<%=ctxPath%>/admin/roomRegister.hb?stay_no=${stay.stay_no}"
          class="btn btn-sm btn-success text-dark">
