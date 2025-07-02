@@ -22,8 +22,8 @@
 </div>
 
   <footer class="text-center py-3">
-    <p>&copy; Company 2024 &nbsp; 대표전화: 1577-1588</p>
-    <p>쌍용교육센터 우수한 형제자매들</p>
+    <p>&copy; NOLJA Company 2025 &nbsp; 대표전화: 1577-1588</p>
+    <p>(주)NOLJA</p>
   </footer>
 
 <!-- JS 연결 -->
