@@ -156,4 +156,72 @@ public class RoomDAO_imple implements RoomDAO
 
 
 	}
+	
+	
+	// stay_no별 다음 순서의 room_no 반환하는 메소드 (예: "45-1","45-2",…)
+    @Override
+    public String getNextRoomNo(String stayNo) throws SQLException {
+        
+        try {
+            conn = ds.getConnection();
+            
+            String sql = " SELECT COUNT(*)+1 AS next_seq FROM tbl_room WHERE fk_stay_no = ? ";
+            
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, stayNo);
+            rs = pstmt.executeQuery();
+            if(rs.next()) {
+                int seq = rs.getInt("next_seq");
+                return stayNo + "-" + seq;
+            }
+            return stayNo + "-1";
+        } finally {
+            close();
+        }
+    }
+
+ // tbl_room에 객실 정보 insert 하는 메소드
+    @Override
+    public int insertRoom(RoomVO rvo) throws SQLException {
+        
+        try {
+            conn = ds.getConnection();
+            
+            String sql = " INSERT INTO tbl_room (room_no, fk_stay_no, room_grade, room_thumbnail, price_per_night, room_info) " +
+                    	 " VALUES (?, ?, ?, ?, ?, ?) ";
+            
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, rvo.getRoom_no());
+            pstmt.setString(2, rvo.getFk_stay_no());
+            pstmt.setString(3, rvo.getRoom_grade());
+            pstmt.setString(4, rvo.getRoom_thumbnail());
+            pstmt.setInt(5, rvo.getPrice_per_night());
+            pstmt.setString(6, rvo.getRoom_info());
+            return pstmt.executeUpdate();
+        } finally {
+            close();
+        }
+    }
+
+ // tbl_room_extraimg에 추가 이미지 insert 하는 메소드
+    @Override
+    public int insertExtraImage(RoomimgVO evo) throws SQLException {
+        
+        try {
+            conn = ds.getConnection();
+            
+            String sql = " INSERT INTO tbl_room_extraimg (room_extraimg_no, fk_room_no, room_extraimg_filename) " +
+       		 	 " VALUES (?, ?, ?) ";
+            
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, evo.getRoom_extraimg_no());
+            pstmt.setString(2, evo.getFk_room_no());
+            pstmt.setString(3, evo.getRoom_extraimg_filename());
+            return pstmt.executeUpdate();
+        } finally {
+            close();
+        }
+    }
+	
+	
 }

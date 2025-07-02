@@ -96,6 +96,9 @@ public class StayRegister extends AbstractController {
             Part p = request.getPart("extra"+i);
             if (p!=null && p.getSize()>0) {
                 String orig = extractFileName(p.getHeader("Content-Disposition"));
+                if (orig == null) {
+                    throw new IllegalStateException("업로드된 추가 이미지(" + i + ")의 파일명을 찾을 수 없습니다.");
+                }
                 if (!orig.toLowerCase().endsWith(".png")) {
                     throw new IllegalArgumentException("추가 이미지는 PNG 파일만 가능합니다.");
                 }
