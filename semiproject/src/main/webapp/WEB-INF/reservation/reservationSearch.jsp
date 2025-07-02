@@ -56,10 +56,10 @@
   </div>
 
   <!-- 2) 추천 검색어 -->
-		<div class="row justify-content-center align-items-start flex-nowrap">
+		<div class="row justify-content-center align-items-start flex-nowrap" style="background-color: #F5F5F5; width: 600px; padding: 15px; padding-right: 100px; margin-left: 250px;">
 		  <!-- 좌측 1~5 -->
 		  <div class="col-auto text-right" style="margin-right: 128px;">
-		    	<h5 class="mb-3" style="height: 16px;">추천검색어</h5>
+		    	<h5 class="mb-3" style="height: 16px; margin-left: 100px;">추천검색어</h5>
 		    <ol class="list-unstyled mb-1">
 		      <c:forEach var="kw" items="${requestScope.detailKeywords}" varStatus="st">
 		        <c:if test="${st.index < 5}">

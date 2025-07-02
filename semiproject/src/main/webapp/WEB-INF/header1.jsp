@@ -115,14 +115,14 @@
 </div>
 
   <!-- 1) 상단 네비게이션 -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top px-4 py-2">
+  <nav class="navbar navbar-expand-lg navbar-light bg-important fixed-top px-4 py-2">
     <!-- 사이드바 토글 버튼 -->
-    <button id="sidebarToggle" class="btn btn-outline-secondary mr-3">
+    <button id="sidebarToggle" class="btn btn-outline-secondary mr-3" >
       <i class="fas fa-bars"></i>
     </button>
 
     <a class="navbar-brand" href="<%=ctxPath%>/index.hb">
-      <img src="<%=ctxPath%>/images/logo2.png" alt="예약 로고" height="40">
+      <img src="<%=ctxPath%>/images/logo3.png" alt="예약 로고" style="height: 80px; width: 120px;  " >
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMain">
       <span class="navbar-toggler-icon"></span>
