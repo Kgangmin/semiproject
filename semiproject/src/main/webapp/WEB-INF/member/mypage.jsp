@@ -52,7 +52,7 @@
 		.dot { font-size: 20px; color: #bbb; margin: 0 10px; } 
 		.wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin-top: 20px; }
 		.reservation-history-header {display: flex; justify-content: space-between; align-items: center;}
-		.more-link {font-size: 15px;text-decoration: none;color: #777;font-weight: bold;transition: color 0.2s ease;}
+		.more-link {font-size: 15px;text-decoration: none;color: #000;font-weight: bold;transition: color 0.2s ease;}
 		.more-link:hover {color: #000;}
 		.reservation-list:hover {  transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.1);}
 		
@@ -89,12 +89,12 @@
         <div class="points-reviews">
             <div class="item">
                 <span>포인트</span>
-                <span id="point">${loginUser.point}pt &nbsp;&nbsp;></span>
+                <span id="point">${loginUser.point}pt &nbsp;&nbsp;<i class="fas fa-chevron-right arrow-icon"></i></span>
             </div>
             <div class="item">
             	<a href="${pageContext.request.contextPath}/reviewUser.hb?user_id=${loginUser.user_id}&page=1">
             		<span>내 후기</span>
-                	<span>></span>	
+                	<span><i class="fas fa-chevron-right arrow-icon"></i></span>	
             	</a>
             </div>
         </div>
@@ -103,7 +103,7 @@
 <div class="reservation-history">
 		    <div class="reservation-history-header">
 			    <h3>예약내역</h3>
-			    <a href="<%= ctx_Path %>/reservationList.hb?user_id=${loginUser.user_id}" class="more-link">></a>
+			    <a href="<%= ctx_Path %>/reservationList.hb?user_id=${loginUser.user_id}" class="more-link"><i class="fas fa-chevron-right arrow-icon"></i></a>
 			</div> 
 		    <div class="reservation-list">
 		        <c:choose>

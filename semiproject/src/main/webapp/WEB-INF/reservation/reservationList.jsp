@@ -82,13 +82,18 @@
 				       <c:when test="${rvo.review_written}">
 				           <button class="btn-action disabled">✔ 후기 작성 완료</button>
 				       </c:when>
-				       <c:otherwise>
-				           <form method="post" action="<%= ctxPath%>/reviewWrite.hb" style="display: inline;">
-				               <input type="hidden" name="reserv_no" value="${rvo.reserv_no}" />
-				                <input type="hidden" name="user_id" value="${loginUser.user_id}" />
-				               <button type="submit" class="btn-action">이용후기 작성하기</button>
-				           </form>
-				       </c:otherwise>
+				      <c:otherwise>
+						  <c:if test="${rvo.canWriteReview}">
+						    <form method="get" action="<%= ctxPath%>/reviewWrite.hb" style="display: inline;">
+						      <input type="hidden" name="reserv_no" value="${rvo.reserv_no}" />
+						      <input type="hidden" name="user_id" value="${loginUser.user_id}" />
+						      <button type="submit" class="btn-action">이용후기 작성하기</button>
+						    </form>
+						  </c:if>
+						  <c:if test="${not rvo.canWriteReview}">
+						    <button class="btn-action disabled">체크아웃 이후 작성 가능</button>
+						  </c:if>
+					</c:otherwise>
 				   </c:choose>
 				</div>
             </div>
