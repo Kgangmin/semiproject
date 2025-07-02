@@ -10,14 +10,40 @@ import member.domain.MemberVO;
 import member.model.MemberDAO;
 import member.model.MemberDAO_imple;
 import myshop.domain.StayVO;
+import myshop.model.ReviewDAO;
+import myshop.model.ReviewDAO_imple;
 import myshop.model.StayDAO;
 import myshop.model.StayDAO_imple;
 
 public class MemberStayList extends AbstractController {
-	 
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		 
+		 	
+		HttpSession session = request.getSession(false);  // 세션 없으면 null 반환
+
+	    if (session == null) {
+	        // 로그인 안 함 -> 로그인 페이지로 이동
+	        request.getRequestDispatcher("/WEB-INF/login/login.jsp").forward(request, response);
+	        return;
+	    }
+
+	    MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
+
+	    if (loginUser == null) {
+	        // 로그인 안 함 -> 로그인 페이지로 이동
+	    	request.getRequestDispatcher("/WEB-INF/login/login.jsp").forward(request, response);
+	        return;
+	    }
+
+	    if (!"admin".equals(loginUser.getUser_id())) {
+	        // 로그인 했지만 admin 아님 -> 접근 거부 페이지 또는 로그인 페이지로 이동
+	        request.setAttribute("message", "관리자만 접근 가능합니다.");
+	        request.setAttribute("loc", "javascript:history.back()");
+	        request.getRequestDispatcher("/WEB-INF/login/login.jsp").forward(request, response);
+	        return;
+	    }
+	    
 		// 회원 검색 관련 파라미터
 		// 클라이언트(사용자)로부터 검색 조건과 페이지 번호를 받아옴
 		String searchType = request.getParameter("memberSearchType");  // 예를 들면 "user_name" 혹은 "email" 같은 검색 기준
@@ -89,6 +115,7 @@ public class MemberStayList extends AbstractController {
 		//  전체 호텔 페이지 수를 계산함 (올림 처리)
 		int stayTotalPage = (int) Math.ceil((double) stayTotalCount / stayLimit);
 		// 예: 12개 호텔이고 5개씩 보여주면 3페이지
+
 
 		
 		request.setAttribute("memberList", memberList);           // 회원 목록

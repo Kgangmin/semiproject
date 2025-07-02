@@ -535,16 +535,16 @@ public class StayDAO_imple implements StayDAO {
 			    try {
 			        conn = ds.getConnection();
 
-			        String sql = " SELECT stay_no, stay_name, stay_tel, stay_score "
-			                   + " FROM tbl_stay ";
+			        String sql = " select stay_no, stay_name, stay_tel, stay_score "
+			                   + " from tbl_stay ";
 			                   
 
 			        if (searchWord != null && !searchWord.trim().isEmpty()) {
 			            sql += " where stay_name like ? ";
 			        }
 
-			        sql += " ORDER BY TO_NUMBER(stay_no) ASC "
-			             + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY ";
+			        sql += " order by to_number(stay_no) asc "
+			             + " offset ? rows fetch next ? rows only ";
 
 			        pstmt = conn.prepareStatement(sql);
 			        
