@@ -5,6 +5,14 @@
     String ctxPath = request.getContextPath();
 %>
 <jsp:include page="/WEB-INF/header1.jsp" />
+<style>
+  /* roomCarousel 의 모든 이미지에 동일한 크기와 object-fit 적용 */
+  #roomCarousel .carousel-item img {
+    width: 100%;
+    height: 400px;       /* 원하는 높이로 설정 */
+    object-fit: cover;   /* 이미지 비율을 유지하면서 중앙에서 잘라서 채움 */
+  }
+</style>
 
 <div class="container my-5">
   <!-- 1. 이미지 캐러셀 -->
@@ -12,12 +20,12 @@
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img src="<%=ctxPath%>/images/${room.room_thumbnail}"
-             class="d-block w-100" alt="메인 이미지">
+             class="d-block w-100 img-modal" alt="메인 이미지">
       </div>
       <c:forEach var="img" items="${extraImgs}">
         <div class="carousel-item">
           <img src="<%=ctxPath%>/images/${img.room_extraimg_filename}"
-               class="d-block w-100" alt="추가 이미지">
+               class="d-block w-100 img-modal" alt="추가 이미지">
         </div>
       </c:forEach>
     </div>
@@ -32,6 +40,7 @@
   <!-- 2. 숙소명·객실 등급 -->
   <h2>${stay.stay_name}</h2>
   <h4 class="text-secondary">${room.room_grade}</h4>
+  <small>${room.room_info}</small>
   <hr/>
 
   <!-- 3. 날짜·요금 -->
@@ -70,8 +79,34 @@
 
 <jsp:include page="/WEB-INF/footer1.jsp" />
 
+ <!-- Image Preview Modal -->
+  <div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content bg-transparent border-0 p-0">
+        <button type="button" class="close position-absolute text-white" 
+                style="right: 1rem; top: 1rem; z-index:1050;" 
+                data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <img src="#" id="modalImage" class="img-fluid w-100"
+             alt="확대 이미지" style="max-height:90vh; object-fit:contain;" />
+      </div>
+    </div>
+  </div>
+
+
 <!-- Iamport JS -->
 <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+<script>
+$(function(){
+  // 캐러셀 이미지 클릭 시 모달 오픈
+  $('.img-modal').on('click', function(){
+    const src = $(this).attr('src');
+    $('#modalImage').attr('src', src);
+    $('#imageModal').modal('show');
+  });
+});
+</script>
 <script>
 	const productAmount = ${productAmount};
 
