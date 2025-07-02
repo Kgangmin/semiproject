@@ -32,7 +32,7 @@
             type="text"
             id="datepickerRange"
             class="form-control" 
-            placeholder="예약 하기"
+            placeholder="예약하기"
             readonly
             style="cursor:pointer; height: 70px; width: 800px; margin: 0 auto;"
             onclick="location.href='<%=ctxPath%>/reservation/reservationSearch.hb';"
