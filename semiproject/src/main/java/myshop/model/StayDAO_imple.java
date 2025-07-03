@@ -536,7 +536,7 @@ public class StayDAO_imple implements StayDAO {
 			    try {
 			        conn = ds.getConnection();
 
-			        String sql = " select stay_no, stay_name, stay_tel, stay_score "
+			        String sql = " select stay_no, stay_name, stay_tel, (stay_score * 10 ) as stay_score "
 			                   + " from tbl_stay ";
 			                   
 
@@ -565,9 +565,7 @@ public class StayDAO_imple implements StayDAO {
 				            stay.setStay_no(rs.getString("stay_no"));
 				            stay.setStay_name(rs.getString("stay_name"));
 				            stay.setStay_tel(rs.getString("stay_tel"));
-				            BigDecimal bd = rs.getBigDecimal("stay_score");           // ex) 4.5
-				            int scaled = bd.movePointRight(1).intValueExact();       // 4.5 → 45
-				            stay.setStay_score(scaled);                               // VO 에는 int 45 로 저장
+				            stay.setStay_score(rs.getInt("stay_score"));                               
 
 				            stayList.add(stay);
 				        }
