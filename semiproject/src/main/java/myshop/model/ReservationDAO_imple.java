@@ -106,7 +106,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	                     + "    JOIN tbl_room rm ON r.fk_room_no = rm.room_no "
 	                     + "    JOIN tbl_stay s ON rm.fk_stay_no = s.stay_no "
 	                     + "    WHERE r.fk_user_id = ? "
-	                     + "      AND r.checkin_date >= SYSDATE "
+	                     + "      AND r.checkout_date >= SYSDATE "
 	                     + "    ORDER BY r.checkin_date ASC "
 	                     + ") "
 	                     + "WHERE ROWNUM = 1";
@@ -208,6 +208,86 @@ public class ReservationDAO_imple implements ReservationDAO {
 		 return list;
 		 
 	}
+
+	// 모든 예약정보와 객실 숙소 정보를 가져오는 메소드
+	@Override
+	public ReservationVO getReservationDetail(String reserv_no) throws SQLException {
+		
+		 ReservationVO rvo = null;
+
+	        try {
+	            conn = ds.getConnection(); // 커넥션은 프로젝트에 맞게 설정하세요
+
+	            String sql = "SELECT r.reserv_no, " +
+	                    "       r.fk_user_id, " +
+	                    "       r.reserv_date, " +
+	                    "       r.checkin_date, " +
+	                    "       r.checkout_date, " +
+	                    "       r.reserv_payment, " +
+	                    "       r.spent_point, " +
+	                    "       s.stay_name, " +
+	                    "       s.stay_thumbnail, " +
+	                    "       s.stay_tel, " +
+	                    "       s.address, " +
+	                    "       s.detailaddress, " +
+	                    "       s.extraaddress, " +
+	                    "       s.stay_score, " +
+	                    "       ro.room_grade, " +
+	                    "       ro.price_per_night, " +
+	                    "       ro.room_thumbnail, " + 
+	                    "       rv.review_no " +
+	                    " FROM tbl_reservation r " +
+	                    " JOIN tbl_room ro ON r.fk_room_no = ro.room_no " +
+	                    " JOIN tbl_stay s ON s.stay_no = ro.fk_stay_no " + 
+	                    " LEFT JOIN TBL_REVIEW rv ON r.reserv_no = rv.fk_reserv_no " +
+	                    " WHERE r.reserv_no = ? ";
+
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, reserv_no);
+	            rs = pstmt.executeQuery();
+
+	            if (rs.next()) {
+	                rvo = new ReservationVO();
+
+	                // 예약 정보
+	                rvo.setReserv_no(rs.getString("reserv_no"));
+	                rvo.setFk_user_id(rs.getString("fk_user_id"));
+	                rvo.setReserv_date(rs.getString("reserv_date"));
+	                rvo.setCheckin_date(rs.getString("checkin_date"));
+	                rvo.setCheckout_date(rs.getString("checkout_date"));
+	                rvo.setReserv_payment(rs.getInt("reserv_payment"));
+	                rvo.setSpent_point(rs.getInt("spent_point"));
+	                rvo.setReview_written(rs.getString("review_no") != null);  // boolean 처리
+
+	                // 숙소 정보
+	                StayVO svo = new StayVO();
+	                svo.setStay_name(rs.getString("stay_name"));
+	                svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	                svo.setStay_tel(rs.getString("stay_tel"));
+	                svo.setAddress(rs.getString("address"));
+	                svo.setDetailaddres(rs.getString("detailaddress"));
+	                svo.setExtraaddress(rs.getString("extraaddress"));
+	                svo.setStay_score(rs.getInt("stay_score"));
+
+	                rvo.setStayvo(svo);
+
+	                // 객실 정보
+	                RoomVO roomvo = new RoomVO();
+	                roomvo.setRoom_grade(rs.getString("room_grade"));
+	                roomvo.setPrice_per_night(rs.getInt("price_per_night"));
+	                roomvo.setRoom_thumbnail(rs.getString("room_thumbnail"));
+
+	                rvo.setRoomvo(roomvo);
+	            }
+
+	        } finally {
+	            close();
+	        }
+
+	        return rvo;
+	}
+
+	
 
 
 	

@@ -18,6 +18,8 @@ import myshop.model.StayDAO_imple;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 public class ReservationList extends AbstractController {
 	private ReservationDAO rdao = new ReservationDAO_imple();
@@ -32,7 +34,7 @@ public class ReservationList extends AbstractController {
 			MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
 			String userid = loginUser.getUser_id();  // 로그인시 유저아이디
 			
-			if(!userid_check.equals(userid)) {
+			if(userid_check == null || !userid_check.equals(userid)) {
 				// 로그인시 유저아이디와 값이 다르다면
 			 	String message = "본인의 예약만 접근할 수 있습니다.";
 	            String loc = request.getContextPath() + "/index.hb";
@@ -52,8 +54,19 @@ public class ReservationList extends AbstractController {
 		    // 모든 예약정보를 가져오는 메소드 
 		    List<ReservationVO> reservationList = rdao.getReservationList(userid, status);
 		    
-		    request.setAttribute("reservationList", reservationList);
+		   
 		    
+		    for (ReservationVO rvo : reservationList) {
+		        String checkoutStr = rvo.getCheckout_date(); // "2025-07-01 00:00:00"
+		        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		        Date checkoutDate = sdf.parse(checkoutStr);
+		        Date today = new Date();
+
+		        boolean canWriteReview = checkoutDate.before(today);
+		        rvo.setCanWriteReview(canWriteReview); // VO에 boolean 필드 추가
+		    }
+		    
+		    request.setAttribute("reservationList", reservationList);
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/reservation/reservationList.jsp");
 			

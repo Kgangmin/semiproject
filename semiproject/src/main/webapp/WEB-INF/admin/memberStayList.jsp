@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:include page="/WEB-INF/header1.jsp" />
 
@@ -128,7 +129,11 @@ $(document).ready(function() {
                     <td>${stay.stay_no}</td>
                     <td>${stay.stay_name}</td>
                     <td>${stay.stay_tel}</td>
-                    <td>${stay.stay_score}</td>
+                    <td>
+					  <fmt:formatNumber 
+					     value="${stay.stay_score / 10.0}" 
+					     pattern="#0.0" />
+					</td>
                 </tr>
             </c:forEach>
         </tbody>

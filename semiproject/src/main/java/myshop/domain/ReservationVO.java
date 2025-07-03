@@ -114,6 +114,13 @@ public class ReservationVO {
 		this.reserv_status = reserv_status;
 	}
 
+	private boolean canWriteReview;
 
+	public boolean isCanWriteReview() {
+	    return canWriteReview;
+	}
+	public void setCanWriteReview(boolean canWriteReview) {
+	    this.canWriteReview = canWriteReview;
+	}
 	
 }
