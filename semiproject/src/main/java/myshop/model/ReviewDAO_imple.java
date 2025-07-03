@@ -445,15 +445,76 @@ public class ReviewDAO_imple implements ReviewDAO
 	        pstmt.setString(4, reserv_no);
 	       
 	        insert_result = pstmt.executeUpdate();
-	        
-	      
-	       
-	        
-
 	    } finally {
 	        // 사용한 자원 모두 반납
 	        close();
 	    }
 	    return insert_result;
+	}
+
+	@Override
+	public void updateAvgScore(String reserv_no) throws SQLException
+	{
+		String stayno = null;
+		double avgscore = 0.0; 
+		try
+		{
+			//	받아온 reserv_no 로 해당하는 숙소번호 구하기
+			conn = ds.getConnection();
+			
+			String sql	= " select  C.fk_stay_no "
+						+ " from    tbl_reservation B "
+						+ " join    tbl_room C "
+						+ " on      B.fk_room_no = C.room_no "
+						+ " where	B.reserv_no = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, reserv_no);
+			
+			rs = pstmt.executeQuery();
+			if(rs.next())
+			{
+				stayno = rs.getString("fk_stay_no");
+			}
+			
+			close();
+			
+			/////////////////////////////////////////////////////////
+
+			conn = ds.getConnection();
+			
+			sql	= " select	avg(A.reserv_score) as avg_score "
+				+ " from	tbl_review A "
+				+ " join	tbl_reservation B "
+				+ " on		A.fk_reserv_no = B.reserv_no "
+				+ " join	tbl_room C "
+				+ " on		B.fk_room_no = C.room_no "
+				+ " where	c.fk_stay_no = "+stayno+" ";
+			
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				avgscore = rs.getDouble("avg_score");
+			}
+			
+			close();
+			
+			/////////////////////////////////////////////////////////
+
+			conn = ds.getConnection();
+			
+			sql = " update	tbl_stay "
+				+ " set		stay_score = "+avgscore+" "
+				+ " where	stay_no = "+stayno+" ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.executeUpdate();
+		}
+		finally
+		{
+			close();
+		}
 	}
 }

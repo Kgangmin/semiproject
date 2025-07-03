@@ -12,8 +12,9 @@ public class ReservationVO {
     private String checkin_date;	// 체크인날짜
     private String checkout_date;	// 체크아웃 날짜
     private String reserv_date;		// 예약한 날짜(결제한날짜)
+    private String imp_uid;
     
-    // 부모테이블
+	// 부모테이블
     private StayVO stayvo;
     private RoomVO roomvo;
     private boolean review_written;
@@ -123,4 +124,12 @@ public class ReservationVO {
 	    this.canWriteReview = canWriteReview;
 	}
 	
+	public String getImp_uid()
+    {
+		return imp_uid;
+	}
+	public void setImp_uid(String imp_uid)
+	{
+		this.imp_uid = imp_uid;
+	}
 }

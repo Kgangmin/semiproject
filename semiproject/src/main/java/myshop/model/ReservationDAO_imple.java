@@ -72,8 +72,8 @@ public class ReservationDAO_imple implements ReservationDAO {
 
 	        // 3) 예약 정보 INSERT
 	        String insertSql = " INSERT INTO tbl_reservation " +
-	        				   " (reserv_no, fk_user_id, fk_room_no, reserv_payment, spent_point, checkin_date, checkout_date) " +
-	        				   " VALUES (?, ?, ?, ?, ?, TO_DATE(?,'YYYY-MM-DD'), TO_DATE(?,'YYYY-MM-DD')) ";
+	        				   " (reserv_no, fk_user_id, fk_room_no, reserv_payment, spent_point, checkin_date, checkout_date, imp_uid) " +
+	        				   " VALUES (?, ?, ?, ?, ?, TO_DATE(?,'YYYY-MM-DD'), TO_DATE(?,'YYYY-MM-DD'), ?) ";
 	        pstmt = conn.prepareStatement(insertSql);
 	        pstmt.setString(1, newNo);
 	        pstmt.setString(2, rv.getFk_user_id());
@@ -82,6 +82,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	        pstmt.setInt   (5, rv.getSpent_point());
 	        pstmt.setString(6, rv.getCheckin_date());
 	        pstmt.setString(7, rv.getCheckout_date());
+	        pstmt.setString(8, rv.getImp_uid());
 	        pstmt.executeUpdate();
 
 	    } finally {

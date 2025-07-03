@@ -28,6 +28,7 @@ public class PaymentComplete extends AbstractController {
         int prodAmt    = Integer.parseInt(request.getParameter("productAmount"));
         int usedPoint  = Integer.parseInt(request.getParameter("usedPoint"));
         int finalPay   = Integer.parseInt(request.getParameter("finalPay"));
+        String impUid  = request.getParameter("imp_uid");
 
         // 1) 예약 INSERT
         ReservationVO rv = new ReservationVO();
@@ -37,6 +38,7 @@ public class PaymentComplete extends AbstractController {
         rv.setSpent_point(usedPoint);
         rv.setCheckin_date(checkin);
         rv.setCheckout_date(checkout);
+        rv.setImp_uid(impUid);
         String newReservNo = rdao.insertReservation(rv);
 
         // 2) 유저 총 결제금액·포인트 보정 및 등급 업데이트
