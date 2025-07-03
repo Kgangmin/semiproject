@@ -10,19 +10,47 @@ import member.domain.MemberVO;
 import member.model.MemberDAO;
 import member.model.MemberDAO_imple;
 import myshop.domain.StayVO;
+import myshop.model.ReviewDAO;
+import myshop.model.ReviewDAO_imple;
 import myshop.model.StayDAO;
 import myshop.model.StayDAO_imple;
 
 public class MemberStayList extends AbstractController {
-	 
+	
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		 
+		 	
+		HttpSession session = request.getSession(false);  // 세션 없으면 null 반환
+
+	    if (session == null) {
+	        // 로그인 안 함 -> 로그인 페이지로 이동
+	        request.getRequestDispatcher("/WEB-INF/login/login.jsp").forward(request, response);
+	        return;
+	    }
+
+	    MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
+
+	    if (loginUser == null) {
+	        // 로그인 안 함 -> 로그인 페이지로 이동
+	    	request.getRequestDispatcher("/WEB-INF/login/login.jsp").forward(request, response);
+	        return;
+	    }
+
+	    if (!"admin".equals(loginUser.getUser_id())) {
+	        // 로그인 했지만 admin 아님 -> 접근 거부 페이지 또는 로그인 페이지로 이동
+	        request.setAttribute("message", "관리자만 접근 가능합니다.");
+	        request.setAttribute("loc", "javascript:history.back()");
+	        request.getRequestDispatcher("/WEB-INF/login/login.jsp").forward(request, response);
+	        return;
+	    }
+	    
 		// 회원 검색 관련 파라미터
 		// 클라이언트(사용자)로부터 검색 조건과 페이지 번호를 받아옴
 		String searchType = request.getParameter("memberSearchType");  // 예를 들면 "user_name" 혹은 "email" 같은 검색 기준
 		String searchWord = request.getParameter("memberSearchWord");  // 사용자가 입력한 검색어 (예: "이순신")
 		String pageStr = request.getParameter("page");                 // 사용자가 보고자 하는 페이지 번호 
+		
 
 		// 만약 클라이언트가 해당 파라미터를 안 넘겼으면 기본값을 설정해줌 (null 체크)
 		if (searchType == null) searchType = "";   // 검색기준이 없으면 빈 문자열로 초기화 (검색 안함 의미)

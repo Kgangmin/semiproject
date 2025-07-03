@@ -39,7 +39,15 @@
             </tr>
             <tr>
                 <th scope="row">회원등급</th>
-                <td>${member.fk_grade_no}</td>
+                <td><c:choose>
+                    <c:when test="${member.fk_grade_no == 6}">WHITE</c:when>
+                    <c:when test="${member.fk_grade_no == 5}">SILVER</c:when>
+                    <c:when test="${member.fk_grade_no == 4}">GOLD</c:when>
+                    <c:when test="${member.fk_grade_no == 3}">PLATINUNM</c:when>
+                    <c:when test="${member.fk_grade_no == 2}">VIP</c:when>
+                    <c:when test="${member.fk_grade_no == 1}">VVIP</c:when>
+                    
+                    </c:choose></td>
             </tr>
             <tr>
                 <th scope="row">누적 결제금액</th>

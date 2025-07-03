@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <jsp:include page="/WEB-INF/header1.jsp" />
 
 
 
 <script>
+<%-- 회원상세정보 이동 --%>
 $(document).ready(function() {
     // data-userid 속성이 있는 모든 tr에 클릭 이벤트 바인딩
     $("tr[data-userid]").click(function() {
@@ -17,6 +19,23 @@ $(document).ready(function() {
         }
     });
 });
+
+<%-- 숙소상세정보 이동 --%>
+$(document).ready(function() {
+    // data-stayno 속성이 있는 모든 tr에 클릭 이벤트 바인딩
+    $("tr[data-stayno]").click(function() {
+    	var stay_no = $(this).attr("data-stayno");
+        if(stay_no) {
+            window.location.href = "<%=request.getContextPath()%>/stayDetail.hb?stay_no=" + stay_no;
+        } else {
+            alert("숙소번호가 없습니다.");
+        }
+    });
+});
+
+
+
+
 </script>
 
 
@@ -58,7 +77,17 @@ $(document).ready(function() {
                     <td>${member.user_name}</td>
                     <td>${member.email}</td>
                     <td>${member.mobile}</td>
-                    <td>${member.fk_grade_no}</td>
+                    
+                    <td><c:choose>
+                    <c:when test="${member.fk_grade_no == 6}">WHITE</c:when>
+                    <c:when test="${member.fk_grade_no == 5}">SILVER</c:when>
+                    <c:when test="${member.fk_grade_no == 4}">GOLD</c:when>
+                    <c:when test="${member.fk_grade_no == 3}">PLATINUNM</c:when>
+                    <c:when test="${member.fk_grade_no == 2}">VIP</c:when>
+                    <c:when test="${member.fk_grade_no == 1}">VVIP</c:when>
+                    
+                    </c:choose></td>
+                    
                 </tr>
             </c:forEach>
         </tbody>
@@ -96,11 +125,15 @@ $(document).ready(function() {
         </thead>
         <tbody>
             <c:forEach var="stay" items="${stayList}">
-                <tr>
+                <tr data-stayno="${stay.stay_no}" >
                     <td>${stay.stay_no}</td>
                     <td>${stay.stay_name}</td>
                     <td>${stay.stay_tel}</td>
-                    <td>${stay.stay_score}</td>
+                    <td>
+					  <fmt:formatNumber 
+					     value="${stay.stay_score / 10.0}" 
+					     pattern="#0.0" />
+					</td>
                 </tr>
             </c:forEach>
         </tbody>
