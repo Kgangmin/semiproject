@@ -35,7 +35,7 @@ $(function() {
 </script>  
   <style>
         body {font-family: 'Noto Sans KR', sans-serif;background-color: #f8f8f8;margin: 0;padding: 0;}
-		.container {width: 800px; height: 500px;  margin: 50px auto; background-color: white; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 12px;}
+		.container {width: 800px; height: 550px;  margin: 50px auto; background-color: white; padding: 30px; box-shadow: 0 0 10px rgba(0,0,0,0.1); border-radius: 12px;}
 		form {margin-left: 140px;}
 		h2 {margin-bottom: 25px; text-align: center;}
 		label { display: block; margin-top: 15px; font-weight: bold;}

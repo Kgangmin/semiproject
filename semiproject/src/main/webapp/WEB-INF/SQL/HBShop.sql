@@ -33,6 +33,7 @@ select * from TBL_STAY_CATEGORY;
 select * from TBL_STAY_EXTRAIMG;
 select * from TBL_STAY;
 select * from TBL_ROOM;
+select * from tbl_room_extraimg;
 select * from TBL_USER;
 select * from tbl_reservation
 order by reserv_date;
@@ -40,6 +41,8 @@ order by reserv_date;
 delete TBL_STAY 
 where stay_name = 'HB하우스';
 
+update TBL_STAY_EXTRAIMG set stay_extraimg_no_filename = 'HB하우스_extraimg1.png' where stay_extraimg_no = '45_extraimg1';
+update TBL_STAY_EXTRAIMG set stay_extraimg_no_filename = 'HB하우스_extraimg2.png' where stay_extraimg_no = '45_extraimg2';
 commit;
 
 insert into tbl_user_grade(grade_no, grade_name, grade_cutoff, pointrate) values(1, 'VVIP', 100000000, 0.08);      
