@@ -1,5 +1,6 @@
 package myshop.model;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -564,7 +565,9 @@ public class StayDAO_imple implements StayDAO {
 				            stay.setStay_no(rs.getString("stay_no"));
 				            stay.setStay_name(rs.getString("stay_name"));
 				            stay.setStay_tel(rs.getString("stay_tel"));
-				            stay.setStay_score(rs.getInt("stay_score"));
+				            BigDecimal bd = rs.getBigDecimal("stay_score");           // ex) 4.5
+				            int scaled = bd.movePointRight(1).intValueExact();       // 4.5 → 45
+				            stay.setStay_score(scaled);                               // VO 에는 int 45 로 저장
 
 				            stayList.add(stay);
 				        }

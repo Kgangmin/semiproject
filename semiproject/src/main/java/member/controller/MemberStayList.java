@@ -17,6 +17,7 @@ import myshop.model.StayDAO_imple;
 
 public class MemberStayList extends AbstractController {
 	
+	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		 	
@@ -49,6 +50,7 @@ public class MemberStayList extends AbstractController {
 		String searchType = request.getParameter("memberSearchType");  // 예를 들면 "user_name" 혹은 "email" 같은 검색 기준
 		String searchWord = request.getParameter("memberSearchWord");  // 사용자가 입력한 검색어 (예: "이순신")
 		String pageStr = request.getParameter("page");                 // 사용자가 보고자 하는 페이지 번호 
+		
 
 		// 만약 클라이언트가 해당 파라미터를 안 넘겼으면 기본값을 설정해줌 (null 체크)
 		if (searchType == null) searchType = "";   // 검색기준이 없으면 빈 문자열로 초기화 (검색 안함 의미)
@@ -115,7 +117,6 @@ public class MemberStayList extends AbstractController {
 		//  전체 호텔 페이지 수를 계산함 (올림 처리)
 		int stayTotalPage = (int) Math.ceil((double) stayTotalCount / stayLimit);
 		// 예: 12개 호텔이고 5개씩 보여주면 3페이지
-
 
 		
 		request.setAttribute("memberList", memberList);           // 회원 목록
