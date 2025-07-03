@@ -25,6 +25,7 @@ public class ReviewDAO_imple implements ReviewDAO
 	private Connection conn;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
+	private ResultSet rs_2;
 	
 	// 생성자
 	public ReviewDAO_imple()
@@ -419,26 +420,34 @@ public class ReviewDAO_imple implements ReviewDAO
 	// 리뷰를 등록하는 메소드 
 	@Override
 	public int insertReview(String content, Double rating, String reserv_no) throws SQLException {
-
+		String newNo = null;
 		int insert_result = 0;
 	    try {
 	        // 1) 커넥션 가져오기
 	        conn = ds.getConnection();
 
+	        String seqSql = " SELECT seq_reviewno.nextval FROM dual ";
+	        pstmt = conn.prepareStatement(seqSql);
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            newNo = "RV" + String.format("%06d", rs.getInt(1));
+	        }
+	        
+	        rs.close();
+	        pstmt.close();
 	        // 3) 예약 정보 INSERT
 	        String insertSql = " insert into tbl_review(REVIEW_NO,RESERV_SCORE,REVIEW_CONTENTS ,REVIEW_WRITEDATE,FK_RESERV_NO) "
 	        					+ " values ( ? , ? , ? , sysdate , ?)  ";
 	        pstmt = conn.prepareStatement(insertSql);
-	        pstmt.setString(1, "RV000021");
+	        pstmt.setString(1, newNo);
 	        pstmt.setDouble(2, rating);
 	        pstmt.setString(3, content);
 	        pstmt.setString(4, reserv_no);
 	       
-	        pstmt.executeUpdate();
+	        insert_result = pstmt.executeUpdate();
 	        
-	        if(rs.next()) {
-	        	insert_result = 1;
-	        }
+	      
+	       
 	        
 
 	    } finally {
