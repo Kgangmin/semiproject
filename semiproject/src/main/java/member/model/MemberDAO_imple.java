@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import member.domain.MemberVO;
+import myshop.domain.ReservationVO;
 import util.security.AES256;
 import util.security.SecretMyKey;
 import util.security.Sha256;
@@ -835,6 +837,83 @@ public class MemberDAO_imple implements MemberDAO {
 
 		    return member;
 		}
+
+		// 유저의 아이디로 등급을 알아오는 메소드 
+		@Override
+		public String selectuserGrade(String userid) throws SQLException {
+			String user_grade = null;
+			
+			try {
+				conn = ds.getConnection();
+				
+				String sql = " select fk_grade_no "
+						+ " from tbl_user "
+						+ "	where user_id = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, userid);
+				
+				rs = pstmt.executeQuery();
+				
+				if(rs.next()) {
+					user_grade= rs.getString("fk_grade_no")  ;
+				}
+				
+			} finally {
+				close();
+			}
+			
+			
+			
+			
+			return user_grade;
+		}
+
+		// 유저의 포인트 증감내역을 보여주는 메소드 
+		@Override
+		public List<Map<String, Object>> getPointHistory(String userid) throws SQLException {
+		    List<Map<String, Object>> pointlist = new ArrayList<>();
+
+		    try {
+		        conn = ds.getConnection();
+
+		        String sql = "SELECT r.reserv_no, r.reserv_payment, r.spent_point, r.reserv_date, " +
+		                     "       g.grade_name, g.pointrate, " +
+		                     "       FLOOR(r.reserv_payment * g.pointrate / 100) AS earned_point " +
+		                     "FROM tbl_reservation r " +
+		                     "JOIN tbl_user u ON r.fk_user_id = u.user_id " +
+		                     "JOIN tbl_user_grade g ON u.fk_grade_no = g.grade_no " +
+		                     "WHERE u.user_id = ? " +
+		                     "ORDER BY r.reserv_date DESC";
+
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, userid);
+
+		        rs = pstmt.executeQuery();
+
+		        while (rs.next()) {
+		            Map<String, Object> map = new HashMap<>();
+		            map.put("reserv_no", rs.getString("reserv_no"));
+		            map.put("reserv_payment", rs.getInt("reserv_payment"));
+		            map.put("spent_point", rs.getInt("spent_point"));
+		            map.put("reserv_date", rs.getDate("reserv_date"));
+		            map.put("grade_name", rs.getString("grade_name"));
+		            map.put("pointrate", rs.getDouble("pointrate"));
+		            map.put("earned_point", rs.getInt("earned_point"));
+		            pointlist.add(map);
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return pointlist;
+		}
+
+
+		
+		
+		
 
 
 

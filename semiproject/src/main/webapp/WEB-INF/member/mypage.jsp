@@ -64,10 +64,6 @@
     <div class="container">
         <div class="header">
             <h1>마이페이지</h1>
-            <div>
-                <span>🔔</span>
-                <span>🛒</span>
-            </div>
         </div>
 
         <%-- 
@@ -75,10 +71,14 @@
             UserDTO user = new UserDTO("홍길동", 0);
             request.setAttribute("user", user);
         --%>
+        
+	    <h3 class="user-name">
+		    ${loginUser.user_name}님	 
+		   	<img src="<%= ctx_Path%>/images/grade${requestScope.user_grade}.png" alt="VIP 등급" style="height:60px; ">
+		</h3>
 	    
-	   	<h3 class="user-name">${loginUser.user_name} 님</h3>
-	   
-	
+		
+		
 		
 		<div class="user-links">
 		    <a href="javascript:goEmailChange('${loginUser.user_id}','<%= ctx_Path%>')">이메일 변경</a>
@@ -88,8 +88,10 @@
 
         <div class="points-reviews">
             <div class="item">
-                <span>포인트</span>
-                <span id="point">${loginUser.point}pt &nbsp;&nbsp;<i class="fas fa-chevron-right arrow-icon"></i></span>
+                <a href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.user_grade}">
+	                <span>포인트</span>
+	                <span id="point">${loginUser.point}pt &nbsp;&nbsp;<i class="fas fa-chevron-right arrow-icon"></i></span>
+                </a>
             </div>
             <div class="item">
             	<a href="${pageContext.request.contextPath}/reviewUser.hb?user_id=${loginUser.user_id}&page=1">

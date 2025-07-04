@@ -286,9 +286,103 @@ public class ReservationDAO_imple implements ReservationDAO {
 
 	        return rvo;
 	}
+	//페이징 처리 한 모든 예약보기
+	@Override
+	public List<ReservationVO> getReservationListByPaging(String userid, String status, int offset, int size) throws SQLException {
+	    List<ReservationVO> list = new ArrayList<>();
+	    try {
+	        conn = ds.getConnection();
 
-	
+	        StringBuilder sql = new StringBuilder();
+	        sql.append("SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no, s.stay_no ")
+	           .append("FROM TBL_RESERVATION r ")
+	           .append("JOIN TBL_ROOM rm ON r.fk_room_no = rm.room_no ")
+	           .append("JOIN TBL_STAY s ON rm.fk_stay_no = s.stay_no ")
+	           .append("LEFT JOIN TBL_REVIEW rv ON r.reserv_no = rv.fk_reserv_no ")
+	           .append("WHERE r.fk_user_id = ? ");
 
+	        if ("진행중".equals(status)) {
+	            sql.append("AND r.checkout_date > CURRENT_DATE ");
+	        } else if ("완료".equals(status)) {
+	            sql.append("AND r.checkout_date <= CURRENT_DATE ");
+	        }
+
+	        sql.append("ORDER BY r.checkin_date DESC ")
+	           .append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+	        pstmt = conn.prepareStatement(sql.toString());
+	        pstmt.setString(1, userid);
+	        pstmt.setInt(2, offset); // (page-1) * size
+	        pstmt.setInt(3, size);
+
+	        rs = pstmt.executeQuery();
+	        Date today = new Date(); 
+	        while (rs.next()) {
+	            ReservationVO rvo = new ReservationVO();
+	            StayVO svo = new StayVO();
+	            RoomVO rmvo = new RoomVO();
+
+	            rvo.setReserv_no(rs.getString("reserv_no"));
+	            rvo.setCheckin_date(rs.getString("checkin_date"));
+	            rvo.setCheckout_date(rs.getString("checkout_date"));
+	            rvo.setReserv_payment(rs.getInt("reserv_payment"));
+	            rvo.setReview_written(rs.getString("review_no") != null);
+
+	            Date checkout = rs.getDate("checkout_date");
+	            String c_status = checkout.after(today) ? "진행중" : "완료";
+	            rvo.setReserv_status(c_status);
+
+	            svo.setStay_name(rs.getString("stay_name"));
+	            svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	            svo.setStay_no(rs.getString("stay_no"));
+	            rvo.setStayvo(svo);
+
+	            rmvo.setRoom_grade(rs.getString("room_grade"));
+	            rvo.setRoomvo(rmvo);
+
+	            list.add(rvo);
+	        }
+	    } finally {
+	        close();
+	    }
+
+	    return list;
+	}
+
+	// 모든예약의 개수를 구하는 메소드
+	@Override
+	public int getReservationCount(String userid, String status) throws SQLException {
+	    int count = 0;
+	    try {
+	        conn = ds.getConnection();
+
+	        StringBuilder sql = new StringBuilder();
+	        sql.append("SELECT COUNT(*) ")
+	           .append("FROM TBL_RESERVATION r ")
+	           .append("JOIN TBL_ROOM rm ON r.fk_room_no = rm.room_no ")
+	           .append("JOIN TBL_STAY s ON rm.fk_stay_no = s.stay_no ")
+	           .append("WHERE r.fk_user_id = ? ");
+
+	        if ("진행중".equals(status)) {
+	            sql.append("AND r.checkout_date > CURRENT_DATE ");
+	        } else if ("완료".equals(status)) {
+	            sql.append("AND r.checkout_date <= CURRENT_DATE ");
+	        }
+
+	        pstmt = conn.prepareStatement(sql.toString());
+	        pstmt.setString(1, userid);
+
+	        rs = pstmt.executeQuery();
+	        if (rs.next()) {
+	            count = rs.getInt(1);
+	        }
+
+	    } finally {
+	        close();
+	    }
+
+	    return count;
+	}
 
 	
 }

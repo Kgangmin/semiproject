@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import member.domain.MemberVO;
+import myshop.domain.ReservationVO;
 
 public interface MemberDAO {
 
@@ -72,6 +73,12 @@ public interface MemberDAO {
 
 	// user_id로 회원상세정보 가져오는 메서드
 	MemberVO getMemberByUserId(String user_id) throws SQLException;
+	
+	// 유저의 아이디로 등급을 알아오는 메소드 
+	String selectuserGrade(String userid) throws SQLException;
+
+	// 유저의 포인트 증감내역을 보여주는 메소드 
+	List<Map<String, Object>> getPointHistory(String userid) throws SQLException;
 	
 	
 	
