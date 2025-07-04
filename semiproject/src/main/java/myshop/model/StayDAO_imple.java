@@ -1,6 +1,5 @@
 package myshop.model;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +14,7 @@ import javax.sql.DataSource;
 
 import myshop.domain.CategoryVO;
 import myshop.domain.RoomVO;
+import myshop.domain.StayLocationVO;
 import myshop.domain.StayVO;
 import myshop.domain.StayimgVO;
 
@@ -720,8 +720,36 @@ public class StayDAO_imple implements StayDAO {
 	    }
 
 		
-		
-		
+	 // 지도 구현 정보 메소드
+	    @Override
+	    public List<StayLocationVO> selectAllStayLocations() throws SQLException {
+	        List<StayLocationVO> list = new ArrayList<>();
+	        String sql = 
+	          "SELECT s.stay_no, s.stay_name, s.latitude, s.longitude, "
+	        + "       MIN(r.price_per_night) AS minPrice, s.stay_thumbnail "
+	        + "FROM tbl_stay s "
+	        + "JOIN tbl_room r ON s.stay_no = r.fk_stay_no "
+	        + "GROUP BY s.stay_no, s.stay_name, s.latitude, s.longitude, s.stay_thumbnail";
+	        try {
+	          conn = ds.getConnection();
+	          pstmt = conn.prepareStatement(sql);
+	          rs = pstmt.executeQuery();
+	          while(rs.next()) {
+	            StayLocationVO vo = new StayLocationVO();
+	            vo.setStay_no(rs.getString("stay_no"));
+	            vo.setStay_name(rs.getString("stay_name"));
+	            vo.setLatitude(rs.getDouble("latitude"));
+	            vo.setLongitude(rs.getDouble("longitude"));
+	            vo.setMinPrice(rs.getInt("minPrice"));
+	            vo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	            list.add(vo);
+	          }
+	          return list;
+	        } finally {
+	          close();
+	        }
+	    }
+
 		
 
 }
