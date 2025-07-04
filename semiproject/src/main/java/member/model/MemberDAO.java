@@ -8,13 +8,10 @@ import member.domain.MemberVO;
 
 public interface MemberDAO {
 
+	//	ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
+	boolean idDuplicateCheck(String userid) throws SQLException;
 
-	// ID 중복검사 (tbl_member 테이블에서 userid 가 존재하면 true 를 리턴해주고, userid 가 존재하지 않으면 false 를 리턴한다) 
-		boolean idDuplicateCheck(String userid) throws SQLException;
-
-
-	// 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다)  
-
+	//	이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다)  
 	boolean emailDuplicateCheck2(Map<String, String> paraMap) throws SQLException;
 
 	boolean emailDuplicateCheck(String email) throws SQLException;
@@ -57,7 +54,7 @@ public interface MemberDAO {
 	boolean updateUserIsActive(String login_ip, String sessionUser_id, String sessionuser_name, String sessionMobile) throws SQLException;
 
 	//유저 총 결제금액·포인트 보정 및 등급 업데이트
-	void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception;
+	void processPostPayment(String userId, int finalPay, int used_point) throws Exception;
 
 	// 90일 뒤에 비밀번호 변경
 	void updateLastPwdUpdate(String user_id) throws SQLException;
@@ -72,6 +69,9 @@ public interface MemberDAO {
 
 	// user_id로 회원상세정보 가져오는 메서드
 	MemberVO getMemberByUserId(String user_id) throws SQLException;
+
+	//	
+	int getEarnedPoint(String user_id, int finalPay);
 	
 	
 	

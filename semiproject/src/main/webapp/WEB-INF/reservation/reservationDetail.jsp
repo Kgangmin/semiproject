@@ -70,9 +70,50 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; line-
     <!-- 하단 버튼 -->
     <div class="section" style="text-align: right;">
         <a href="<%= ctxPath %>/reservationList.hb?user_id=${loginUser.user_id}" class="btn-action">목록으로</a>
-        <a href="<%= ctxPath %>/reservationCancel.hb?reserv_no=${reservation.reserv_no}"
-           class="btn-action" >예약 취소</a>
+        <a href="javascript:void(0);" class="btn-action" onclick="cancelReserv();">예약 취소</a>
     </div>
 </div>
+
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script type="text/javascript">
+
+	function cancelReserv()
+	{
+		if(!confirm("정말 예약을 취소하시겠습니까?")) return;
+		
+		const IMP = window.IMP;
+        IMP.init("imp00266003");
+        
+        const imp_uid	= "${reservation.imp_uid}"
+        const reserv_no = "${reservation.reserv_no}"
+        
+       	IMP.cancel
+       	({
+			imp_uid: imp_uid,
+			reason: "사용자 예약 취소"
+		},
+		function(rsp)
+		{
+			if (rsp.success)
+			{//	결제 취소 성공 → 예약 상태 변경 요청
+				$.post("<%= ctxPath %>/reservationCancel.hb", { reserv_no: reserv_no },
+				function(res)
+				{
+					alert("결제 및 예약이 취소되었습니다.");
+					location.href = "<%= ctxPath %>/reservationList.hb?user_id=${loginUser.user_id}";
+				}).fail(function()
+					{
+						alert("예약 상태 변경 중 오류가 발생했습니다.");
+					});
+			}
+			else
+			{
+				alert("결제취소 실패: " + rsp.error_msg);
+			}
+		});
+	}
+	
+</script>
+
 
 <jsp:include page="../footer1.jsp" />

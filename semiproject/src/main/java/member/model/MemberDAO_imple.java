@@ -579,7 +579,7 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 		@Override
-		public void processPostPayment(String userId, int finalPay, int usedPoint) throws Exception {
+		public void processPostPayment(String userId, int finalPay, int used_point) throws Exception {
 			try {
 		        // 1) 커넥션 가져오기
 		        conn = ds.getConnection();
@@ -594,7 +594,7 @@ public class MemberDAO_imple implements MemberDAO {
 		        				   " WHERE user_id = ? ";
 		        pstmt = conn.prepareStatement(updateSql);
 		        pstmt.setInt(1, finalPay);    // 결제금액만큼 total_payment 증가
-		        pstmt.setInt(2, usedPoint);   // 사용 포인트 차감
+		        pstmt.setInt(2, used_point);   // 사용 포인트 차감
 		        pstmt.setInt(3, finalPay);    // 보너스 포인트 = finalPay * pointrate
 		        pstmt.setString(4, userId);
 		        pstmt.executeUpdate();

@@ -288,8 +288,65 @@ public class ReservationDAO_imple implements ReservationDAO {
 	        return rvo;
 	}
 
-	
+	//	예약 정보에서 imp_uid를 조회
+	@Override
+	public String selectImpUid(String reserv_no) throws SQLException
+	{
+		String imp_uid = null;
+		
+		try
+		{
+			conn = ds.getConnection();
+			
+			String sql	= " select	imp_uid "
+						+ " from	tbl_reservation "
+						+ " where	reserv_no = ? ";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, reserv_no);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				imp_uid = rs.getString("imp_uid");
+			}
+		}
+		finally
+		{
+			close();
+		}
+		return imp_uid;
+	}	//	end of public String selectImpUid(String reserv_no) throws SQLException-----
 
+	//	예약 상태 변경: 1 (취소됨)
+	@Override
+	public boolean updateReservStatus(String reserv_no, int status) throws SQLException
+	{
+		boolean result = false;
 
-	
+		try
+		{
+			conn = ds.getConnection();
+
+			String sql	= " update	tbl_reservation "
+						+ " set		reserv_status = ? "
+						+ " where	reserv_no = ? ";
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, status);
+	        pstmt.setString(2, reserv_no);
+	        
+	        int n = pstmt.executeUpdate();
+	        
+	        if(n == 1)
+	        {
+	        	result = true;
+	        }
+
+	    } finally {
+	        close();
+	    }
+
+	    return result;
+	}
 }

@@ -1,23 +1,24 @@
 package myshop.domain;
 
-import member.domain.MemberVO;
-
 public class ReservationVO {
 
-	private String reserv_no;		// 예약 번호
-	private String fk_user_id;		// 회원아이디
-	private String fk_room_no;		// 객실 번호
-	private int reserv_payment;		// 결제 총액(1박당가격*일수)
-	private int spent_point;		// 결제 포인트
-    private String checkin_date;	// 체크인날짜
-    private String checkout_date;	// 체크아웃 날짜
-    private String reserv_date;		// 예약한 날짜(결제한날짜)
-    private String imp_uid;
+	private String reserv_no;		//	예약 번호
+	private String fk_user_id;		//	회원아이디
+	private String fk_room_no;		//	객실 번호
+	private int reserv_payment;		//	결제 총액(1박당가격*일수)
+	private int spent_point;		//	결제 포인트
+    private String checkin_date;	//	체크인날짜
+    private String checkout_date;	//	체크아웃 날짜
+    private String reserv_date;		//	예약한 날짜(결제한날짜)
+    private boolean canWriteReview;	//	리뷰 작성가능 여부
+    private String imp_uid;			//	결제ID
+    private String reserv_status;	//	예약상태	
     
 	// 부모테이블
     private StayVO stayvo;
     private RoomVO roomvo;
     private boolean review_written;
+    
 	public String getReserv_no() {
 		return reserv_no;
 	}
@@ -102,20 +103,9 @@ public class ReservationVO {
 		return review_written;
 	}
 
-	public void setReview_written(boolean review_written) {
-		this.review_written = review_written;
-	}
-	private String reserv_status;
-	
-	public String getReserv_status() {
-		return reserv_status;
-	}
-
 	public void setReserv_status(String reserv_status) {
 		this.reserv_status = reserv_status;
 	}
-
-	private boolean canWriteReview;
 
 	public boolean isCanWriteReview() {
 	    return canWriteReview;
@@ -131,5 +121,14 @@ public class ReservationVO {
 	public void setImp_uid(String imp_uid)
 	{
 		this.imp_uid = imp_uid;
+	}
+	
+	public String getReserv_status()
+	{
+		return reserv_status;
+	}
+	public void setReview_written(boolean review_written)
+	{
+		this.review_written = review_written;
 	}
 }

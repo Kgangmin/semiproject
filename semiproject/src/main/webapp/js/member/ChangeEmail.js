@@ -4,6 +4,8 @@ let b_emailcheck_click = false;
 let b_email_change = false;
 // 이메일값을 변경했는지 여부를 알아오기 위한 용도
 
+const contextPath = '<%= request.getContextPath() %>';
+
 $(function(){
 	$("span.error").hide();
 	// "이메일중복확인" 을 클릭했을 때 이벤트 처리하기
@@ -11,6 +13,7 @@ $(function(){
 		$("span#emailCheckResult").hide()
 		
 		const emailVal = $("input#newEmail").val().trim();
+		const currentEmail = $("#currentEmail").val().trim();
 		const regExp_email = new RegExp(/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i);  
 	    
 		if (!regExp_email.test(emailVal)) {
@@ -24,21 +27,25 @@ $(function(){
 		$("span#emailCheckResult").show()
 
 	    $.ajax({
-	        url: "emailDuplicateCheck2.hb",
+	        url: contextPath + "/member/emailDuplicateCheck.hb",
 	        type: "POST",
-	        data: {
-	            email: $("input#newEmail").val(),
-	            userid: $("input:hidden[name='userid']").val()
-	        },
+	        data: {	email: emailVal	},
 	        dataType: "json",
 	        success: function(json) {
 	            if(json.isExists) {
-	                $("span#emailCheckResult").html($("input#newEmail").val() + " 은 현재 다른 사용자가 사용 중입니다.").css({"color":"red"});
-	                $("input#newEmail").val("");
-					console.log(json.isExists);
+					if(emailVal === currentEmail){
+						$("span#emailCheckResult").html("기존 이메일과 동일하므로 변경할 수 없습니다.")
+													.css({ "color": "orange" });
+					}
+					else{
+						$("span#emailCheckResult").html(emailVal + " 은 현재 다른 사용자가 사용 중입니다.").css({"color":"red"});
+						$("input#newEmail").val("");
+						//	console.log(json.isExists);
+					}
+					$("input#newEmail").val("");
 	            } else {
-	                $("span#emailCheckResult").html($("input#newEmail").val() + " 은 사용 가능합니다.").css({"color":"navy"});
-					console.log(json.isExists);
+	                $("span#emailCheckResult").html(emailVal + " 은 사용 가능합니다.").css({"color":"navy"});
+					//	console.log(json.isExists);
 	            }
 	        },
 	        error: function(request, status, error) {
