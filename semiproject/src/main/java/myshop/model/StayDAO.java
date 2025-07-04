@@ -5,6 +5,7 @@ import java.util.List;
 
 import myshop.domain.CategoryVO;
 import myshop.domain.RoomVO;
+import myshop.domain.StayLocationVO;
 import myshop.domain.StayVO;
 import myshop.domain.StayimgVO;
 
@@ -87,8 +88,8 @@ public interface StayDAO {
 	// tbl_stay_extraimg 에 추가 이미지 정보 insert 하는 메소드
 	int insertExtraImage(StayimgVO img) throws SQLException;
 	
-	
-	
+	// 지도 구현 정보 메소드
+	List<StayLocationVO> selectAllStayLocations() throws SQLException;
 	
 
 }

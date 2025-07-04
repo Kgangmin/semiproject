@@ -120,8 +120,15 @@ public class MemberVO {
 	}
 
 	
-	
-	
+	// 얻어온 전화번호 사이에 ( - ) 를 넣는 함수 
+	public String getFormattedMobile() {
+        if (mobile != null && mobile.length() == 11) {
+            return mobile.substring(0, 3) + "-" +
+                   mobile.substring(3, 7) + "-" +
+                   mobile.substring(7);
+        }
+        return mobile; // null 또는 잘못된 형식이면 그대로 반환
+    }
 	
 	
 	

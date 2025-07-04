@@ -76,7 +76,7 @@ $(document).ready(function() {
                 <tr data-userid="${member.user_id}" >
                     <td>${member.user_name}</td>
                     <td>${member.email}</td>
-                    <td>${member.mobile}</td>
+                    <td>${member.formattedMobile}</td>
                     
                     <td><c:choose>
                     <c:when test="${member.fk_grade_no == 6}">WHITE</c:when>
