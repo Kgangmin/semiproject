@@ -153,11 +153,23 @@
 		                </c:forEach>
 		            </c:when>
 		            <c:otherwise>
-		                <p>찜한 숙소가 없습니다.</p>
+			            <div class="reservation-history">
+			            	<div  class="reservation-list">
+			            		 <p class="better-card">찜 내역이 없습니다.</p>
+			            	</div> 
+			            </div>
+		                
 		            </c:otherwise>
 		        </c:choose>
 		    </div>
-		    <button id="loadMoreBtn">찜 더보기</button>
+		   <c:choose>
+		     	<c:when test="${not empty wishList}">
+		    		<button id="loadMoreBtn">찜 더보기</button>
+		    	</c:when>
+		    	 <c:otherwise>
+		                
+		         </c:otherwise>
+		    </c:choose>
 		</div>
 		
 
