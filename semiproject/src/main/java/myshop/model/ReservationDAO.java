@@ -22,4 +22,7 @@ public interface ReservationDAO {
 	public List<ReservationVO> getReservationListByPaging(String userid, String status, int offset, int size) throws SQLException;
 	// 모든예약의 개수를 구하는 메소드
 	public int getReservationCount(String userid, String status) throws SQLException;
+
+	
+
 }
