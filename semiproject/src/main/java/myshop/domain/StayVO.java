@@ -129,4 +129,9 @@ public class StayVO {
 	public void setExtraaddress(String extraaddress) {
 		this.extraaddress = extraaddress;
 	}
+	
+    
+    
+    
+    
 }

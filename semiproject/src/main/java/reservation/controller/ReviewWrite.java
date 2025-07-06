@@ -1,16 +1,29 @@
 package reservation.controller;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import common.controller.AbstractController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import member.domain.MemberVO;
+import myshop.domain.ReservationVO;
+import myshop.domain.RoomVO;
+import myshop.domain.StayVO;
+import myshop.domain.WishVo;
+import myshop.model.ReservationDAO;
+import myshop.model.ReservationDAO_imple;
 import myshop.model.ReviewDAO;
 import myshop.model.ReviewDAO_imple;
 
 public class ReviewWrite extends AbstractController {
-	
 	private ReviewDAO rvdao = new ReviewDAO_imple();
+	private ReservationDAO rdao = new ReservationDAO_imple();
+	
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -19,6 +32,7 @@ public class ReviewWrite extends AbstractController {
 		if("GET".equalsIgnoreCase(method)) {
 			if(super.checkLogin(request)) {
 				HttpSession session = request.getSession();
+				String reserv_no = request.getParameter("reserv_no");
 				String userid_check = request.getParameter("user_id"); // url 에 저장해둔 유저아이디
 				MemberVO loginUser = (MemberVO) session.getAttribute("loginUser"); // 로그인시 유저정보
 				String userid = loginUser.getUser_id();  // 로그인시 유저아이디
@@ -63,7 +77,7 @@ public class ReviewWrite extends AbstractController {
 				String reserv_no = request.getParameter("reserv_no");
 				MemberVO loginUser = (MemberVO) session.getAttribute("loginUser"); // 로그인시 유저정보
 				String userid = loginUser.getUser_id();  // 로그인시 유저아이디
-				String content = request.getParameter("content");
+				String content = request.getParameter("content");						
 				Double rating = Double.parseDouble(request.getParameter("rating"));
 			
 				request.setAttribute("user_id", userid);
@@ -79,18 +93,29 @@ public class ReviewWrite extends AbstractController {
 				}
 				else {
 					message="리뷰 등록 성공!~~~~";
-					
-					rvdao.updateAvgScore(reserv_no);	//	작성된 리뷰에 해당하는 숙소의 평균평점 업데이트
 				}
+				
+				
 
 		        request.setAttribute("message", message);
 		        request.setAttribute("loc", loc);
 
 		        super.setRedirect(false);
 		        super.setViewPage("/WEB-INF/msg.jsp");
+				
+			
+			
+					
+				}
+				
+			
 			}
-		}	
+			
+			
+			
+		}
+		
+	
 	}
-}
 
 

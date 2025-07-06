@@ -29,9 +29,6 @@ public interface ReviewDAO
 	//	리뷰 테이블에서 특정 리뷰를 지우기
 	int deleteReview(String review_no) throws SQLException;
 	
-	//	리뷰를 등록하는 메소드 
+	// 리뷰를 등록하는 메소드 
 	int insertReview(String content, Double rating, String reserv_no) throws SQLException;
-	
-	//	작성된 리뷰에 해당하는 숙소의 평균평점 업데이트
-	void updateAvgScore(String reserv_no) throws SQLException;
 }
