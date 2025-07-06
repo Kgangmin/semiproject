@@ -11,11 +11,15 @@
 
 <jsp:include page="/WEB-INF/header1.jsp" />
 
+
 <!-- daterangepicker CSS & JS -->
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/daterangepicker@3.1/daterangepicker.min.js"></script>
+
+
+
 
 <div class="container content-center">
   <!-- 1) 검색 폼 -->
@@ -55,7 +59,8 @@
     </div>
   </div>
 
-  <!-- 2) 추천 검색어 -->
+
+<!-- 2) 추천 검색어 -->
 		<div class="row justify-content-center align-items-start flex-nowrap" style="background-color: #F5F5F5; width: 600px; padding: 15px; padding-right: 100px; margin-left: 250px;">
 		  <!-- 좌측 1~5 -->
 		  <div class="col-auto text-right" style="margin-right: 128px;">
@@ -93,38 +98,40 @@
 		  </div>
 		</div>
 		
-    </div>
+</div>
+
+  
+
 
 
 <script>
-  // daterangepicker 초기화
-  $(function() {
-    $('#dateRangePicker').daterangepicker({
-      locale: {
-        format: 'YYYY-MM-DD',
-        separator: ' ~ ',
-        applyLabel: '적용',
-        cancelLabel: '취소'
-      },
-      opens: 'center',
-      minDate:  moment().startOf('day')
-    }, function(start, end) {
-        // 선택된 날짜 범위의 총 일수(포함) 계산
-        var days = end.diff(start, 'days') + 1;
-        $('#dateCount').text('총 ' + days + '박');
-      });
+$(function(){
+  // 1) daterangepicker 초기화
+  $('#dateRangePicker').daterangepicker({
+    locale: { format:'YYYY-MM-DD', separator:' ~ ', applyLabel:'적용', cancelLabel:'취소' },
+    opens:'center', minDate: moment().startOf('day')
+  }, function(start,end){
+    $('#dateCount').text('총 ' + (end.diff(start,'days')+1) + '박');
   });
 
+}); 
+
+
+
 //추천 검색어/키워드 클릭 핸들러
-  function onRecSearch(keyword) {
-    var period = $('#dateRangePicker').val() || '';
-    var url = '<%=ctxPath%>/reservation/searchResult.hb?keyword=' 
-              + encodeURIComponent(keyword);
-    if (period) {
-      url += '&period=' + encodeURIComponent(period);
-    }
-    location.href = url;
+function onRecSearch(keyword) {
+  var period = $('#dateRangePicker').val() || '';
+  var url = '<%=ctxPath%>/reservation/searchResult.hb?keyword=' 
+            + encodeURIComponent(keyword);
+  if (period) {
+    url += '&period=' + encodeURIComponent(period);
   }
+  location.href = url;
+}
+
+
 </script>
+
+
 
 <jsp:include page="/WEB-INF/footer1.jsp" />

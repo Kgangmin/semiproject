@@ -1,6 +1,5 @@
 package myshop.model;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +14,7 @@ import javax.sql.DataSource;
 
 import myshop.domain.CategoryVO;
 import myshop.domain.RoomVO;
+import myshop.domain.StayLocationVO;
 import myshop.domain.StayVO;
 import myshop.domain.StayimgVO;
 
@@ -536,7 +536,7 @@ public class StayDAO_imple implements StayDAO {
 			    try {
 			        conn = ds.getConnection();
 
-			        String sql = " select stay_no, stay_name, stay_tel, stay_score "
+			        String sql = " select stay_no, stay_name, stay_tel, (stay_score * 10 ) as stay_score "
 			                   + " from tbl_stay ";
 			                   
 
@@ -565,9 +565,7 @@ public class StayDAO_imple implements StayDAO {
 				            stay.setStay_no(rs.getString("stay_no"));
 				            stay.setStay_name(rs.getString("stay_name"));
 				            stay.setStay_tel(rs.getString("stay_tel"));
-				            BigDecimal bd = rs.getBigDecimal("stay_score");           // ex) 4.5
-				            int scaled = bd.movePointRight(1).intValueExact();       // 4.5 → 45
-				            stay.setStay_score(scaled);                               // VO 에는 int 45 로 저장
+				            stay.setStay_score(rs.getInt("stay_score"));                               
 
 				            stayList.add(stay);
 				        }
@@ -722,8 +720,36 @@ public class StayDAO_imple implements StayDAO {
 	    }
 
 		
-		
-		
+	 // 지도 구현 정보 메소드
+	    @Override
+	    public List<StayLocationVO> selectAllStayLocations() throws SQLException {
+	        List<StayLocationVO> list = new ArrayList<>();
+	        String sql = 
+	          "SELECT s.stay_no, s.stay_name, s.latitude, s.longitude, "
+	        + "       MIN(r.price_per_night) AS minPrice, s.stay_thumbnail "
+	        + "FROM tbl_stay s "
+	        + "JOIN tbl_room r ON s.stay_no = r.fk_stay_no "
+	        + "GROUP BY s.stay_no, s.stay_name, s.latitude, s.longitude, s.stay_thumbnail";
+	        try {
+	          conn = ds.getConnection();
+	          pstmt = conn.prepareStatement(sql);
+	          rs = pstmt.executeQuery();
+	          while(rs.next()) {
+	            StayLocationVO vo = new StayLocationVO();
+	            vo.setStay_no(rs.getString("stay_no"));
+	            vo.setStay_name(rs.getString("stay_name"));
+	            vo.setLatitude(rs.getDouble("latitude"));
+	            vo.setLongitude(rs.getDouble("longitude"));
+	            vo.setMinPrice(rs.getInt("minPrice"));
+	            vo.setStay_thumbnail(rs.getString("stay_thumbnail"));
+	            list.add(vo);
+	          }
+	          return list;
+	        } finally {
+	          close();
+	        }
+	    }
+
 		
 
 }

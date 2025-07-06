@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="/WEB-INF/header1.jsp" />
 
 <!DOCTYPE html>
@@ -31,7 +31,7 @@
             </tr>
             <tr>
                 <th scope="row">전화번호</th>
-                <td>${member.mobile}</td>
+                <td>${member.formattedMobile}</td>
             </tr>
             <tr>
                 <th scope="row">생년월일</th>
@@ -50,13 +50,19 @@
                     </c:choose></td>
             </tr>
             <tr>
-                <th scope="row">누적 결제금액</th>
-                <td>${member.total_payment}</td>
-            </tr>
+			    <th scope="row">누적 결제금액</th>
+			    <td>
+			        <fmt:formatNumber value="${member.total_payment}" type="number" groupingUsed="true" var="formattedTotalPayment"/>
+			        ₩<c:out value="${formattedTotalPayment}"/>
+			    </td>
+			</tr>
             <tr>
-                <th scope="row">포인트</th>
-                <td>${member.point}</td>
-            </tr>
+			    <th scope="row">포인트</th>
+			    <td>
+			        <fmt:formatNumber value="${member.point}" type="number" groupingUsed="true" var="formattedPoint"/>
+			        <c:out value="${formattedPoint}"/>P
+			    </td>
+			</tr>
             <tr>
                 <th scope="row">가입일자</th>
                 <td><c:out value="${member.register_date}"/></td>
