@@ -82,7 +82,6 @@ public class ReservationDAO_imple implements ReservationDAO {
 	        pstmt.setInt   (5, rv.getSpent_point());
 	        pstmt.setString(6, rv.getCheckin_date());
 	        pstmt.setString(7, rv.getCheckout_date());
-	        pstmt.setString(8, rv.getImp_uid());
 	        pstmt.executeUpdate();
 
 	    } finally {

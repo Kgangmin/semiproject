@@ -1,6 +1,8 @@
 package reservation.controller;
 
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import common.controller.AbstractController;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,7 @@ public class PaymentComplete extends AbstractController {
             return;
         }
 
+        //	전달된 결제관련 파라미터 추출
         String roomNo	= request.getParameter("room_no");
         String checkin	= request.getParameter("checkin");
         String checkout	= request.getParameter("checkout");
@@ -37,11 +40,9 @@ public class PaymentComplete extends AbstractController {
         int used_point	= Integer.parseInt(request.getParameter("used_point"));
         int finalPay	= Integer.parseInt(request.getParameter("finalPay"));
         String imp_uid	= request.getParameter("imp_uid");
-        
-        //	등급 기반으로 적립율 계산
-        int earned_point = mdao.getEarnedPoint(user.getUser_id(), finalPay);
+        String pay_method = request.getParameter("pay_method");
 
-        // 1) 예약 INSERT
+        //	예약 테이블에 insert
         ReservationVO rv = new ReservationVO();
         rv.setFk_user_id(user.getUser_id());
         rv.setFk_room_no(roomNo);
@@ -49,19 +50,35 @@ public class PaymentComplete extends AbstractController {
         rv.setSpent_point(used_point);
         rv.setCheckin_date(checkin);
         rv.setCheckout_date(checkout);
+        //	예약번호 생성 및 insert
         String newReservNo = rdao.insertReservation(rv);
 
-        // 2) 유저 총 결제금액·포인트 보정 및 등급 업데이트
-        mdao.processPostPayment(user.getUser_id(), finalPay, used_point);
+        //	등급 기반으로 적립율 계산
+        int earned_point = mdao.getEarnedPoint(user.getUser_id(), finalPay);
+        
+        //	유저 총 결제금액·포인트 보정 및 등급 업데이트
+        mdao.processPostPayment(user.getUser_id(), finalPay, used_point, earned_point);
         
         ////////////////////////////////////////////////////////////////
 
+        //	결제내역 테이블에 insert
         PaymentVO pmvo = new PaymentVO();
         pmvo.setImp_uid(imp_uid);
         pmvo.setFk_reserv_no(newReservNo);
         pmvo.setFk_user_id(user.getUser_id());
         pmvo.setPaid_amount(finalPay);
         pmvo.setUsed_point(used_point);
+        pmvo.setEarned_point(earned_point);
+        pmvo.setPay_method(pay_method);
+        pmvo.setStatus("paid");
+        
+        //	현재 시각을 결제 시각으로 저장
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        pmvo.setPay_time(sdf.format(new Date()));
+        
+        //	결제 당시의 total_payment 값
+        int total_payment_stamp = mdao.getCurrentTotalPayment(user.getUser_id());
+        pmvo.setTotal_payment_stamp(total_payment_stamp);
 
         // JSON 응답
         response.setContentType("application/json;charset=UTF-8");

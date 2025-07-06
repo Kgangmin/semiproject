@@ -4,8 +4,6 @@ let b_emailcheck_click = false;
 let b_email_change = false;
 // 이메일값을 변경했는지 여부를 알아오기 위한 용도
 
-const contextPath = '<%= request.getContextPath() %>';
-
 $(function(){
 	$("span.error").hide();
 	// "이메일중복확인" 을 클릭했을 때 이벤트 처리하기

@@ -59,42 +59,7 @@ public class MemberDAO_imple implements MemberDAO {
       } catch(SQLException e) {
          e.printStackTrace();
       }
-   }// end of private void close()---------------
-
-
-
-   
-	@Override
-	public boolean emailDuplicateCheck2(Map<String, String> paraMap) throws SQLException {
-	    boolean isExists = false;
-
-	    try {
-	        conn = ds.getConnection();
-
-	        String sql = " select email "
-	                   + " from tbl_user "
-	                   + " where email = ? ";
-
-	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setString(1, aes.encrypt(paraMap.get("new_email")));
-
-	        rs = pstmt.executeQuery();
-
-	        isExists = rs.next(); // 행이 있으면 true (중복된 email)
-	                              // 행이 없으면 false (사용가능한 email)
-
-	     } catch (GeneralSecurityException | UnsupportedEncodingException e) {
-			e.printStackTrace();
-	    } finally {
-	        close();
-	    }
-
-	    return isExists;
-	}
-
-
-		
-
+   }// end of private void close()---------------		
 
    // 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
       @Override
@@ -579,24 +544,21 @@ public class MemberDAO_imple implements MemberDAO {
 
 
 		@Override
-		public void processPostPayment(String userId, int finalPay, int used_point) throws Exception {
+		public void processPostPayment(String user_id, int finalPay, int used_point, int earned_point) throws Exception {
 			try {
 		        // 1) 커넥션 가져오기
 		        conn = ds.getConnection();
 
 		        // 2) tbl_user 총 결제금액·포인트 업데이트
-		        String updateSql = " UPDATE tbl_user u SET " +
-		        				   "  total_payment = total_payment + ?, " +
-		        				   "  point = point - ? + FLOOR(? * ( " +
-		        				   "    SELECT pointrate FROM tbl_user_grade g " +
-		        				   "    WHERE g.grade_no = u.fk_grade_no " +
-		        				   "  )) " +
-		        				   " WHERE user_id = ? ";
+		        String updateSql	= " update	tbl_user "
+		        					+ " set		total_payment = total_payment + ?, "
+		        					+ " 		point = point - ? + ? "
+		        					+ " where	user_id = ? ";
 		        pstmt = conn.prepareStatement(updateSql);
-		        pstmt.setInt(1, finalPay);    // 결제금액만큼 total_payment 증가
-		        pstmt.setInt(2, used_point);   // 사용 포인트 차감
-		        pstmt.setInt(3, finalPay);    // 보너스 포인트 = finalPay * pointrate
-		        pstmt.setString(4, userId);
+		        pstmt.setInt(1, finalPay);		// 결제금액만큼 total_payment 증가
+		        pstmt.setInt(2, used_point);	// 사용 포인트 차감
+		        pstmt.setInt(3, earned_point);	// 보너스 포인트 = finalPay * pointrate
+		        pstmt.setString(4, user_id);
 		        pstmt.executeUpdate();
 		        pstmt.close();
 
@@ -610,7 +572,7 @@ public class MemberDAO_imple implements MemberDAO {
 		            "  ) WHERE rn = 1 " +
 		            " ) WHERE user_id = ? ";
 		        pstmt = conn.prepareStatement(gradeSql);
-		        pstmt.setString(1, userId);
+		        pstmt.setString(1, user_id);
 		        pstmt.executeUpdate();
 
 		    } finally {
@@ -837,8 +799,64 @@ public class MemberDAO_imple implements MemberDAO {
 		}
 
 
+		@Override
+		public int getEarnedPoint(String user_id, int finalPay) throws SQLException
+		{
+			int result = 0;
+			
+			try
+			{
+				conn = ds.getConnection();
 
+		        String sql	= " select	floor(? * (select pointrate from tbl_user_grade where grade_no = u.fk_grade_no "
+		        			+ " from	tbl_user u"
+		        			+ " where	u.user_id = ? ";
+		        
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setInt(1, finalPay);
+		        pstmt.setString(2, user_id);
+		        rs = pstmt.executeQuery();
+		        
+		        if(rs.next())
+		        {
+		        	result = rs.getInt(1);
+		        }
+			}
+			finally
+			{
+		        close();
+		    }
+			return result;
+		}
 
+		//	결제 시점의 누적 결제금액 조회
+		@Override
+		public int getCurrentTotalPayment(String user_id) throws SQLException
+		{
+		    int result = 0;
+
+		    try
+		    {
+		        conn = ds.getConnection();
+		        
+		        String sql = "SELECT total_payment FROM tbl_user WHERE user_id = ?";
+		        
+		        pstmt = conn.prepareStatement(sql);
+		        pstmt.setString(1, user_id);
+		        rs = pstmt.executeQuery();
+		        
+		        if (rs.next())
+		        {
+		            result = rs.getInt(1);
+		        }
+		    }
+		    finally
+		    {
+		        close();
+		    }
+
+		    return result;
+		}
 }
 
 
