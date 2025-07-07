@@ -17,6 +17,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import jakarta.servlet.jsp.tagext.TryCatchFinally;
 import member.domain.MemberVO;
 import myshop.domain.ReservationVO;
 import util.security.AES256;
@@ -862,54 +863,96 @@ public class MemberDAO_imple implements MemberDAO {
 			} finally {
 				close();
 			}
-			
-			
-			
-			
+
 			return user_grade;
 		}
 
-		// 유저의 포인트 증감내역을 보여주는 메소드 
 		@Override
-		public List<Map<String, Object>> getPointHistory(String userid) throws SQLException {
-		    List<Map<String, Object>> pointlist = new ArrayList<>();
+		public List<Map<String, Object>> getPointHistory(String userid, int pageSize, int offset) throws SQLException {
+			List<Map<String, Object>> pointlist = new ArrayList<>();
 
 		    try {
 		        conn = ds.getConnection();
 
-		        String sql = "SELECT r.reserv_no, r.reserv_payment, r.spent_point, r.reserv_date, " +
-		                     "       g.grade_name, g.pointrate, " +
-		                     "       FLOOR(r.reserv_payment * g.pointrate / 100) AS earned_point " +
-		                     "FROM tbl_reservation r " +
-		                     "JOIN tbl_user u ON r.fk_user_id = u.user_id " +
-		                     "JOIN tbl_user_grade g ON u.fk_grade_no = g.grade_no " +
-		                     "WHERE u.user_id = ? " +
-		                     "ORDER BY r.reserv_date DESC";
-
+		        String sql = " SELECT p.FK_RESERV_NO, p.PAY_TIME, p.STATUS, p.PAID_AMOUNT, p.USED_POINT, p.EARNED_POINT, g.GRADE_NAME, g.POINTRATE "
+			        		+ " FROM TBL_PAYMENT p"
+			        		+ " JOIN ( "
+			        		+ "    SELECT grade_name, pointrate, grade_cutoff "
+			        		+ "    FROM tbl_user_grade "
+			        		+ " ) g "
+			        		+ "    ON g.grade_cutoff = ( "
+			        		+ "        SELECT MAX(grade_cutoff) "
+			        		+ "        FROM tbl_user_grade "
+			        		+ "        WHERE grade_cutoff <= p.TOTAL_PAYMENT_STAMP "
+			        		+ "    ) "
+			        		+ " WHERE p.FK_USER_ID = ? "
+			        		+ " ORDER BY p.PAY_TIME DESC "
+			        		+ " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY " ;
 		        pstmt = conn.prepareStatement(sql);
 		        pstmt.setString(1, userid);
+		        pstmt.setInt(2, offset);
+		        pstmt.setInt(3, pageSize);
 
 		        rs = pstmt.executeQuery();
-
 		        while (rs.next()) {
-		            Map<String, Object> map = new HashMap<>();
-		            map.put("reserv_no", rs.getString("reserv_no"));
-		            map.put("reserv_payment", rs.getInt("reserv_payment"));
-		            map.put("spent_point", rs.getInt("spent_point"));
-		            map.put("reserv_date", rs.getDate("reserv_date"));
-		            map.put("grade_name", rs.getString("grade_name"));
-		            map.put("pointrate", rs.getDouble("pointrate"));
-		            map.put("earned_point", rs.getInt("earned_point"));
-		            pointlist.add(map);
-		        }
+	                Map<String, Object> map = new HashMap<>();
+	                map.put("FK_RESERV_NO", rs.getString("FK_RESERV_NO"));
+	                map.put("PAY_TIME", rs.getTimestamp("PAY_TIME"));
+	                map.put("STATUS", rs.getString("STATUS"));
+	                map.put("PAID_AMOUNT", rs.getInt("PAID_AMOUNT"));
+	                map.put("USED_POINT", rs.getInt("USED_POINT"));
+	                map.put("EARNED_POINT", rs.getInt("EARNED_POINT"));
+	                map.put("GRADE_NAME", rs.getString("GRADE_NAME"));
+	                map.put("POINTRATE", rs.getDouble("POINTRATE"));
 
-		    } finally {
+	                pointlist.add(map);
+
+		    } 
+		    }finally {
 		        close();
 		    }
 
 		    return pointlist;
 		}
 
+		
+		// 유저 포인트 증감 총내역 개수
+		@Override
+		public int getPointListTotalCount(String userid) throws SQLException {
+			 int totalCount = 0;
+			 
+			 try {
+				 conn = ds.getConnection();
+				
+			     String sql = "SELECT COUNT(*) AS CNT FROM TBL_PAYMENT WHERE FK_USER_ID = ?";
+
+					
+			     pstmt = conn.prepareStatement(sql);
+
+			     pstmt.setString(1, userid);
+			     
+			     rs=pstmt.executeQuery();
+			         
+	            if (rs.next()) {
+	                totalCount = rs.getInt("CNT");
+	            }
+				        
+			} finally {
+				close();
+			}
+			 return totalCount;
+		}
+
+		@Override
+		public int deletecomple(String user_id) throws SQLException {
+			
+			return 0;
+		}
+
+		
+
+
+	
 
 		
 		

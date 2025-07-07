@@ -22,9 +22,13 @@ public class PointDetail extends AbstractController {
 			MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
 			String userid = loginUser.getUser_id();  // 로그인시 유저아이디
 			String fk_grade_no = request.getParameter("fk_grade_no");
+			int currentPage = 1;
+			 int pageSize = 5;  // 한 페이지에 보여줄 항목 수
+			 int blockSize = 5;      // 페이지 번호 블럭 크기 (예: 1~5, 6~10)
+			 int offset = (currentPage - 1) * pageSize;
 			if(!userid_check.equals(userid)) {
 				// 로그인시 유저아이디와 값이 다르다면
-			 	String message = "본인의 마이페이지만 접근할 수 있습니다.";
+			 	String message = "본인의 페이지만 접근할 수 있습니다.";
 	            String loc = request.getContextPath() + "/index.hb";
 	
 	            request.setAttribute("message", message);
@@ -34,11 +38,39 @@ public class PointDetail extends AbstractController {
 	            super.setViewPage("/WEB-INF/msg.jsp");
 	            return;
 			}	
-			// 유저의 포인트 증감내역을 보여주는 메소드 
-			List<Map<String, Object>> pointList = mdao.getPointHistory(userid);
 			
+			
+			// 유저의 포인트 증감내역을 보여주는 메소드 
+			List<Map<String, Object>> pointList = mdao.getPointHistory(userid,pageSize,offset);
+			int totalCount = mdao.getPointListTotalCount(userid);
+			int totalPage = (int)Math.ceil((double)totalCount / pageSize);
+			String user_grade = mdao.selectuserGrade(userid);
+
+			if(!fk_grade_no.equals(user_grade)) {
+				
+			 	String message = "유저의 등급이 다릅니다";
+	            String loc = "javascript:history.back()";
+	
+	            request.setAttribute("message", message);
+	            request.setAttribute("loc", loc);
+	
+	            super.setRedirect(false);
+	            super.setViewPage("/WEB-INF/msg.jsp");
+	            return;
+			}
+			
+			
+			int startPage = ((currentPage - 1) / blockSize) * blockSize + 1;
+			int endPage = startPage + blockSize - 1;
+			if (endPage > totalPage) {
+				endPage = totalPage;
+			}
 			request.setAttribute("fk_grade_no", fk_grade_no);
 			request.setAttribute("pointList", pointList);
+	        request.setAttribute("currentPage", currentPage);
+	        request.setAttribute("totalPage", totalPage);
+	        request.setAttribute("startPage", startPage);
+	        request.setAttribute("endPage", endPage);
 			
 			
 			super.setRedirect(false);

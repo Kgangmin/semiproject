@@ -87,68 +87,114 @@
 
         <div class="points-reviews">
             <div class="item">
-                <a href="<%= ctx_Path %>/myPage.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.user_grade}">
-                    <span>포인트</span>
+                <a href="<%= ctx_Path %>/myPage.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.fk_grade_no}">
+                    <span>결제내역 및 포인트</span>
                     <span id="point">${loginUser.point}pt &nbsp;&nbsp;<i class="fas fa-chevron-right arrow-icon"></i></span>
                 </a>
             </div>
         </div>
   <!-- 제목 -->
-	<h2 class="mb-4  border-primary pb-2">포인트 적립/차감 내역</h2>
+	<h2 class="mb-4 border-bottom pb-2">포인트 적립/차감 내역</h2>
 
-	<c:choose>
-	    <c:when test="${not empty requestScope.pointList}">
-	        <!-- 테이블 영역 -->
-	        <div class="table-responsive">
-	            <table class="table table-bordered table-hover align-middle text-center">
-	                <thead class="table-light">
-	                    <tr>
-	                        <th>예약번호</th>
-	                        <th>예약일</th>
-	                        <th class="text-end">결제금액</th>
-	                        <th class="text-end">사용포인트</th>
-	                        <th class="text-end">적립포인트</th>
-	                        <th>회원등급</th>
-	                    </tr>
-	                </thead>
-	                <tbody>
-	                    <c:forEach var="point" items="${pointList}">
-	                        <tr>
-	                            <td>${point.reserv_no}</td>
-	                            <td>
-	                                <fmt:formatDate value="${point.reserv_date}" pattern="yyyy-MM-dd" />
-	                            </td>
-	                            <td class="text-end">
-	                                <fmt:formatNumber value="${point.reserv_payment}" type="number" />
-	                            </td>
-	                            <td class="text-end">
-	                                <c:choose>
-	                                    <c:when test="${point.spent_point > 0}">
-	                                        -<fmt:formatNumber value="${point.spent_point}" type="number" />
-	                                    </c:when>
-	                                    <c:otherwise>0</c:otherwise>
-	                                </c:choose>
-	                            </td>
-	                            <td class="text-end">
-	                                <fmt:formatNumber value="${point.earned_point}" type="number" />
-	                            </td>
-	                            <td>${point.grade_name}</td>
-	                        </tr>
-	                    </c:forEach>
-	                </tbody>
-	            </table>
-	        </div>
-	
-	        <!-- 페이징 예시 -->
-	        <nav aria-label="Page navigation" class="mt-4">
-	            <ul class="pagination justify-content-center">
-	                <li class="page-item active" aria-current="page">
-	                    <a class="page-link" href="#">1</a>
-	                </li>
-	                <li class="page-item"><a class="page-link" href="#">2</a></li>
-	                <li class="page-item"><a class="page-link" href="#">3</a></li>
-	            </ul>
-	        </nav>
+		<c:choose>
+		    <c:when test="${not empty pointList}">
+		        <div class="table-responsive">
+		            <table class="table table-bordered table-hover text-center align-middle">
+		                <thead class="table-light">
+		                    <tr>
+		                        <th>예약번호</th>
+		                        <th>결제일</th>
+		                        <th class="text-end">결제금액</th>
+		                        <th class="text-end">사용포인트</th>
+		                        <th class="text-end">적립포인트</th>
+		                        <th>회원등급</th>
+		                        <th>적립율</th>
+		                        <th>상태</th>
+		                    </tr>
+		                </thead>
+		                <tbody>
+		                    <c:forEach var="point" items="${pointList}">
+		                        <tr class="${point.STATUS == '결제취소' ? 'table-secondary' : ''}">
+		                            <td>${point.FK_RESERV_NO}</td>
+		                            <td>
+		                                <fmt:formatDate value="${point.PAY_TIME}" pattern="yyyy-MM-dd" />
+		                            </td>
+		                            <td class="text-end">
+		                                <fmt:formatNumber value="${point.PAID_AMOUNT}" type="number" />
+		                            </td>
+		                            <td class="text-end">
+		                                <c:choose>
+		                                    <c:when test="${point.USED_POINT > 0}">
+		                                        -<fmt:formatNumber value="${point.USED_POINT}" type="number" />
+		                                    </c:when>
+		                                    <c:otherwise>0</c:otherwise>
+		                                </c:choose>
+		                            </td>
+		                            <td class="text-end">
+		                                <c:choose>
+		                                    <c:when test="${point.STATUS == 'cancel'}">-</c:when>
+		                                    <c:otherwise>
+		                                        <fmt:formatNumber value="${point.EARNED_POINT}" type="number" />
+		                                    </c:otherwise>
+		                                </c:choose>
+		                            </td>
+		                            <td>${point.GRADE_NAME}</td>
+		                            <td>${point.POINTRATE}%</td>
+		                            <td>
+		                                <c:choose>
+		                                    <c:when test="${point.STATUS == 'cancel'}">
+		                                        <span class="text-danger fw-bold">결제취소</span>
+		                                    </c:when>
+		                                    <c:otherwise>
+		                                        <span class="text-success fw-bold">결제완료</span>
+		                                    </c:otherwise>
+		                                </c:choose>
+		                            </td>
+		                        </tr>
+		                    </c:forEach>
+		                </tbody>
+		            </table>
+		        </div>
+	        <div class="pagination-wrapper mt-4">
+			    <ul class="pagination justify-content-center">
+			
+			        <!-- First -->
+			        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+			            <a class="page-link" href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.fk_grade_no}&page=1">
+			                <i class="fas fa-angle-double-left"></i>
+			            </a>
+			        </li>
+			
+			        <!-- Prev Block -->
+			        <li class="page-item ${startPage == 1 ? 'disabled' : ''}">
+			            <a class="page-link" href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.fk_grade_no}&page=${startPage - 1}">
+			                <i class="fas fa-angle-left"></i>
+			            </a>
+			        </li>
+			
+			        <!-- Page Numbers (startPage ~ endPage) -->
+			        <c:forEach var="page" begin="${startPage}" end="${endPage}">
+			            <li class="page-item ${page == currentPage ? 'active' : ''}">
+			                <a class="page-link" href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.fk_grade_no}&page=${page}">${page}</a>
+			            </li>
+			        </c:forEach>
+			
+			        <!-- Next Block -->
+			        <li class="page-item ${endPage == totalPage ? 'disabled' : ''}">
+			            <a class="page-link" href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.fk_grade_no}&page=${endPage + 1}">
+			                <i class="fas fa-angle-right"></i>
+			            </a>
+			        </li>
+			
+			        <!-- Last -->
+			        <li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
+			            <a class="page-link" href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.fk_grade_no}&page=${totalPage}">
+			                <i class="fas fa-angle-double-right"></i>
+			            </a>
+			        </li>
+			    </ul>
+			</div>
+
 	    </c:when>
 	    <c:otherwise>
 	        <div class="text-center fst-italic text-muted py-4">

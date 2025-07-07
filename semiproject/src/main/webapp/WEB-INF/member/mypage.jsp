@@ -91,7 +91,7 @@
         <div class="points-reviews">
             <div class="item">
                 <a href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.user_grade}">
-	                <span>포인트</span>
+	                <span>결제내역 및 포인트</span>
 	                <span id="point">${loginUser.point}pt &nbsp;&nbsp;<i class="fas fa-chevron-right arrow-icon"></i></span>
                 </a>
             </div>

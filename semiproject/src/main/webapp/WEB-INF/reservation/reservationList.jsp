@@ -186,58 +186,61 @@
                     </c:choose>
                 </div>
             </div>
+            
         </c:forEach>
+        
+	        <div class="pagination-wrapper">
+	        <ul class="pagination justify-content-center">
+	            <!-- First -->
+	            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+	                <a class="page-link"
+	                    href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=1">
+	                    <i class="fas fa-angle-double-left"></i>
+	                </a>
+	            </li>
+	
+	            <!-- Prev -->
+	            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+	                <a class="page-link"
+	                    href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=${currentPage - 1}">
+	                    <i class="fas fa-angle-left"></i>
+	                </a>
+	            </li>
+	
+	            <!-- Page Numbers -->
+	            <c:forEach var="page" begin="1" end="${totalPage}">
+	                <li class="page-item ${page == currentPage ? 'active' : ''}">
+	                    <a class="page-link"
+	                        href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=${page}">
+	                        ${page}
+	                    </a>
+	                </li>
+	            </c:forEach>
+	
+	            <!-- Next -->
+	            <li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
+	                <a class="page-link"
+	                    href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=${currentPage + 1}">
+	                    <i class="fas fa-angle-right"></i>
+	                </a>
+	            </li>
+	
+	            <!-- Last -->
+	            <li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
+	                <a class="page-link"
+	                    href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=${totalPage}">
+	                    <i class="fas fa-angle-double-right"></i>
+	                </a>
+	            </li>
+	        </ul>
+	    </div>
     </c:if>
 
     <c:if test="${empty reservationList}">
         <div class="no-data">예약 내역이 없습니다.</div>
     </c:if>
 
-    <div class="pagination-wrapper">
-        <ul class="pagination justify-content-center">
-            <!-- First -->
-            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                <a class="page-link"
-                    href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=1">
-                    <i class="fas fa-angle-double-left"></i>
-                </a>
-            </li>
-
-            <!-- Prev -->
-            <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                <a class="page-link"
-                    href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=${currentPage - 1}">
-                    <i class="fas fa-angle-left"></i>
-                </a>
-            </li>
-
-            <!-- Page Numbers -->
-            <c:forEach var="page" begin="1" end="${totalPage}">
-                <li class="page-item ${page == currentPage ? 'active' : ''}">
-                    <a class="page-link"
-                        href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=${page}">
-                        ${page}
-                    </a>
-                </li>
-            </c:forEach>
-
-            <!-- Next -->
-            <li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
-                <a class="page-link"
-                    href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=${currentPage + 1}">
-                    <i class="fas fa-angle-right"></i>
-                </a>
-            </li>
-
-            <!-- Last -->
-            <li class="page-item ${currentPage == totalPage ? 'disabled' : ''}">
-                <a class="page-link"
-                    href="reservationList.hb?user_id=${loginUser.user_id}&status=${param.status}&page=${totalPage}">
-                    <i class="fas fa-angle-double-right"></i>
-                </a>
-            </li>
-        </ul>
-    </div>
+    
 </div>
 
 <jsp:include page="../footer1.jsp" />

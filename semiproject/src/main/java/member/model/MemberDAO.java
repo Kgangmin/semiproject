@@ -78,7 +78,15 @@ public interface MemberDAO {
 	String selectuserGrade(String userid) throws SQLException;
 
 	// 유저의 포인트 증감내역을 보여주는 메소드 
-	List<Map<String, Object>> getPointHistory(String userid) throws SQLException;
+	List<Map<String, Object>> getPointHistory(String userid, int pageSize, int offset) throws SQLException;
+
+	// 유저 포인트 증감 총내역 개수
+	int getPointListTotalCount(String userid) throws SQLException;
+	
+	
+	int deletecomple(String user_id) throws SQLException;
+
+
 	
 	
 	

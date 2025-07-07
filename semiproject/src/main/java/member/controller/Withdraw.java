@@ -26,7 +26,7 @@ public class Withdraw extends AbstractController {
 		if(isMatch) {
 
 				int n = mdao.deletecomple(user_id);
-				if(유저정보 변경완료시 == 1) {
+				if(n == 1) {
 					String message = "유저 탈퇴성공";
 					String loc = "javascript:history.back()";
 					
