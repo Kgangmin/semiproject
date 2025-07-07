@@ -47,8 +47,21 @@ public class Login extends AbstractController {
             if (loginUser != null) {
             	
             	loginUser.setAccess_level(access_level);
+           /* 	
+            	if (loginUser.getIs_withdrawn() == 1) {
+                    String message = "탈퇴한 회원은 로그인이 불가합니다.";
+                    String loc = "javascript:history.back();";
+
+                    request.setAttribute("message", message);
+                    request.setAttribute("loc", loc);
+
+                    super.setRedirect(false);
+                    super.setViewPage("/WEB-INF/msg.jsp");
+
+                    return; // 메소드 종료
+                }
                   
-                
+           */       
                 if (1 == loginUser.getIs_active()) {            	    
             		
             	    String message = "로그인을 한지 1년이 지나서 휴면상태로 되었습니다.휴면을 풀어주는 페이지로 이동합니다.";
@@ -95,5 +108,5 @@ public class Login extends AbstractController {
                 super.setViewPage("/WEB-INF/msg.jsp");
             }
         }
-    }
+    }// end of public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception----------
 }
