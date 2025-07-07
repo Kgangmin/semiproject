@@ -397,7 +397,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	        conn = ds.getConnection();
 
 	        // 결제 ID 채번
-	        String sql_seq = "SELECT 'pm' || LPAD(seq_paymentid.nextval, 5, '0') FROM dual";
+	        String sql_seq = "SELECT 'PM' || LPAD(seq_paymentid.nextval, 5, '0') FROM dual";
 	        pstmt = conn.prepareStatement(sql_seq);
 	        rs = pstmt.executeQuery();
 	        if (rs.next()) {
