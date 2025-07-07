@@ -19,6 +19,10 @@ public interface ReservationDAO {
 
 	// 모든 예약정보와 객실 숙소 정보를 가져오는 메소드
 	ReservationVO getReservationDetail(String reserv_no) throws SQLException;
+	//페이징 처리 한 모든 예약보기
+	public List<ReservationVO> getReservationListByPaging(String userid, String status, int offset, int size) throws SQLException;
+	// 모든예약의 개수를 구하는 메소드
+	public int getReservationCount(String userid, String status) throws SQLException;
 	
 	//	결제내역번호 채번 및 insert
 	void insertPaymentHistory(PaymentVO pmvo) throws SQLException;
@@ -28,4 +32,5 @@ public interface ReservationDAO {
 
 	//	결제내역 상태 'cancelled' 및 취소시간 업데이트
 	int updatePaymentStatusToCancelled(String imp_uid, String cancel_time) throws SQLException;
+
 }
