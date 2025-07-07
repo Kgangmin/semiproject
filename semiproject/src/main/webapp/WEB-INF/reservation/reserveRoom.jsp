@@ -132,7 +132,7 @@ $(function(){
 	});
 
   $('#payBtn').click(function(){
-    IMP.init('imp00266003');  // PortOne(Iamport) 가맹점 식별코드
+    IMP.init('imp87127207');  // PortOne(Iamport) 가맹점 식별코드
     const usedPoint = Number($('#usedPointDisplay').text().replace(/,/g,''));
     const finalPay  = productAmount - usedPoint;
 
@@ -158,10 +158,11 @@ $(function(){
           room_no:    '${room.room_no}',
           checkin:    '${checkin}',
           checkout:   '${checkout}',
-          productAmount: productAmount,
-          usedPoint:  usedPoint,
+          paid_amount: finalPay,
+          used_point:  usedPoint,
           finalPay:   finalPay,
           merchant_uid: rsp.merchant_uid,
+          pay_method: rsp.pay_method,
           imp_uid:    rsp.imp_uid
         }, function(res) {
           if (res.status === 'success') {

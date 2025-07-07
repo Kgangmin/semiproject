@@ -1605,3 +1605,4 @@ from
 )   C
 join    tbl_room D
 on      C.fk_room_no = D.room_no;
+

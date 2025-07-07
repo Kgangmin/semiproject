@@ -3,6 +3,7 @@ package myshop.model;
 import java.sql.SQLException;
 import java.util.List;
 
+import myshop.domain.PaymentVO;
 import myshop.domain.ReservationVO;
 
 public interface ReservationDAO {
@@ -18,8 +19,13 @@ public interface ReservationDAO {
 
 	// 모든 예약정보와 객실 숙소 정보를 가져오는 메소드
 	ReservationVO getReservationDetail(String reserv_no) throws SQLException;
-
 	
+	//	결제내역번호 채번 및 insert
+	void insertPaymentHistory(PaymentVO pmvo) throws SQLException;
 
-	
+	//	DB에서 결제내역 조회
+	PaymentVO selectPaymentByImpUid(String imp_uid) throws SQLException;
+
+	//	결제내역 상태 'cancelled' 및 취소시간 업데이트
+	int updatePaymentStatusToCancelled(String imp_uid, String cancel_time) throws SQLException;
 }

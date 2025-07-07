@@ -81,36 +81,28 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; line-
 	{
 		if(!confirm("정말 예약을 취소하시겠습니까?")) return;
 		
-		const IMP = window.IMP;
-        IMP.init("imp00266003");
+		const imp_uid = "${reservation.imp_uid}";
+		const reserv_no = "${reservation.reserv_no}";
         
-        const imp_uid	= "${reservation.imp_uid}"
-        const reserv_no = "${reservation.reserv_no}"
-        
-       	IMP.cancel
-       	({
-			imp_uid: imp_uid,
-			reason: "사용자 예약 취소"
-		},
-		function(rsp)
-		{
-			if (rsp.success)
-			{//	결제 취소 성공 → 예약 상태 변경 요청
-				$.post("<%= ctxPath %>/reservationCancel.hb", { reserv_no: reserv_no },
-				function(res)
-				{
-					alert("결제 및 예약이 취소되었습니다.");
-					location.href = "<%= ctxPath %>/reservationList.hb?user_id=${loginUser.user_id}";
-				}).fail(function()
-					{
-						alert("예약 상태 변경 중 오류가 발생했습니다.");
-					});
-			}
-			else
-			{
-				alert("결제취소 실패: " + rsp.error_msg);
-			}
-		});
+        $.post("<%= ctxPath %>/reservation/reserveCancel.hb", 
+        		{ imp_uid: imp_uid, reserv_no: reserv_no }, 
+        		function (res)
+        		{
+        			if (res.status === 'success')
+        			{
+        				alert("결제 및 예약이 취소되었습니다.");
+        				location.href = "<%= ctxPath %>/reservationList.hb?user_id=${sessionScope.loginUser.user_id}";
+        			}
+        			else
+        			{
+        				alert("결제취소 실패: " + res.message);
+        			}
+        		},
+        		"json"
+        	).fail(function () {
+        		alert("서버 통신 오류가 발생했습니다.");
+        	});
+
 	}
 	
 </script>

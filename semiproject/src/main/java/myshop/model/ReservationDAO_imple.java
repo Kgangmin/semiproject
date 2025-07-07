@@ -13,6 +13,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import myshop.domain.PaymentVO;
 import myshop.domain.ReservationVO;
 import myshop.domain.RoomVO;
 import myshop.domain.StayVO;
@@ -287,8 +288,111 @@ public class ReservationDAO_imple implements ReservationDAO {
 	        return rvo;
 	}
 
-	
 
+	//	결제내역번호 채번 및 insert
+	@Override
+	public void insertPaymentHistory(PaymentVO pmvo) throws SQLException
+	{
+		try
+		{
+			conn = ds.getConnection();
 
-	
+	        //	결제 ID 채번
+	        String sql_seq = "SELECT 'PM' || LPAD(seq_paymentid.nextval, 5, '0') FROM dual";
+	        pstmt = conn.prepareStatement(sql_seq);
+	        rs = pstmt.executeQuery();
+	        
+	        if (rs.next())
+	        {
+	            pmvo.setPayment_id(rs.getString(1));
+	        }
+	        rs.close();
+	        pstmt.close();
+
+	        //	INSERT
+	        String sql = "INSERT INTO tbl_payment " +
+	                     "(payment_id, imp_uid, fk_reserv_no, fk_user_id, paid_amount, used_point, earned_point, pay_method, status, pay_time, total_payment_stamp) " +
+	                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS'), ?)";
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, pmvo.getPayment_id());
+	        pstmt.setString(2, pmvo.getImp_uid());
+	        pstmt.setString(3, pmvo.getFk_reserv_no());
+	        pstmt.setString(4, pmvo.getFk_user_id());
+	        pstmt.setInt   (5, pmvo.getPaid_amount());
+	        pstmt.setInt   (6, pmvo.getUsed_point());
+	        pstmt.setInt   (7, pmvo.getEarned_point());
+	        pstmt.setString(8, pmvo.getPay_method());
+	        pstmt.setString(9, pmvo.getStatus());
+	        pstmt.setString(10, pmvo.getPay_time());
+	        pstmt.setInt   (11, pmvo.getTotal_payment_stamp());
+
+	        pstmt.executeUpdate();
+	    }
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+	        close();
+	    }
+	}
+
+	//	DB에서 결제내역 조회
+	@Override
+	public PaymentVO selectPaymentByImpUid(String imp_uid) throws SQLException
+	{
+		PaymentVO pmvo = null;
+		
+		try
+		{
+			conn = ds.getConnection();
+			
+			String sql = " select * from tbl_payment where imp_uid = ? ";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, imp_uid);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				pmvo = new PaymentVO();
+                pmvo.setPayment_id(rs.getString("payment_id"));
+                pmvo.setImp_uid(rs.getString("imp_uid"));
+                pmvo.setFk_reserv_no(rs.getString("fk_reserv_no"));
+                pmvo.setFk_user_id(rs.getString("fk_user_id"));
+                pmvo.setPaid_amount(rs.getInt("paid_amount"));
+                pmvo.setUsed_point(rs.getInt("used_point"));
+                pmvo.setEarned_point(rs.getInt("earned_point"));
+                pmvo.setPay_method(rs.getString("pay_method"));
+                pmvo.setStatus(rs.getString("status"));
+                pmvo.setPay_time(rs.getString("pay_time"));
+                pmvo.setTotal_payment_stamp(rs.getInt("total_payment_stamp"));
+			}
+		}
+		finally
+		{
+			close();
+		}
+        return pmvo;
+	}
+
+	//	결제내역 상태 'cancelled' 및 취소시간 업데이트
+	@Override
+	public int updatePaymentStatusToCancelled(String imp_uid, String cancel_time) throws SQLException
+	{
+	    int result = 0;
+	    
+	    try {
+	        conn = ds.getConnection();
+	        String sql = "UPDATE tbl_payment SET status = 'cancelled', cancel_time = TO_DATE(?, 'YYYY-MM-DD HH24:MI:SS') WHERE imp_uid = ?";
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, cancel_time);
+	        pstmt.setString(2, imp_uid);
+	        result = pstmt.executeUpdate();
+	    } finally {
+	        close();
+	    }
+	    return result;
+	}
 }
