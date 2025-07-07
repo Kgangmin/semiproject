@@ -154,6 +154,9 @@
          <!-- 관리자일때(access_level == 1) -->
           <c:if test="${sessionScope.loginUser.access_level == 1}">
           	<li class="nav-item">
+	     		 <a class="nav-link" href="<%=ctxPath%>/admin/stayChart.hb">숙소통계</a>
+	 		 </li>
+          	<li class="nav-item">
 	     		 <a class="nav-link" href="<%=ctxPath%>/admin/stayRegister.hb">숙소등록하기</a>
 	 		 </li>
          	 <li class="nav-item">

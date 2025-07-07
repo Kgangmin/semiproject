@@ -14,6 +14,8 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import myshop.domain.PaymentVO;
+import myshop.domain.CategoryStatsVO;
+import myshop.domain.RegionStatsVO;
 import myshop.domain.ReservationVO;
 import myshop.domain.RoomVO;
 import myshop.domain.StayVO;
@@ -391,10 +393,10 @@ public class ReservationDAO_imple implements ReservationDAO {
 	    return count;
 	}
 
+
 	@Override
 	public void insertPaymentHistory(PaymentVO pvo) throws SQLException {
 	    try {
-	        conn = ds.getConnection();
 
 	        // 결제 ID 채번
 	        String sql_seq = "SELECT 'PM' || LPAD(seq_paymentid.nextval, 5, '0') FROM dual";
@@ -487,5 +489,135 @@ public class ReservationDAO_imple implements ReservationDAO {
 	    }
 	    return result;
 	}
+
+	 // 각 카테고리별 예약 건수·총 결제액 집계 
+	@Override
+   public List<CategoryStatsVO> getCategoryReservationStats() throws SQLException {
+      
+		List<CategoryStatsVO> list = new ArrayList<>();
+       
+       try {
+           conn = ds.getConnection();
+           
+           String sql = " SELECT "
+           		   + "  c.stay_category_name  AS cname, "
+           		   + "  COUNT(*)         AS cnt, "
+           		   + "  SUM(r.reserv_payment)         AS sumpay, "
+           		   + "  ROUND( "
+           		   + "    SUM(r.reserv_payment) "
+           		   + "    / (SELECT SUM(reserv_payment) FROM tbl_reservation) "
+           		   + "    * 100, 2 "
+           		   + "  ) AS sumpay_pct "
+           		   + " FROM tbl_reservation r "
+           		   + " JOIN tbl_room            rm ON r.fk_room_no = rm.room_no "
+           		   + " JOIN tbl_stay            s  ON rm.fk_stay_no = s.stay_no "
+           		   + " JOIN tbl_stay_category   c  ON s.fk_stay_category_no = c.stay_category_no "
+           		   + " GROUP BY c.stay_category_name "
+           		   + " ORDER BY SUM(r.reserv_payment) DESC ";
+           		
+           
+           pstmt = conn.prepareStatement(sql);
+           rs = pstmt.executeQuery();
+           while(rs.next()) {
+           	CategoryStatsVO vo = new CategoryStatsVO();
+               vo.setCname(rs.getString("cname"));
+               vo.setCnt(rs.getInt("cnt"));
+               vo.setSumpay(rs.getLong("sumpay"));
+               vo.setSumpayPct(rs.getDouble("sumpay_pct"));
+               list.add(vo);
+           }
+           return list;
+       } finally {
+           close();
+       }
+   }
+
+	// 지역별(서울, 경기, …, 기타) 예약 건수·총 결제액 집계
+   @Override
+   public List<RegionStatsVO> getRegionReservationStats() throws SQLException {
+
+   	List<RegionStatsVO> list = new ArrayList<>();
+       
+       try {
+           conn = ds.getConnection();
+           
+           String sql = " SELECT "
+           		+ "    r.region, "
+           		+ "    NVL(t.cnt, 0)    AS cnt, "
+           		+ "    NVL(t.sumpay, 0) AS sumpay "
+           		+ " FROM ( "
+           		+ "    SELECT '서울'     AS region FROM DUAL UNION ALL "
+           		+ "    SELECT '경기'     FROM DUAL UNION ALL "
+           		+ "    SELECT '강원'     FROM DUAL UNION ALL "
+           		+ "    SELECT '충청북도'  FROM DUAL UNION ALL "
+           		+ "    SELECT '충청남도'  FROM DUAL UNION ALL "
+           		+ "    SELECT '경상북도'  FROM DUAL UNION ALL "
+           		+ "    SELECT '경상남도'  FROM DUAL UNION ALL "
+           		+ "    SELECT '부산'     FROM DUAL UNION ALL "
+           		+ "    SELECT '제주'     FROM DUAL UNION ALL "
+           		+ "    SELECT '전북'     FROM DUAL UNION ALL "
+           		+ "    SELECT '전라남도'  FROM DUAL UNION ALL "
+           		+ "    SELECT '기타'     FROM DUAL "
+           		+ " ) r "
+           		+ " LEFT JOIN ( "
+           		+ "    SELECT "
+           		+ "        CASE "
+           		+ "            WHEN s.address LIKE '서울%'    THEN '서울' "
+           		+ "            WHEN s.address LIKE '경기%'    THEN '경기' "
+           		+ "            WHEN s.address LIKE '강원%'    THEN '강원' "
+           		+ "            WHEN s.address LIKE '충청북도%' THEN '충청북도' "
+           		+ "            WHEN s.address LIKE '충청남도%' THEN '충청남도' "
+           		+ "            WHEN s.address LIKE '경상북도%' THEN '경상북도' "
+           		+ "            WHEN s.address LIKE '경상남도%' THEN '경상남도' "
+           		+ "            WHEN s.address LIKE '부산%'    THEN '부산' "
+           		+ "            WHEN s.address LIKE '제주%'    THEN '제주' "
+           		+ "            WHEN s.address LIKE '전북%'    THEN '전북' "
+           		+ "            WHEN s.address LIKE '전라남도%' THEN '전라남도' "
+           		+ "            ELSE '기타' "
+           		+ "        END AS region, "
+           		+ "        COUNT(*)               AS cnt, "
+           		+ "        SUM(r.reserv_payment)  AS sumpay "
+           		+ "    FROM tbl_reservation r "
+           		+ "    JOIN tbl_room       rm ON r.fk_room_no = rm.room_no "
+           		+ "    JOIN tbl_stay       s  ON rm.fk_stay_no = s.stay_no "
+           		+ "    GROUP BY "
+           		+ "        CASE "
+           		+ "            WHEN s.address LIKE '서울%'    THEN '서울' "
+           		+ "            WHEN s.address LIKE '경기%'    THEN '경기' "
+           		+ "            WHEN s.address LIKE '강원%'    THEN '강원' "
+           		+ "            WHEN s.address LIKE '충청북도%' THEN '충청북도' "
+           		+ "            WHEN s.address LIKE '충청남도%' THEN '충청남도' "
+           		+ "            WHEN s.address LIKE '경상북도%' THEN '경상북도' "
+           		+ "            WHEN s.address LIKE '경상남도%' THEN '경상남도' "
+           		+ "            WHEN s.address LIKE '부산%'    THEN '부산' "
+           		+ "            WHEN s.address LIKE '제주%'    THEN '제주' "
+           		+ "            WHEN s.address LIKE '전북%'    THEN '전북' "
+           		+ "            WHEN s.address LIKE '전라남도%' THEN '전라남도' "
+           		+ "            ELSE '기타' "
+           		+ "        END "
+           		+ " ) t "
+           		+ "  ON r.region = t.region "
+           		+ " ORDER BY "
+           		+ "    DECODE( "
+           		+ "        r.region, "
+           		+ "        '서울', 1, '경기', 2, '강원', 3, '충청북도', 4, '충청남도', 5, "
+           		+ "        '경상북도', 6, '경상남도', 7, '부산', 8, '제주', 9, "
+           		+ "        '전북', 10, '전라남도', 11, '기타', 12 "
+           		+ "    ) ";
+           
+           pstmt = conn.prepareStatement(sql);
+           rs = pstmt.executeQuery();
+           while(rs.next()) {
+               RegionStatsVO vo = new RegionStatsVO();
+               vo.setRegion(rs.getString("region"));
+               vo.setCnt(rs.getInt   ("cnt"));
+               vo.setSumpay(rs.getLong("sumpay"));
+               list.add(vo);
+           }
+           return list;
+       } finally {
+           close();
+       }
+   }
 
 }

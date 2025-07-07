@@ -29,7 +29,7 @@ public class MemberOneDetail extends AbstractController {
 	        return;
 	    }
 
-	    if (!"admin".equals(loginUser.getUser_id())) {
+	    if (!(loginUser.getAccess_level() == 1)) {
 	        // 로그인 했지만 admin 아님 -> 접근 거부 페이지 또는 로그인 페이지로 이동
 	        request.setAttribute("message", "관리자만 접근 가능합니다.");
 	        request.setAttribute("loc", "javascript:history.back()");
