@@ -1028,8 +1028,8 @@ public class MemberDAO_imple implements MemberDAO {
 	        pstmt.close();
 
 	        // 2. 누적결제금액 기준으로 가장 높은 등급 번호 가져오기
-	        String sql2 = "SELECT grade_no FROM tbl_user_grade WHERE min_payment <= ? " +
-	                      "ORDER BY min_payment DESC FETCH FIRST 1 ROWS ONLY";
+	        String sql2 = "SELECT grade_no FROM tbl_user_grade WHERE GRADE_CUTOFF <= ? " +
+	                      "ORDER BY GRADE_CUTOFF DESC FETCH FIRST 1 ROWS ONLY";
 	        pstmt = conn.prepareStatement(sql2);
 	        pstmt.setInt(1, totalPayment);
 	        rs = pstmt.executeQuery();

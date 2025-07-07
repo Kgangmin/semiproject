@@ -236,11 +236,13 @@ public class ReservationDAO_imple implements ReservationDAO {
 		                    "       ro.room_grade, " +
 		                    "       ro.price_per_night, " +
 		                    "       ro.room_thumbnail, " + 
-		                    "       rv.review_no " +
+		                    "       rv.review_no, " +
+		                    " 		p.imp_uid "+
 		                    " FROM tbl_reservation r " +
 		                    " JOIN tbl_room ro ON r.fk_room_no = ro.room_no " +
 		                    " JOIN tbl_stay s ON s.stay_no = ro.fk_stay_no " + 
 		                    " LEFT JOIN TBL_REVIEW rv ON r.reserv_no = rv.fk_reserv_no " +
+		                    " LEFT JOIN tbl_payment p ON r.reserv_no = p.fk_reserv_no " +
 		                    " WHERE r.reserv_no = ? ";
 
 		            pstmt = conn.prepareStatement(sql);
@@ -259,6 +261,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 		                rvo.setReserv_payment(rs.getInt("reserv_payment"));
 		                rvo.setSpent_point(rs.getInt("spent_point"));
 		                rvo.setReview_written(rs.getString("review_no") != null);  // boolean 처리
+		                rvo.setImp_uid(rs.getString("imp_uid"));
 
 		                // 숙소 정보
 		                StayVO svo = new StayVO();
@@ -296,7 +299,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	           conn = ds.getConnection();
 
 	           StringBuilder sql = new StringBuilder();
-	           sql.append("SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no, s.stay_no ")
+	           sql.append("SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no, s.stay_no, p.imp_uid ")
 	              .append("FROM TBL_RESERVATION r ")
 	              .append("JOIN TBL_ROOM rm ON r.fk_room_no = rm.room_no ")
 	              .append("JOIN TBL_STAY s ON rm.fk_stay_no = s.stay_no ")

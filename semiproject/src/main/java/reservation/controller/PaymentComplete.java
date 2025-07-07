@@ -50,6 +50,7 @@ public class PaymentComplete extends AbstractController {
         rv.setSpent_point(used_point);
         rv.setCheckin_date(checkin);
         rv.setCheckout_date(checkout);
+        rv.setImp_uid(imp_uid);
         //   예약번호 생성 및 insert
         String newReservNo = rdao.insertReservation(rv);
 
