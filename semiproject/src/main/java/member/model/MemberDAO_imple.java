@@ -867,15 +867,15 @@ public class MemberDAO_imple implements MemberDAO {
 	        conn = ds.getConnection();
 
 	        String sql = "UPDATE tbl_user " +
-	                     "SET point = point + ?, " +
-	                     "    total_payment = ?, " +
-	                     "    earned_point = earned_point - ? " +
-	                     "WHERE user_id = ?";
-	        pstmt = conn.prepareStatement(sql);
-	        pstmt.setInt(1, used_point);                 // 사용 포인트 환불
-	        pstmt.setInt(2, total_payment_stamp);   // 이전 누적금액으로 복원
-	        pstmt.setInt(3, earned_point);               // 적립된 포인트 차감
-	        pstmt.setString(4, user_id);
+	                "SET point = point + ? - ?, " +
+	                "    total_payment = total_payment - ? " +
+	                "WHERE user_id = ?";
+
+	   pstmt = conn.prepareStatement(sql);
+	   pstmt.setInt(1, used_point);
+	   pstmt.setInt(2, earned_point);
+	   pstmt.setInt(3, paid_amount);
+	   pstmt.setString(4, user_id);
 
 	        pstmt.executeUpdate();
 	    } finally {

@@ -24,7 +24,7 @@ import myshop.domain.PaymentVO;
 import myshop.model.ReservationDAO;
 import myshop.model.ReservationDAO_imple;
 
-public class reserveCancel extends AbstractController
+public class ReserveCancel extends AbstractController
 {
 	private ReservationDAO rsvdao = new ReservationDAO_imple();
 	private MemberDAO mdao = new MemberDAO_imple();

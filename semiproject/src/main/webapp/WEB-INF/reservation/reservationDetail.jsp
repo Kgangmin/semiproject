@@ -83,6 +83,9 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; line-
 		
 		const imp_uid = "${reservation.imp_uid}";
 		const reserv_no = "${reservation.reserv_no}";
+		
+		console.log("imp_uid:", imp_uid);
+		console.log("reserv_no:", reserv_no);
         
         $.post("<%= ctxPath %>/reservation/reserveCancel.hb", 
         		{ imp_uid: imp_uid, reserv_no: reserv_no }, 
