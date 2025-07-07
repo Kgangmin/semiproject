@@ -2,6 +2,7 @@ package myshop.model;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import myshop.domain.PaymentVO;
 import myshop.domain.ReservationVO;
