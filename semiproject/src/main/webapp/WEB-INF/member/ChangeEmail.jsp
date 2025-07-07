@@ -33,11 +33,10 @@
       
     </style>
     
-   <script type="text/javascript">
+	<script>
+		const contextPath = '<%= ctxPath %>';
+	</script>
 
-
-   
-   </script>
 </head>
 <body>
 <div class="container">

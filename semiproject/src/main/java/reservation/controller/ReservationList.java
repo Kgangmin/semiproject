@@ -49,11 +49,15 @@ public class ReservationList extends AbstractController {
 				
 			}
 
-			
+			String pageStr = request.getParameter("page");
+			int currentPage = (pageStr == null || pageStr.trim().isEmpty()) ? 1 : Integer.parseInt(pageStr);
+			int pageSize = 5;
+			int offset = (currentPage - 1) * pageSize;
 		    String status = request.getParameter("status"); // 예약 상태 필터
 		    // 모든 예약정보를 가져오는 메소드 
-		    List<ReservationVO> reservationList = rdao.getReservationList(userid, status);
-		    
+		    List<ReservationVO> reservationList = rdao.getReservationListByPaging(userid, status, offset, pageSize);
+		    //  총 개수 조회
+		    int totalCount = rdao.getReservationCount(userid, status);
 		   
 		    
 		    for (ReservationVO rvo : reservationList) {
@@ -65,8 +69,19 @@ public class ReservationList extends AbstractController {
 		        boolean canWriteReview = checkoutDate.before(today);
 		        rvo.setCanWriteReview(canWriteReview); // VO에 boolean 필드 추가
 		    }
-		    
+		    int totalPage = (int) Math.ceil((double) totalCount / pageSize);
+		    int prevPage = (currentPage > 1) ? currentPage - 1 : 1;
+		    int nextPage = (currentPage < totalPage) ? currentPage + 1 : totalPage;
 		    request.setAttribute("reservationList", reservationList);
+		    request.setAttribute("currentPage", currentPage);
+		    request.setAttribute("pageSize", pageSize);
+		    request.setAttribute("totalCount", totalCount);
+		    request.setAttribute("status", status); 
+		    request.setAttribute("totalPage", totalPage);
+		    request.setAttribute("prevPage", prevPage);
+		    request.setAttribute("nextPage", nextPage);
+		    
+		    
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/reservation/reservationList.jsp");
 			

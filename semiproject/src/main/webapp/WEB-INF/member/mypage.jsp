@@ -64,10 +64,6 @@
     <div class="container">
         <div class="header">
             <h1>마이페이지</h1>
-            <div>
-                <span>🔔</span>
-                <span>🛒</span>
-            </div>
         </div>
 
         <%-- 
@@ -75,21 +71,29 @@
             UserDTO user = new UserDTO("홍길동", 0);
             request.setAttribute("user", user);
         --%>
+        
+	    <h3 class="user-name">
+		    ${loginUser.user_name}님	 
+		   	<img src="<%= ctx_Path%>/images/grade${requestScope.user_grade}.png" alt="VIP 등급" style="height:60px; ">
+		</h3>
 	    
-	   	<h3 class="user-name">${loginUser.user_name} 님</h3>
-	   
-	
+		
+		
 		
 		<div class="user-links">
 		    <a href="javascript:goEmailChange('${loginUser.user_id}','<%= ctx_Path%>')">이메일 변경</a>
 		    &nbsp;
 		    <a href="javascript:goPwdChange('${loginUser.user_id}','${loginUser.user_pwd}','<%= ctx_Path%>')">비밀번호 변경</a>
+		    &nbsp;
+		    <a href="javascript:goMbWithdraw('${loginUser.user_id}','${loginUser.user_pwd}','<%= ctx_Path%>')" style="color: red;">회원 탈퇴</a>
 		</div>
 
         <div class="points-reviews">
             <div class="item">
-                <span>포인트</span>
-                <span id="point">${loginUser.point}pt &nbsp;&nbsp;<i class="fas fa-chevron-right arrow-icon"></i></span>
+                <a href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.user_grade}">
+	                <span>결제내역 및 포인트</span>
+	                <span id="point">${loginUser.point}pt &nbsp;&nbsp;<i class="fas fa-chevron-right arrow-icon"></i></span>
+                </a>
             </div>
             <div class="item">
             	<a href="${pageContext.request.contextPath}/reviewUser.hb?user_id=${loginUser.user_id}&page=1">
@@ -151,14 +155,26 @@
 		                </c:forEach>
 		            </c:when>
 		            <c:otherwise>
-		                <p>찜한 숙소가 없습니다.</p>
+			            <div class="reservation-history">
+			            	<div  class="reservation-list">
+			            		 <p class="better-card">찜 내역이 없습니다.</p>
+			            	</div> 
+			            </div>
+		                
 		            </c:otherwise>
 		        </c:choose>
 		    </div>
-		    <button id="loadMoreBtn">찜 더보기</button>
+		   <c:choose>
+		     	<c:when test="${not empty wishList}">
+		    		<button id="loadMoreBtn">찜 더보기</button>
+		    	</c:when>
+		    	 <c:otherwise>
+		                
+		         </c:otherwise>
+		    </c:choose>
 		</div>
 		
-
+		
 
     </div>
      
