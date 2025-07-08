@@ -189,6 +189,31 @@ $(function()
 		cursor: not-allowed;
 		opacity: 0.6;
 	}
+	
+	.points-reviews .item a
+	{
+		color: inherit;
+		font-size: 14px;
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.arrow-icon
+	{
+		font-size: 14px;
+		color: #555555;
+		vertical-align: middle;
+		margin-left: 5px;
+		display: inline-block;
+		line-height: 1;
+	}
+
+	.points-reviews .item a:hover .arrow-icon
+	{
+		color: #007bff;
+	}
+	
 </style>
 
 <body>
@@ -218,7 +243,7 @@ $(function()
             <div class="item">
             	<a href="${pageContext.request.contextPath}/myPage.hb?user_id=${loginUser.user_id}">
             		<span>내 후기</span>
-                	<span>></span>	
+                	<span><i class="fas fa-chevron-right arrow-icon"></i></span>	
 				</a>
 			</div>
 		</div>

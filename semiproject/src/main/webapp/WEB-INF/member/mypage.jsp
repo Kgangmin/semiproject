@@ -28,7 +28,7 @@
         .user-info a { color: #555; text-decoration: none; margin-left: 15px; font-size: 14px; }
         .points-reviews { border-top: 1px solid #eee; border-bottom: 1px solid #eee; margin-top: 30px; padding: 20px 0; }
         .points-reviews .item { display: flex; justify-content: space-between; padding: 10px 0; }
-        .points-reviews .item a { display: flex; justify-content: space-between; width: 100%; color: inherit; }
+        .points-reviews .item a { display: flex; justify-content: space-between; align-items: center; width: 100%; color: inherit; }
         .points-reviews .item a:hover { color: #007bff; }
 		.user-links a {margin-left: 15px;color: #555;text-decoration: none;font-size: 14px;}
         .user-links a:first-child {margin-left: 0;}

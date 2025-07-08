@@ -1,60 +1,52 @@
 package login.controller;
 
+import java.util.HashMap;
+import java.util.Random;
+
 import common.controller.AbstractController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import member.model.MemberDAO;
 import member.model.MemberDAO_imple;
-import net.nurigo.java_sdk.exceptions.CoolsmsException;
-
-import java.util.HashMap;
-import java.util.Random;
-
 import net.nurigo.java_sdk.api.Message;
-
-import org.json.simple.JSONObject;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
 
 public class Dormant extends AbstractController {
 
-    private MemberDAO mdao = new MemberDAO_imple();
+	private MemberDAO mdao = new MemberDAO_imple();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        HttpSession session = request.getSession();
+    	HttpSession session = request.getSession();
 
-        String action = request.getParameter("action"); // "send" or "verify"
-        String user_name = request.getParameter("user_name");
-        String mobile = request.getParameter("mobile");
-        String user_id = request.getParameter("user_id");
-        String login_ip = request.getRemoteAddr();
-        
+    	String action		= request.getParameter("action"); // "send" or "verify"
+        String user_name	= request.getParameter("user_name");
+        String mobile		= request.getParameter("mobile");
+        String user_id		= request.getParameter("user_id");
+        String login_ip		= request.getRemoteAddr();
 
-        if ("send".equals(action)) {  // 인증번호 발송버튼을 눌렀을 때
-
-     
-        	
-            //  입력값 체크
-            if (user_name.isEmpty() || mobile.isEmpty() || user_id.isEmpty()) {
-                request.setAttribute("message", "아이디, 성명, 전화번호를 모두 입력하세요.");
-                request.setAttribute("loc", "javascript:history.back()");
-                session.removeAttribute("certStep");
-                super.setRedirect(false);
-                super.setViewPage("/WEB-INF/msg.jsp");
-                return;
+        if ("send".equals(action)) {	// 인증번호 발송버튼을 눌렀을 때
+            //	입력값 체크
+        	if (user_name.isEmpty() || mobile.isEmpty() || user_id.isEmpty()) {
+        		request.setAttribute("message", "아이디, 성명, 전화번호를 모두 입력하세요.");
+        		request.setAttribute("loc", "javascript:history.back()");
+        		session.removeAttribute("certStep");
+        		super.setRedirect(false);
+        		super.setViewPage("/WEB-INF/msg.jsp");
+        		return;
             }
-            else {
-            	// 회원 존재 여부 확인
-                boolean isUserExist = mdao.isUserExists(user_name , mobile);
+        	else {	//	회원 존재 여부 확인
+        		boolean isUserExist = mdao.isUserExists(user_name , mobile);
 
-                if (!isUserExist) {
-                    request.setAttribute("message", "잘못된 회원정보를 입력하셨습니다.");
-                    request.setAttribute("loc", "javascript:history.back()");
-                    session.removeAttribute("certStep");
-                    super.setRedirect(false);
-                    super.setViewPage("/WEB-INF/msg.jsp");
-                    return;
+        		if (!isUserExist) {
+        			request.setAttribute("message", "잘못된 회원정보를 입력하셨습니다.");
+        			request.setAttribute("loc", "javascript:history.back()");
+        			session.removeAttribute("certStep");
+        			super.setRedirect(false);
+        			super.setViewPage("/WEB-INF/msg.jsp");
+        			return;
                 }
             }
 
@@ -155,6 +147,7 @@ public class Dormant extends AbstractController {
         }
     }
 
+    //	인증번호 생성
     private String generateRandomCode(int length) {
         Random rnd = new Random();
         StringBuilder sb = new StringBuilder();

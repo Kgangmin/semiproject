@@ -47,9 +47,6 @@ public interface MemberDAO {
    //   인증번호 일치 시 휴면 해제 처리(is_active=0)
    boolean updateUserIsActive(String login_ip, String sessionUser_id, String sessionuser_name, String sessionMobile) throws SQLException;
 
-   //   유저 총 결제금액·포인트 보정 및 등급 업데이트
-   void processPostPayment(String user_id, int finalPay, int used_point, int earned_point) throws Exception;
-
    //   90일 뒤에 비밀번호 변경
    void updateLastPwdUpdate(String user_id) throws SQLException;
 
@@ -88,6 +85,12 @@ public interface MemberDAO {
 
 	// 회원탈퇴유무 알아오기
 	boolean isWithdrawnUser(String user_id, String user_pwd) throws SQLException;
+
+    //	결제 시 소모한 포인트만 즉시 반영
+	void spentPoint(String user_id, int used_point) throws SQLException;
+
+	//	보유 포인트 최신화를 위한 현 시점 보유포인트 조회
+	int getUserPointById(String user_id) throws SQLException;
 }
 
 
