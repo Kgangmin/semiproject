@@ -2,19 +2,20 @@ package myshop.domain;
 
 public class PaymentVO
 {
-   private String   payment_id;			//   결제내역번호
-   private String   imp_uid;			//   결제코드(아임포트 결제id)
-   private String   fk_reserv_no;		//   예약번호
-   private String   fk_user_id;			//   회원아이디
-   private int      paid_amount;		//   실 결제금액
-   private int      used_point;			//   소모 포인트
-   private int      earned_point;		//   적립 포인트
-   private String   pay_method;			//   결제수단
-   private String   status;				//   결제상태
-   private String   pay_time;			//   결제시각
-   private String   cancel_time;		//   결제취소시각
-   private int      total_payment_stamp;//   결제 당시의 누적결제금액
-   
+   private String   payment_id;			//	결제내역번호
+   private String   imp_uid;			//	결제코드(아임포트 결제id)
+   private String   fk_reserv_no;		//	예약번호
+   private String   fk_user_id;			//	회원아이디
+   private int      paid_amount;		//	실 결제금액
+   private int      used_point;			//	소모 포인트
+   private int      earned_point;		//	적립 예정 포인트
+   private String   pay_method;			//	결제수단
+   private String   status;				//	결제상태
+   private String   pay_time;			//	결제시각
+   private String   cancel_time;		//	결제취소시각
+   private int      total_payment_stamp;//	결제 당시의 누적결제금액
+   private int		processed;			//	포인트 적립 및 등급업데이트 여부
+
    public String getPayment_id()
    {
       return payment_id;
@@ -121,5 +122,14 @@ public class PaymentVO
    public void setTotal_payment_stamp(int total_payment_stamp)
    {
       this.total_payment_stamp = total_payment_stamp;
-   }   
+   }
+   
+   public int getProcessed()
+   {
+	   return processed;
+   }
+   public void setProcessed(int processed)
+   {
+	   this.processed = processed;
+   }
 }
