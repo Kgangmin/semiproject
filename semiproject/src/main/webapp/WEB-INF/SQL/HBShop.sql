@@ -41,6 +41,10 @@ select * from TBL_USER;
 select * from tbl_reservation
 order by reserv_date;
 
+select * from tbl_payment;
+
+update tbl_user set access_level = 1 where user_id = 'admin2';
+
 delete TBL_STAY 
 where stay_name = 'HB하우스';
 

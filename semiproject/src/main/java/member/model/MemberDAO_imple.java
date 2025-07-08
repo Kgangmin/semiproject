@@ -599,8 +599,8 @@ public class MemberDAO_imple implements MemberDAO {
               
               String sql = " select user_name, mobile, email, fk_grade_no, user_id "
                          + " from tbl_user "
-                         + " where user_id != 'admin' ";
-
+                         + " where access_level != 1 ";
+              				// 회원 목록에 관리자 권한을 가진 사람은 조회되지 않게 변경
               // 검색어가 있으면 조건 추가
               if (searchWord != null && !searchWord.trim().isEmpty()) {
                   if ("user_name".equals(searchType)) {  
