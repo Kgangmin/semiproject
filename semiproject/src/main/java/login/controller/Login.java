@@ -36,7 +36,7 @@ public class Login extends AbstractController {
             String login_ip = request.getRemoteAddr();
             
             boolean isWithdrawn = mdao.isWithdrawnUser(user_id, user_pwd);
-
+            
         	if(isWithdrawn) {
         	    // 탈퇴회원 메시지 출력
         	    String message = "탈퇴한 회원입니다. 회원가입 후 이용해주세요.";
