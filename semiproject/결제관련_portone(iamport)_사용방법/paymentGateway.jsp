@@ -14,7 +14,7 @@
 $(document).ready(function() {
 	//	여기 링크를 꼭 참고하세용 http://www.iamport.kr/getstarted
    var IMP = window.IMP;     // 생략가능
-   IMP.init('imp00266003');  // 중요!!  아임포트에 가입시 부여받은 "가맹점 식별코드". 
+   IMP.init('imp87127207');  // 중요!!  아임포트에 가입시 부여받은 "가맹점 식별코드". 
 	
    // 결제요청하기
    IMP.request_pay({

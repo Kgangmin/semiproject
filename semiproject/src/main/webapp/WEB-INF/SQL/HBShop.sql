@@ -10,6 +10,9 @@ create table tbl_main_page
 ,imgfilename  Nvarchar2(30) not null
 ,constraint   PK_tbl_main_page_imgno primary key(imgno)
 );
+    
+select * from tbl_login_history
+order by login_records desc;
 
 create sequence seq_main_image
 start with 1
@@ -1605,3 +1608,4 @@ from
 )   C
 join    tbl_room D
 on      C.fk_room_no = D.room_no;
+

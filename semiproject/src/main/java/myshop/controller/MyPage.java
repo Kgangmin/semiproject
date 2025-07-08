@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import member.domain.MemberVO;
+import member.model.MemberDAO;
+import member.model.MemberDAO_imple;
 import myshop.domain.ImageVO;
 import myshop.domain.ReservationVO;
 import myshop.domain.RoomVO;
@@ -28,6 +30,7 @@ public class MyPage extends AbstractController {
 	private ReservationDAO rdao = new ReservationDAO_imple();
 	private RoomDAO roomdao = new RoomDAO_imple();
 	private StayDAO sdao = new StayDAO_imple();
+	private MemberDAO mdao = new MemberDAO_imple();
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(super.checkLogin(request)) {
@@ -64,6 +67,10 @@ public class MyPage extends AbstractController {
 			// 마이페이지에서 보여줄 가장 빠른시기에 가야할 예약
 			ReservationVO nextReservation = rdao.selectNextReservation(userid);
 			request.setAttribute("nextReservation", nextReservation);
+			// 유저의 아이디로 등급을 알아오는 메소드 
+			String user_grade = mdao.selectuserGrade(userid);
+			
+			
 			
 			if (nextReservation != null) {
 				// 방의 번호로 객실의 등급을 찾는 메소드 
@@ -74,7 +81,7 @@ public class MyPage extends AbstractController {
 		        nextReservation.setStayvo(stay);
 		    }
 			
-			
+			request.setAttribute("user_grade", user_grade);
 			request.setAttribute("nextReservation", nextReservation);
 			
 			

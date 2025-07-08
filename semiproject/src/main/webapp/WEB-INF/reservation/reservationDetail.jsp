@@ -70,9 +70,45 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; line-
     <!-- 하단 버튼 -->
     <div class="section" style="text-align: right;">
         <a href="<%= ctxPath %>/reservationList.hb?user_id=${loginUser.user_id}" class="btn-action">목록으로</a>
-        <a href="<%= ctxPath %>/reservationCancel.hb?reserv_no=${reservation.reserv_no}"
-           class="btn-action" >예약 취소</a>
+        <a href="javascript:void(0);" class="btn-action" onclick="cancelReserv();">예약 취소</a>
     </div>
 </div>
+
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script type="text/javascript">
+
+	function cancelReserv()
+	{
+		if(!confirm("정말 예약을 취소하시겠습니까?")) return;
+		
+		const imp_uid = "${reservation.imp_uid}";
+		const reserv_no = "${reservation.reserv_no}";
+		
+		console.log("imp_uid:", imp_uid);
+		console.log("reserv_no:", reserv_no);
+        
+        $.post("<%= ctxPath %>/reservation/reserveCancel.hb", 
+        		{ imp_uid: imp_uid, reserv_no: reserv_no }, 
+        		function (res)
+        		{
+        			if (res.status === 'success')
+        			{
+        				alert("결제 및 예약이 취소되었습니다.");
+        				location.href = "<%= ctxPath %>/reservationList.hb?user_id=${sessionScope.loginUser.user_id}";
+        			}
+        			else
+        			{
+        				alert("결제취소 실패: " + res.message);
+        			}
+        		},
+        		"json"
+        	).fail(function () {
+        		alert("서버 통신 오류가 발생했습니다.");
+        	});
+
+	}
+	
+</script>
+
 
 <jsp:include page="../footer1.jsp" />
