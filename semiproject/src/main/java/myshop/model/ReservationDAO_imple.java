@@ -388,11 +388,16 @@ public class ReservationDAO_imple implements ReservationDAO {
 		        sql.append("JOIN TBL_PAYMENT P ON R.RESERV_NO = P.FK_RESERV_NO ");
 		        sql.append("WHERE P.FK_USER_ID = ? ");
 
-		        if ("paid".equalsIgnoreCase(status)) {
-		            sql.append("AND P.STATUS = 'paid' ");
-		        } else if ("canceled".equalsIgnoreCase(status)) {
-		            sql.append("AND P.STATUS = 'cancelled' ");
-		        }
+	       
+	           if ("진행중".equals(status)) {
+	               sql.append("AND r.checkout_date > CURRENT_DATE ");
+	               sql.append("AND NVL(p.status, 'paid') != 'cancelled' "); // 취소된 건 제외
+	           } else if ("완료".equals(status)) {
+	               sql.append("AND r.checkout_date <= CURRENT_DATE ");
+	               sql.append("AND NVL(p.status, 'paid') != 'cancelled' "); // 취소된 건 제외
+	           } else if ("취소".equals(status)) {
+	               sql.append("AND p.status = 'cancelled' ");
+	           }
 
 		        pstmt = conn.prepareStatement(sql.toString());
 		        pstmt.setString(1, userid);
@@ -401,6 +406,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 
 		        if (rs.next()) {
 		            totalCount = rs.getInt("CNT");
+		       
 		        }
 
 		    } finally {

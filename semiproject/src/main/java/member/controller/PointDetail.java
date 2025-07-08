@@ -23,7 +23,15 @@ public class PointDetail extends AbstractController {
 			String userid = loginUser.getUser_id();  // 로그인시 유저아이디
 			String fk_grade_no = request.getParameter("fk_grade_no");
 			int currentPage = 1;
-			 int pageSize = 5;  // 한 페이지에 보여줄 항목 수
+			try {
+			    String page = request.getParameter("page");
+			    if (page != null && !page.trim().isEmpty()) {
+			        currentPage = Integer.parseInt(page);
+			    }
+			} catch (NumberFormatException e) {
+			    currentPage = 1;  // 잘못된 입력이 들어온 경우 기본값으로 fallback
+			}
+			 int pageSize = 10;  // 한 페이지에 보여줄 항목 수
 			 int blockSize = 5;      // 페이지 번호 블럭 크기 (예: 1~5, 6~10)
 			 int offset = (currentPage - 1) * pageSize;
 			if(!userid_check.equals(userid)) {
