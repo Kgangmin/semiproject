@@ -12,10 +12,13 @@ import myshop.domain.ReservationVO;
 import myshop.model.ReservationDAO;
 import myshop.model.ReservationDAO_imple;
 
-public class MemberWithdraw extends AbstractController {
+public class MemberWithdraw extends AbstractController
+{
 	private ReservationDAO rdao = new ReservationDAO_imple();
+	
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
 		if(super.checkLogin(request)) {
 			HttpSession session = request.getSession();
 			String userid_check = request.getParameter("user_id"); // url 에 저장해둔 유저아이디

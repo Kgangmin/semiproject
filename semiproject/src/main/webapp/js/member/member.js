@@ -85,7 +85,7 @@ function goEmailChange(user_id,ctx_Path){
 	   */   
        const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
        const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
-      window.open(url, "goEmailChange", 
+      window.open(url, "AccountController", 
                   `left=${left}, top=${top}, width=${width}, height=${height}`);
 	
 }//function goEditMyInfo(userid, ctx_Path)
@@ -110,7 +110,7 @@ function goPwdChange(user_id,user_pwd,ctx_Path){
 	   */   
        const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
        const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
-      window.open(url, "goPwdChange", 
+      window.open(url, "AccountController", 
                   `left=${left}, top=${top}, width=${width}, height=${height}`);
 	
 }//function goEditMyInfo(userid, ctx_Path)
@@ -134,7 +134,7 @@ function goMbWithdraw(user_id,user_pwd,ctx_Path){
 	   */   
        const left = Math.ceil((window.screen.width - width)/2);  // 정수로 만듬 
        const top = Math.ceil((window.screen.height - height)/2); // 정수로 만듬
-      window.open(url, "goPwdChange", 
+      window.open(url, "AccountController", 
                   `left=${left}, top=${top}, width=${width}, height=${height}`);
 	
 }//function goEditMyInfo(userid, ctx_Path)
