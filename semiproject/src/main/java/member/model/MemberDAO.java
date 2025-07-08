@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import member.domain.MemberVO;
-import myshop.domain.ReservationVO;
 
 public interface MemberDAO {
 
@@ -85,6 +84,9 @@ public interface MemberDAO {
 	int getPointListTotalCount(String userid) throws SQLException;
 
 	int deletecomple(String user_id) throws SQLException;
+
+	// 회원탈퇴유무 알아오기
+	boolean isWithdrawnUser(String user_id, String user_pwd) throws SQLException;
 }
 
 

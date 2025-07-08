@@ -16,10 +16,9 @@ public class IdFind extends AbstractController {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		String method = request.getMethod(); // "GET" 또는 "POST"
+		String method = request.getMethod(); 
 		
 		if("POST".equalsIgnoreCase(method)) {
-			// 아이디 찾기 모달창에서 "찾기" 버튼을 클릭했을 경우
 			
 			String user_name = request.getParameter("user_name"); 
 			String email = request.getParameter("email"); 

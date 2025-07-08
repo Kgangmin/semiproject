@@ -54,6 +54,7 @@ public class ReservationList extends AbstractController {
 			int pageSize = 5;
 			int offset = (currentPage - 1) * pageSize;
 		    String status = request.getParameter("status"); // 예약 상태 필터
+		    
 		    // 모든 예약정보를 가져오는 메소드 
 		    List<ReservationVO> reservationList = rdao.getReservationListByPaging(userid, status, offset, pageSize);
 		    //  총 개수 조회
@@ -108,5 +109,4 @@ public class ReservationList extends AbstractController {
 			
 	
 }
-
 

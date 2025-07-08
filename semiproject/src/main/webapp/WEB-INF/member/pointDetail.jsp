@@ -66,7 +66,18 @@
         font-size: 12px;
         color: #888;
     }
+    .font-size-sm {
+        font-size: 12px; 
+    }
     
+      thead.table-light th {
+        border: 1px solid #dee2e6; 
+        background-color: #f8f9fa; 
+    }
+    .text-lightgray {
+    color: #ced4da;
+}
+
 </style>
 
 <body>
@@ -94,13 +105,13 @@
             </div>
         </div>
   <!-- 제목 -->
-	<h2 class="mb-4 border-bottom pb-2">포인트 적립/차감 내역</h2>
+	<h2 class="mb-4 pb-2 " >포인트 적립/차감 내역</h2>
 
 		<c:choose>
 		    <c:when test="${not empty pointList}">
 		        <div class="table-responsive">
-		            <table class="table table-bordered table-hover text-center align-middle">
-		                <thead class="table-light">
+		            <table class="table table-bordered table-hover text-center align-middle font-size-sm">
+		                <thead class="table-light" >
 		                    <tr>
 		                        <th>예약번호</th>
 		                        <th>결제일</th>
@@ -114,7 +125,7 @@
 		                </thead>
 		                <tbody>
 		                    <c:forEach var="point" items="${pointList}">
-		                        <tr class="${point.STATUS == '결제취소' ? 'table-secondary' : ''}">
+		                        <tr class="${point.STATUS == 'cancelled' ? 'text-lightgray' : ''}">
 		                            <td>${point.FK_RESERV_NO}</td>
 		                            <td>
 		                                <fmt:formatDate value="${point.PAY_TIME}" pattern="yyyy-MM-dd" />
@@ -132,7 +143,8 @@
 		                            </td>
 		                            <td class="text-end">
 		                                <c:choose>
-		                                    <c:when test="${point.STATUS == 'cancel'}">-</c:when>
+		                                	
+		                                    <c:when test="${point.STATUS == 'cancelled'}">${point.EARNED_POINT}</c:when>
 		                                    <c:otherwise>
 		                                        <fmt:formatNumber value="${point.EARNED_POINT}" type="number" />
 		                                    </c:otherwise>
@@ -142,7 +154,7 @@
 		                            <td>${point.POINTRATE}%</td>
 		                            <td>
 		                                <c:choose>
-		                                    <c:when test="${point.STATUS == 'cancel'}">
+		                                    <c:when test="${point.STATUS == 'cancelled'}">
 		                                        <span class="text-danger fw-bold">결제취소</span>
 		                                    </c:when>
 		                                    <c:otherwise>
