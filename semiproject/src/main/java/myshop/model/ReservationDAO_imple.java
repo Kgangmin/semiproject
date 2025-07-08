@@ -422,7 +422,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	@Override
 	public void insertPaymentHistory(PaymentVO pvo) throws SQLException {
 	    try {
-
+	    	conn =ds.getConnection();
 	        // 결제 ID 채번
 	        String sql_seq = "SELECT 'PM' || LPAD(seq_paymentid.nextval, 5, '0') FROM dual";
 	        pstmt = conn.prepareStatement(sql_seq);
