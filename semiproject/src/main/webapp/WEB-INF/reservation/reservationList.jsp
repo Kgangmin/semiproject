@@ -126,6 +126,7 @@
             <option value="" <c:if test="${empty param.status}">selected</c:if>>전체</option>
             <option value="진행중" <c:if test="${param.status == '진행중'}">selected</c:if>>진행중</option>
             <option value="완료" <c:if test="${param.status == '완료'}">selected</c:if>>완료</option>
+            <option value="취소" <c:if test="${param.status == '취소'}">selected</c:if>>취소</option>
         </select>
     </form>
 
@@ -142,6 +143,9 @@
                                 <c:when test="${rvo.reserv_status == '진행중'}">
                                     <span class="status-progress">진행중</span>
                                 </c:when>
+                                <c:when test="${rvo.reserv_status == '취소됨'}">
+								   <span class="status-canceled">취소됨</span>
+								</c:when>
                                 <c:otherwise>
                                     <span class="status-complete">완료</span>
                                 </c:otherwise>

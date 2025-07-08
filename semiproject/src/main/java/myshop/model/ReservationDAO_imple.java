@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -294,6 +296,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 		}
 	
 	//	페이징 처리 한 모든 예약보기
+	   
 	   @Override
 	   public List<ReservationVO> getReservationListByPaging(String userid, String status, int offset, int size) throws SQLException {
 	       List<ReservationVO> list = new ArrayList<>();
@@ -301,7 +304,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	           conn = ds.getConnection();
 
 	           StringBuilder sql = new StringBuilder();
-	           sql.append("SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no, s.stay_no, p.imp_uid ")
+	           sql.append("SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no, s.stay_no, p.imp_uid, p.status AS payment_status ")
 	              .append("FROM TBL_RESERVATION r ")
 	              .append("JOIN TBL_ROOM rm ON r.fk_room_no = rm.room_no ")
 	              .append("JOIN TBL_STAY s ON rm.fk_stay_no = s.stay_no ")
@@ -309,10 +312,15 @@ public class ReservationDAO_imple implements ReservationDAO {
 	              .append("LEFT JOIN tbl_payment p ON r.reserv_no = p.fk_reserv_no ")
 	              .append("WHERE r.fk_user_id = ? ");
 
+	           // 상태별 필터링 조건
 	           if ("진행중".equals(status)) {
 	               sql.append("AND r.checkout_date > CURRENT_DATE ");
+	               sql.append("AND NVL(p.status, 'paid') != 'cancelled' "); // 취소된 건 제외
 	           } else if ("완료".equals(status)) {
 	               sql.append("AND r.checkout_date <= CURRENT_DATE ");
+	               sql.append("AND NVL(p.status, 'paid') != 'cancelled' "); // 취소된 건 제외
+	           } else if ("취소".equals(status)) {
+	               sql.append("AND p.status = 'cancelled' ");
 	           }
 
 	           sql.append("ORDER BY r.checkin_date DESC ")
@@ -324,7 +332,8 @@ public class ReservationDAO_imple implements ReservationDAO {
 	           pstmt.setInt(3, size);
 
 	           rs = pstmt.executeQuery();
-	           Date today = new Date(); 
+	           Date today = new Date();
+
 	           while (rs.next()) {
 	               ReservationVO rvo = new ReservationVO();
 	               StayVO svo = new StayVO();
@@ -337,8 +346,15 @@ public class ReservationDAO_imple implements ReservationDAO {
 	               rvo.setReview_written(rs.getString("review_no") != null);
 	               rvo.setImp_uid(rs.getString("imp_uid"));
 
-	               Date checkout = rs.getDate("checkout_date");
-	               String c_status = checkout.after(today) ? "진행중" : "완료";
+	               // 상태 설정
+	               String paymentStatus = rs.getString("payment_status");
+	               String c_status = "취소됨";
+
+	               if (!"cancelled".equalsIgnoreCase(paymentStatus)) {
+	                   Date checkout = rs.getDate("checkout_date");
+	                   c_status = checkout.after(today) ? "진행중" : "완료";
+	               }
+
 	               rvo.setReserv_status(c_status);
 
 	               svo.setStay_name(rs.getString("stay_name"));
@@ -358,46 +374,55 @@ public class ReservationDAO_imple implements ReservationDAO {
 	       return list;
 	   }
 
+
+
 	// 모든예약의 개수를 구하는 메소드
 	@Override
 	public int getReservationCount(String userid, String status) throws SQLException {
-	    int count = 0;
-	    try {
-	        conn = ds.getConnection();
+		 int totalCount = 0;
 
-	        StringBuilder sql = new StringBuilder();
-	        sql.append("SELECT COUNT(*) ")
-	           .append("FROM TBL_RESERVATION r ")
-	           .append("JOIN TBL_ROOM rm ON r.fk_room_no = rm.room_no ")
-	           .append("JOIN TBL_STAY s ON rm.fk_stay_no = s.stay_no ")
-	           .append("WHERE r.fk_user_id = ? ");
+		    try {
+		        conn = ds.getConnection();
 
-	        if ("진행중".equals(status)) {
-	            sql.append("AND r.checkout_date > CURRENT_DATE ");
-	        } else if ("완료".equals(status)) {
-	            sql.append("AND r.checkout_date <= CURRENT_DATE ");
-	        }
+		        StringBuilder sql = new StringBuilder();
+		        sql.append("SELECT COUNT(*) AS CNT ");
+		        sql.append("FROM TBL_RESERVATION R ");
+		        sql.append("JOIN TBL_PAYMENT P ON R.RESERV_NO = P.FK_RESERV_NO ");
+		        sql.append("WHERE P.FK_USER_ID = ? ");
 
-	        pstmt = conn.prepareStatement(sql.toString());
-	        pstmt.setString(1, userid);
+	       
+	           if ("진행중".equals(status)) {
+	               sql.append("AND r.checkout_date > CURRENT_DATE ");
+	               sql.append("AND NVL(p.status, 'paid') != 'cancelled' "); // 취소된 건 제외
+	           } else if ("완료".equals(status)) {
+	               sql.append("AND r.checkout_date <= CURRENT_DATE ");
+	               sql.append("AND NVL(p.status, 'paid') != 'cancelled' "); // 취소된 건 제외
+	           } else if ("취소".equals(status)) {
+	               sql.append("AND p.status = 'cancelled' ");
+	           }
 
-	        rs = pstmt.executeQuery();
-	        if (rs.next()) {
-	            count = rs.getInt(1);
-	        }
+		        pstmt = conn.prepareStatement(sql.toString());
+		        pstmt.setString(1, userid);
 
-	    } finally {
-	        close();
-	    }
+		        rs = pstmt.executeQuery();
 
-	    return count;
-	}
+		        if (rs.next()) {
+		            totalCount = rs.getInt("CNT");
+		       
+		        }
+
+		    } finally {
+		        close();
+		    }
+
+		    return totalCount;
+		}
 
 
 	@Override
 	public void insertPaymentHistory(PaymentVO pvo) throws SQLException {
 	    try {
-
+	    	conn =ds.getConnection();
 	        // 결제 ID 채번
 	        String sql_seq = "SELECT 'PM' || LPAD(seq_paymentid.nextval, 5, '0') FROM dual";
 	        pstmt = conn.prepareStatement(sql_seq);
