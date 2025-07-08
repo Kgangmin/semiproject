@@ -9,8 +9,10 @@ public class ReservationVO {
     private String checkout_date;	// 체크아웃 날짜
     private String reserv_date;		// 예약한 날짜(결제한날짜)
     private String imp_uid;			// 결제 식별자
+    private int paid_amount;		// 실 결제 금액
+    private int used_point;			// 소모 포인트
     
-    // 부모테이블
+	// 부모테이블
     private StayVO stayvo;
     private RoomVO roomvo;
     private boolean review_written;
@@ -110,5 +112,21 @@ public class ReservationVO {
 
 	public void setImp_uid(String imp_uid) {
 	    this.imp_uid = imp_uid;
+	}
+	
+    public int getPaid_amount() {
+		return paid_amount;
+	}
+
+	public void setPaid_amount(int paid_amount) {
+		this.paid_amount = paid_amount;
+	}
+
+	public int getUsed_point() {
+		return used_point;
+	}
+
+	public void setUsed_point(int used_point) {
+		this.used_point = used_point;
 	}
 }

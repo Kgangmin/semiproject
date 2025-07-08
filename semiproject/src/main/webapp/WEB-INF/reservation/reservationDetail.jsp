@@ -56,8 +56,8 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; line-
             <span class="label">체크인:</span> ${reservation.checkin_date}
             <span style="margin-left: 20px;" class="label">체크아웃:</span> ${reservation.checkout_date}
         </div>
-        <div class="value"><span class="label">총 결제액:</span> <fmt:formatNumber value="${reservation.reserv_payment}" pattern="#,###" /> 원</div>
-        <div class="value"><span class="label">사용 포인트:</span> <fmt:formatNumber value="${reservation.spent_point}" pattern="#,###" /> P</div>
+        <div class="value"><span class="label">총 결제액:</span> <fmt:formatNumber value="${reservation.paid_amount}" pattern="#,###" /> 원</div>
+        <div class="value"><span class="label">사용 포인트:</span> <fmt:formatNumber value="${reservation.used_point}" pattern="#,###" /> P</div>
         <div class="value">
             <span class="label">리뷰:</span>
             <c:choose>

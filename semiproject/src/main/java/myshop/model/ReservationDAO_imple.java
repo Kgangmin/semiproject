@@ -234,7 +234,9 @@ public class ReservationDAO_imple implements ReservationDAO {
 		                    "       ro.price_per_night, " +
 		                    "       ro.room_thumbnail, " + 
 		                    "       rv.review_no, " +
-		                    " 		p.imp_uid "+
+		                    " 		p.imp_uid, "+
+		                    " 		p.paid_amount, "+
+		                    " 		p.used_point "+
 		                    " FROM tbl_reservation r " +
 		                    " JOIN tbl_room ro ON r.fk_room_no = ro.room_no " +
 		                    " JOIN tbl_stay s ON s.stay_no = ro.fk_stay_no " + 
@@ -257,6 +259,8 @@ public class ReservationDAO_imple implements ReservationDAO {
 		                rvo.setCheckout_date(rs.getString("checkout_date"));
 		                rvo.setReview_written(rs.getString("review_no") != null);  // boolean 처리
 		                rvo.setImp_uid(rs.getString("imp_uid"));
+		                rvo.setPaid_amount(rs.getInt("paid_amount"));
+		                rvo.setUsed_point(rs.getInt("used_point"));
 
 		                // 숙소 정보
 		                StayVO svo = new StayVO();
@@ -295,7 +299,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	           conn = ds.getConnection();
 
 	           StringBuilder sql = new StringBuilder();
-	           sql.append("SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no, s.stay_no, p.imp_uid, p.status AS payment_status ")
+	           sql.append("SELECT r.*, s.stay_name, s.stay_thumbnail, rm.room_grade, rv.review_no, s.stay_no, p.imp_uid, p.status AS payment_status, p.paid_amount, p.used_point ")
 	              .append("FROM TBL_RESERVATION r ")
 	              .append("JOIN TBL_ROOM rm ON r.fk_room_no = rm.room_no ")
 	              .append("JOIN TBL_STAY s ON rm.fk_stay_no = s.stay_no ")
@@ -335,6 +339,8 @@ public class ReservationDAO_imple implements ReservationDAO {
 	               rvo.setCheckout_date(rs.getString("checkout_date"));
 	               rvo.setReview_written(rs.getString("review_no") != null);
 	               rvo.setImp_uid(rs.getString("imp_uid"));
+	               rvo.setPaid_amount(rs.getInt("paid_amount"));
+	               rvo.setUsed_point(rs.getInt("used_point"));
 
 	               // 상태 설정
 	               String paymentStatus = rs.getString("payment_status");
@@ -517,7 +523,7 @@ public class ReservationDAO_imple implements ReservationDAO {
            
            String sql = " SELECT "
            		   + "  c.stay_category_name  AS cname, "
-           		   + "  COUNT(*)         AS cnt, "
+           		   + "  COUNT(*)         AS cnt "
            		   + " FROM tbl_reservation r "
            		   + " JOIN tbl_room            rm ON r.fk_room_no = rm.room_no "
            		   + " JOIN tbl_stay            s  ON rm.fk_stay_no = s.stay_no "
@@ -550,7 +556,7 @@ public class ReservationDAO_imple implements ReservationDAO {
            
            String sql = " SELECT "
            		+ "    r.region, "
-           		+ "    NVL(t.cnt, 0)    AS cnt, "
+           		+ "    NVL(t.cnt, 0)    AS cnt "
            		+ " FROM ( "
            		+ "    SELECT '서울'     AS region FROM DUAL UNION ALL "
            		+ "    SELECT '경기'     FROM DUAL UNION ALL "
@@ -581,7 +587,7 @@ public class ReservationDAO_imple implements ReservationDAO {
            		+ "            WHEN s.address LIKE '전라남도%' THEN '전라남도' "
            		+ "            ELSE '기타' "
            		+ "        END AS region, "
-           		+ "        COUNT(*)               AS cnt, "
+           		+ "        COUNT(*)               AS cnt "
            		+ "    FROM tbl_reservation r "
            		+ "    JOIN tbl_room       rm ON r.fk_room_no = rm.room_no "
            		+ "    JOIN tbl_stay       s  ON rm.fk_stay_no = s.stay_no "
