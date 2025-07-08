@@ -1,50 +1,46 @@
 $(function(){
 
-$('#loadMoreBtn').on('click', function () {
+	$('#loadMoreBtn').on('click', function () {
+		
+	    const $btn = $(this);
+	    $.ajax({
+	        url: `${ctxPath}/loadMoreWishlist.hb`,
+	        type: 'GET',
+	        data: {
+	            
+	            offset: offset,
+	            limit: limit
+	        },
+	        dataType: 'json',
+	        success: function (data) {
+	            if (data.length === 0) {
+	                alert('더 이상 찜한 숙소가 없습니다.');
+	                $btn.hide();
+	                return;
+	            }
 	
-    const $btn = $(this);
-    $.ajax({
-        url: `${ctxPath}/loadMoreWishlist.hb`,
-        type: 'GET',
-        data: {
-            
-            offset: offset,
-            limit: limit
-        },
-        dataType: 'json',
-        success: function (data) {
-            if (data.length === 0) {
-                alert('더 이상 찜한 숙소가 없습니다.');
-                $btn.hide();
-                return;
-            }
-
-            let html = '';
-            $.each(data, function (index, wish) {
-                html += `
-                    <a href="${ctxPath}/stayDetail.hb?stay_no=${wish.w_stay_no}" class="wishlist-link">
-                        <div class="wishlist-card">
-                            <img src="${ctxPath}/images/${wish.stayVO.stay_thumbnail}" alt="${wish.stayVO.stay_name}" class="wishlist-img">
-                            <div class="wishlist-info">
-                                <h4 class="wishlist-title">${wish.stayVO.stay_name}</h4>
-                            </div>
-                        </div>
-                    </a>
-                `;
-            });
-
-            $('#wishlistGrid').append(html);
-            offset += data.length;
-        },
-        error: function () {
-            alert('데이터를 불러오는데 실패했습니다.');
-        }
-    });
-});//END $('#loadMoreBtn').on('click', function ()
+	            let html = '';
+	            $.each(data, function (index, wish) {
+	                html += `
+	                    <a href="${ctxPath}/stayDetail.hb?stay_no=${wish.w_stay_no}" class="wishlist-link">
+	                        <div class="wishlist-card">
+	                            <img src="${ctxPath}/images/${wish.stayVO.stay_thumbnail}" alt="${wish.stayVO.stay_name}" class="wishlist-img">
+	                            <div class="wishlist-info">
+	                                <h4 class="wishlist-title">${wish.stayVO.stay_name}</h4>
+	                            </div>
+	                        </div>
+	                    </a>
+	                `;
+	            });
 	
-
-
-
+	            $('#wishlistGrid').append(html);
+	            offset += data.length;
+	        },
+	        error: function () {
+	            alert('데이터를 불러오는데 실패했습니다.');
+	        }
+	    });
+	});//END $('#loadMoreBtn').on('click', function ()
 
 });	//END $(function()
 

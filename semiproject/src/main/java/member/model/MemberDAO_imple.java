@@ -64,41 +64,39 @@ public class MemberDAO_imple implements MemberDAO {
       }
    }// end of private void close()---------------      
 
-   // 이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
-      @Override
-      public boolean emailDuplicateCheck(String email) throws SQLException {
+   //	이메일 중복검사 (tbl_member 테이블에서 email 이 존재하면 true 를 리턴해주고, email 이 존재하지 않으면 false 를 리턴한다) 
+   @Override
+   public boolean emailDuplicateCheck(String email) throws SQLException {
 
-         boolean isExists = false;
-         
-         try {
-              conn = ds.getConnection();
-              
-              String sql = " select email "
-                         + " from tbl_user "
-                         + " where email = ? ";
-              
-              pstmt = conn.prepareStatement(sql);
-              pstmt.setString(1, aes.encrypt(email));
-              
-              rs = pstmt.executeQuery();
-              
-              isExists = rs.next(); // 행이 있으면 true  (중복된 email) 
-                                    // 행이 없으면 false (사용가능한 email) 
-            
-         } catch(GeneralSecurityException | UnsupportedEncodingException e) {
-              e.printStackTrace();
-         } finally {
-              close();
-         }
-         
-         return isExists;      
-      }// end of public boolean emailDuplicateCheck(String email) throws SQLException-------
-
-
-      
-      // 로그인 처리 
-      @Override
-      public MemberVO login(Map<String, String> paraMap) throws SQLException {
+	   boolean isExists = false;
+	   
+	   try {
+		   conn = ds.getConnection();
+		   
+		   String sql = " select email "
+				   		+ " from tbl_user "
+				   		+ " where email = ? ";
+		   
+		   pstmt = conn.prepareStatement(sql);
+		   pstmt.setString(1, aes.encrypt(email));
+		   
+		   rs = pstmt.executeQuery();
+		   
+		   isExists = rs.next();	// 행이 있으면 true  (중복된 email) 
+		   							// 행이 없으면 false (사용가능한 email) 
+		   
+	   } catch(GeneralSecurityException | UnsupportedEncodingException e) {
+		   e.printStackTrace();
+	   } finally {
+		   close();
+	   }
+	   
+	   return isExists;      
+   }// end of public boolean emailDuplicateCheck(String email) throws SQLException-------
+   
+   // 로그인 처리 
+   @Override
+   public MemberVO login(Map<String, String> paraMap) throws SQLException {
 
           MemberVO member = null;
 
@@ -403,29 +401,31 @@ public class MemberDAO_imple implements MemberDAO {
       }// end of public int pwdUpdate(Map<String, String> paraMap) throws SQLException----------------
 
 
-      //입력한 비밀번호가 맞는지 확인하는 메소드
+      //  	암호화된 입력받은 비밀번호를 유저테이블의 비밀번호와 비교
       @Override
-      public boolean checkPassword(String user_id, String currentPwd) throws SQLException {
-         boolean isExists = false;
+      public boolean checkPassword(String user_id, String currentPwd) throws SQLException
+      {
+    	  boolean isExists = false;
+    	  
+    	  try
+    	  {
+    		  conn = ds.getConnection();
 
-         try {
-            conn = ds.getConnection();
-
-            String sql = " select   * " + " from      tbl_user " + " where      user_id = ? and user_pwd = ? ";
-
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1,   user_id );
-            pstmt.setString(2, Sha256.encrypt(currentPwd));
-
-            rs = pstmt.executeQuery();
-
-            isExists = rs.next(); // 행이 있으면 true (기존과 동일한 pwd)
-            // 행이 없으면 false (기존과 상이한 pwd > 사용가능한 pwd)
-         } finally {
-            close();
-         }
-
-         return isExists;
+    		  String sql = " select * from tbl_user where user_id = ? and user_pwd = ? ";
+    		  
+    		  pstmt = conn.prepareStatement(sql);
+    		  pstmt.setString(1, user_id);
+    		  pstmt.setString(2, currentPwd);
+    		  
+    		  rs = pstmt.executeQuery();
+    		  
+    		  isExists = rs.next();
+    	  }
+    	  finally
+    	  {
+    		  close();
+    	  }
+    	  return isExists;
       }
 
 
@@ -553,10 +553,10 @@ public class MemberDAO_imple implements MemberDAO {
               conn = ds.getConnection();
 
               // 2) tbl_user 총 결제금액·포인트 업데이트
-              String updateSql   = " update   tbl_user "
-                             + " set      total_payment = total_payment + ?, "
-                             + "       point = point - ? + ? "
-                             + " where   user_id = ? ";
+              String updateSql	= " update	tbl_user "
+                             	+ " set		total_payment = total_payment + ?, "
+                             	+ " 		point = point - ? + ? "
+                             	+ " where	user_id = ? ";
               pstmt = conn.prepareStatement(updateSql);
               pstmt.setInt(1, finalPay);      // 결제금액만큼 total_payment 증가
               pstmt.setInt(2, used_point);   // 사용 포인트 차감
@@ -582,7 +582,6 @@ public class MemberDAO_imple implements MemberDAO {
               // 사용한 자원 모두 반납
               close();
           }
-         
       }
       
 
@@ -905,21 +904,30 @@ public class MemberDAO_imple implements MemberDAO {
 			 return totalCount;
 		}
 
+		//	입력한 비밀번호가 해당 유저의 비밀번호와 일치할 경우 탈퇴여부 변경
 		@Override
-		public int deletecomple(String user_id) throws SQLException {
+		public int deletecomple(String user_id) throws SQLException
+		{	
+			int n = 0;
 			
-			return 0;
+			try
+			{
+				conn = ds.getConnection();
+				
+				String sql = " update tbl_user set is_withdrawn = 1 where user_id = ? ";
+				
+				pstmt = conn.prepareStatement(sql);
+				
+				pstmt.setString(1, user_id);
+				
+				n = pstmt.executeUpdate();
+			}
+			finally
+			{
+				close();
+			}
+			return n;
 		}
-
-		
-
-
-	
-
-		
-		
-		
-
 
       @Override
       public int getEarnedPoint(String user_id, int finalPay) throws SQLException
@@ -988,19 +996,22 @@ public class MemberDAO_imple implements MemberDAO {
 		{
 	        conn = ds.getConnection();
 
-	        String sql = "UPDATE tbl_user " +
-	                "SET point = point + ? - ?, " +
-	                "    total_payment = total_payment - ? " +
-	                "WHERE user_id = ?";
-
-	   pstmt = conn.prepareStatement(sql);
-	   pstmt.setInt(1, used_point);
-	   pstmt.setInt(2, earned_point);
-	   pstmt.setInt(3, paid_amount);
-	   pstmt.setString(4, user_id);
+	        String sql =	" update	tbl_user " +
+	                		" set		point = point + ? - ?, " +
+	                		" 			total_payment = total_payment - ? " +
+	                		" where		user_id = ? ";
+	        
+	        pstmt = conn.prepareStatement(sql);
+	        
+	        pstmt.setInt(1, used_point);
+	        pstmt.setInt(2, earned_point);
+	        pstmt.setInt(3, paid_amount);
+	        pstmt.setString(4, user_id);
 
 	        pstmt.executeUpdate();
-	    } finally {
+		}
+		finally
+		{
 	        close();
 	    }
 	}
@@ -1014,41 +1025,44 @@ public class MemberDAO_imple implements MemberDAO {
 	    {
 	    	conn = ds.getConnection();
 
-	        // 1. 해당 유저의 누적 결제 금액 조회
-	        String sql1 = "SELECT total_payment FROM tbl_user WHERE user_id = ?";
+	        //	해당 유저의 누적 결제 금액 조회
+	        String sql1 = " select total_payment from tbl_user where user_id = ? ";
 	        pstmt = conn.prepareStatement(sql1);
 	        pstmt.setString(1, user_id);
 	        rs = pstmt.executeQuery();
 
 	        int totalPayment = 0;
-	        if (rs.next()) {
+	        if (rs.next())
+	        {
 	            totalPayment = rs.getInt("total_payment");
 	        }
 	        rs.close();
 	        pstmt.close();
 
-	        // 2. 누적결제금액 기준으로 가장 높은 등급 번호 가져오기
-	        String sql2 = "SELECT grade_no FROM tbl_user_grade WHERE GRADE_CUTOFF <= ? " +
-	                      "ORDER BY GRADE_CUTOFF DESC FETCH FIRST 1 ROWS ONLY";
+	        //	누적결제금액 기준으로 가장 높은 등급 번호 가져오기
+	        String sql2 = " select		grade_no from tbl_user_grade where grade_cutoff <= ? " +
+	                      " order by	grade_cutoff desc fetch first 1 rows only ";
 	        pstmt = conn.prepareStatement(sql2);
 	        pstmt.setInt(1, totalPayment);
 	        rs = pstmt.executeQuery();
 
 	        int newGradeNo = 1;  // 기본등급 (예: 브론즈)
-	        if (rs.next()) {
+	        if (rs.next())
+	        {
 	            newGradeNo = rs.getInt("grade_no");
 	        }
 	        rs.close();
 	        pstmt.close();
 
-	        // 3. 회원 테이블에 등급 업데이트
+	        //	회원 테이블에 등급 업데이트
 	        String sql3 = "UPDATE tbl_user SET fk_grade_no = ? WHERE user_id = ?";
 	        pstmt = conn.prepareStatement(sql3);
 	        pstmt.setInt(1, newGradeNo);
 	        pstmt.setString(2, user_id);
 	        pstmt.executeUpdate();
 	    }
-	    finally {
+	    finally
+	    {
 	        close();
 	    }
 	}

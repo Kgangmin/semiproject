@@ -46,8 +46,6 @@ public class PaymentComplete extends AbstractController {
         ReservationVO rv = new ReservationVO();
         rv.setFk_user_id(user.getUser_id());
         rv.setFk_room_no(roomNo);
-        rv.setReserv_payment(finalPay);
-        rv.setSpent_point(used_point);
         rv.setCheckin_date(checkin);
         rv.setCheckout_date(checkout);
         rv.setImp_uid(imp_uid);

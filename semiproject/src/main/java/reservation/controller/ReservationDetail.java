@@ -1,16 +1,11 @@
 package reservation.controller;
 
-import java.util.List;
-
 import common.controller.AbstractController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import member.domain.MemberVO;
 import myshop.domain.ReservationVO;
-import myshop.domain.RoomVO;
-import myshop.domain.StayVO;
-import myshop.domain.WishVo;
 import myshop.model.ReservationDAO;
 import myshop.model.ReservationDAO_imple;
 import myshop.model.RoomDAO;

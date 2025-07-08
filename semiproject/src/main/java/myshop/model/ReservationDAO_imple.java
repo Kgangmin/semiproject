@@ -75,16 +75,14 @@ public class ReservationDAO_imple implements ReservationDAO {
 
 	        // 3) 예약 정보 INSERT
 	        String insertSql = " INSERT INTO tbl_reservation " +
-	        				   " (reserv_no, fk_user_id, fk_room_no, reserv_payment, spent_point, checkin_date, checkout_date) " +
-	        				   " VALUES (?, ?, ?, ?, ?, TO_DATE(?,'YYYY-MM-DD'), TO_DATE(?,'YYYY-MM-DD')) ";
+	        				   " (reserv_no, fk_user_id, fk_room_no, checkin_date, checkout_date) " +
+	        				   " VALUES (?, ?, ?, TO_DATE(?,'YYYY-MM-DD'), TO_DATE(?,'YYYY-MM-DD')) ";
 	        pstmt = conn.prepareStatement(insertSql);
 	        pstmt.setString(1, newNo);
 	        pstmt.setString(2, rv.getFk_user_id());
 	        pstmt.setString(3, rv.getFk_room_no());
-	        pstmt.setInt   (4, rv.getReserv_payment());
-	        pstmt.setInt   (5, rv.getSpent_point());
-	        pstmt.setString(6, rv.getCheckin_date());
-	        pstmt.setString(7, rv.getCheckout_date());
+	        pstmt.setString(4, rv.getCheckin_date());
+	        pstmt.setString(5, rv.getCheckout_date());
 	        pstmt.executeUpdate();
 
 	    } finally {
@@ -125,8 +123,6 @@ public class ReservationDAO_imple implements ReservationDAO {
 	            	 rvo.setReserv_no(rs.getString("reserv_no"));
 	            	 rvo.setFk_user_id(rs.getString("fk_user_id"));
 	            	 rvo.setFk_room_no(rs.getString("fk_room_no"));
-	            	 rvo.setReserv_payment(rs.getInt("reserv_payment"));
-	            	 rvo.setSpent_point(rs.getInt("spent_point"));
 	            	 rvo.setCheckin_date(rs.getString("checkin_date"));
 	            	 rvo.setCheckout_date(rs.getString("checkout_date"));
 	            	 rvo.setReserv_date(rs.getString("reserv_date"));
@@ -182,7 +178,6 @@ public class ReservationDAO_imple implements ReservationDAO {
 	                 rvo.setReserv_no(rs.getString("reserv_no"));
 	                 rvo.setCheckin_date(rs.getString("checkin_date"));
 	                 rvo.setCheckout_date(rs.getString("checkout_date"));
-	                 rvo.setReserv_payment(rs.getInt("reserv_payment"));
 	                 rvo.setReview_written(rs.getString("review_no") != null); // 후기 작성 여부
 	                 
 	                 Date checkout = rs.getDate("checkout_date");
@@ -226,8 +221,6 @@ public class ReservationDAO_imple implements ReservationDAO {
 		                    "       r.reserv_date, " +
 		                    "       r.checkin_date, " +
 		                    "       r.checkout_date, " +
-		                    "       r.reserv_payment, " +
-		                    "       r.spent_point, " +
 		                    "       s.stay_name, " +
 		                    "       s.stay_thumbnail, " +
 		                    "       s.stay_tel, " +
@@ -260,8 +253,6 @@ public class ReservationDAO_imple implements ReservationDAO {
 		                rvo.setReserv_date(rs.getString("reserv_date"));
 		                rvo.setCheckin_date(rs.getString("checkin_date"));
 		                rvo.setCheckout_date(rs.getString("checkout_date"));
-		                rvo.setReserv_payment(rs.getInt("reserv_payment"));
-		                rvo.setSpent_point(rs.getInt("spent_point"));
 		                rvo.setReview_written(rs.getString("review_no") != null);  // boolean 처리
 		                rvo.setImp_uid(rs.getString("imp_uid"));
 
@@ -333,7 +324,6 @@ public class ReservationDAO_imple implements ReservationDAO {
 	               rvo.setReserv_no(rs.getString("reserv_no"));
 	               rvo.setCheckin_date(rs.getString("checkin_date"));
 	               rvo.setCheckout_date(rs.getString("checkout_date"));
-	               rvo.setReserv_payment(rs.getInt("reserv_payment"));
 	               rvo.setReview_written(rs.getString("review_no") != null);
 	               rvo.setImp_uid(rs.getString("imp_uid"));
 
@@ -397,7 +387,8 @@ public class ReservationDAO_imple implements ReservationDAO {
 	@Override
 	public void insertPaymentHistory(PaymentVO pvo) throws SQLException {
 	    try {
-
+	    	conn = ds.getConnection();
+	    	
 	        // 결제 ID 채번
 	        String sql_seq = "SELECT 'PM' || LPAD(seq_paymentid.nextval, 5, '0') FROM dual";
 	        pstmt = conn.prepareStatement(sql_seq);
@@ -502,18 +493,11 @@ public class ReservationDAO_imple implements ReservationDAO {
            String sql = " SELECT "
            		   + "  c.stay_category_name  AS cname, "
            		   + "  COUNT(*)         AS cnt, "
-           		   + "  SUM(r.reserv_payment)         AS sumpay, "
-           		   + "  ROUND( "
-           		   + "    SUM(r.reserv_payment) "
-           		   + "    / (SELECT SUM(reserv_payment) FROM tbl_reservation) "
-           		   + "    * 100, 2 "
-           		   + "  ) AS sumpay_pct "
            		   + " FROM tbl_reservation r "
            		   + " JOIN tbl_room            rm ON r.fk_room_no = rm.room_no "
            		   + " JOIN tbl_stay            s  ON rm.fk_stay_no = s.stay_no "
            		   + " JOIN tbl_stay_category   c  ON s.fk_stay_category_no = c.stay_category_no "
-           		   + " GROUP BY c.stay_category_name "
-           		   + " ORDER BY SUM(r.reserv_payment) DESC ";
+           		   + " GROUP BY c.stay_category_name ";
            		
            
            pstmt = conn.prepareStatement(sql);
@@ -522,8 +506,6 @@ public class ReservationDAO_imple implements ReservationDAO {
            	CategoryStatsVO vo = new CategoryStatsVO();
                vo.setCname(rs.getString("cname"));
                vo.setCnt(rs.getInt("cnt"));
-               vo.setSumpay(rs.getLong("sumpay"));
-               vo.setSumpayPct(rs.getDouble("sumpay_pct"));
                list.add(vo);
            }
            return list;
@@ -544,7 +526,6 @@ public class ReservationDAO_imple implements ReservationDAO {
            String sql = " SELECT "
            		+ "    r.region, "
            		+ "    NVL(t.cnt, 0)    AS cnt, "
-           		+ "    NVL(t.sumpay, 0) AS sumpay "
            		+ " FROM ( "
            		+ "    SELECT '서울'     AS region FROM DUAL UNION ALL "
            		+ "    SELECT '경기'     FROM DUAL UNION ALL "
@@ -576,7 +557,6 @@ public class ReservationDAO_imple implements ReservationDAO {
            		+ "            ELSE '기타' "
            		+ "        END AS region, "
            		+ "        COUNT(*)               AS cnt, "
-           		+ "        SUM(r.reserv_payment)  AS sumpay "
            		+ "    FROM tbl_reservation r "
            		+ "    JOIN tbl_room       rm ON r.fk_room_no = rm.room_no "
            		+ "    JOIN tbl_stay       s  ON rm.fk_stay_no = s.stay_no "
@@ -611,7 +591,6 @@ public class ReservationDAO_imple implements ReservationDAO {
                RegionStatsVO vo = new RegionStatsVO();
                vo.setRegion(rs.getString("region"));
                vo.setCnt(rs.getInt   ("cnt"));
-               vo.setSumpay(rs.getLong("sumpay"));
                list.add(vo);
            }
            return list;

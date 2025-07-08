@@ -36,7 +36,7 @@ public interface MemberDAO {
    //   비밀번호 변경하기
    int pwdUpdate(Map<String, String> paraMap) throws SQLException;
 
-   //   입력한 비밀번호가 맞는지 확인하는 메소드
+   //	암호화된 입력받은 비밀번호를 유저테이블의 비밀번호와 비교
    boolean checkPassword(String user_id, String currentPwd) throws SQLException;
 
    //   회원 존재 여부를 확인하는 메소드
@@ -84,6 +84,7 @@ public interface MemberDAO {
 	// 유저 포인트 증감 총내역 개수
 	int getPointListTotalCount(String userid) throws SQLException;
 
+	//	입력한 비밀번호가 해당 유저의 비밀번호와 일치할 경우 탈퇴여부 변경
 	int deletecomple(String user_id) throws SQLException;
 }
 

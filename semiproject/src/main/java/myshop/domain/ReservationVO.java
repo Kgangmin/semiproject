@@ -1,14 +1,10 @@
 package myshop.domain;
 
-import member.domain.MemberVO;
-
 public class ReservationVO {
 
 	private String reserv_no;		// 예약 번호
 	private String fk_user_id;		// 회원아이디
 	private String fk_room_no;		// 객실 번호
-	private int reserv_payment;		// 결제 총액(1박당가격*일수)
-	private int spent_point;		// 결제 포인트
     private String checkin_date;	// 체크인날짜
     private String checkout_date;	// 체크아웃 날짜
     private String reserv_date;		// 예약한 날짜(결제한날짜)
@@ -40,22 +36,6 @@ public class ReservationVO {
 	
 	public void setFk_room_no(String fk_room_no) {
 		this.fk_room_no = fk_room_no;
-	}
-	
-	public int getReserv_payment() {
-		return reserv_payment;
-	}
-	
-	public void setReserv_payment(int reserv_payment) {
-		this.reserv_payment = reserv_payment;
-	}
-	
-	public int getSpent_point() {
-		return spent_point;
-	}
-	
-	public void setSpent_point(int spent_point) {
-		this.spent_point = spent_point;
 	}
 	
 	public String getCheckin_date() {
