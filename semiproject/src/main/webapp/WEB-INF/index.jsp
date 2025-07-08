@@ -9,6 +9,17 @@
 %>
 
 <jsp:include page="header1.jsp" />
+
+<script>
+	window.addEventListener('load', function()
+	{//	페이지가 강제로 로드됐을 때 한번 새로고침 시도
+		if (!performance || performance.navigation.type !== 1)
+		{
+			location.reload(true);
+		}
+	});
+</script>
+
 <style>
 .card-img-top {
   width: 100%;        /* 가로는 카드 너비에 딱 맞추고 */

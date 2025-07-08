@@ -1,16 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
-    String ctxPath = request.getContextPath();
-    String userid = (String) session.getAttribute("userid");
+    String ctxPath	= request.getContextPath();
 %>
 
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
     <meta charset="UTF-8" />
+    
     <title>회원 탈퇴</title>
     
-     <!-- Optional JavaScript -->
+	<!-- Optional JavaScript -->
   <script src="<%=ctxPath%>/js/jquery-3.7.1.min.js"></script>
   <script src="<%=ctxPath%>/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js"></script>
   
@@ -116,7 +117,7 @@
 
 <div class="withdraw-container">
     <h2>회원 탈퇴</h2>
-    <form name="mbwithdraw" action="<%= ctxPath %>/withdraw.hb" method="post" >
+    <form name="mbwithdraw" action="<%= ctxPath %>/withdrawComplete.hb" method="post" >
         <label for="userid">아이디</label>
         <input type="text" id="userid" name="userid" value="${loginUser.user_id}" readonly />
 
@@ -124,36 +125,31 @@
         <input type="password" id="userpwd" name="userpwd" placeholder="비밀번호를 입력하세요"  />
 
         <div class="btn-group">
-            <button type="button" name='changePwd' class="btn-delete">탈퇴하기</button>
+            <button type="button" name='withdraw' class="btn-delete">탈퇴하기</button>
             <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
         </div>
     </form>
 </div>
 
-<script>
-$(function(){
-	$("button[name='changePwd']").click(function() {
-		const Pwd = $("#userpwd").val().trim();
-    // 필수입력 확인
-    if (Pwd === "" ) {
-        alert("모든 항목을 입력해주세요.");
-        return;
-    }
-    //  비밀번호 유효성 검사
-    const regExp_pwd = new RegExp(/^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9]).*$/g); 
-    if (!regExp_pwd.test(Pwd)) {
-        alert("숫자/문자/특수문자 포함 형태의 8~15자리 이내의 암호로 입력해주세요")
-        return;
-    }
+<script type="text/javascript">
 
-    // 제출
-    $("form[name='mbwithdraw']").submit();
+$(function()
+{
+	//	탈퇴하기 버튼을 눌렀을 경우
+	$("button[name='withdraw']").click(function()
+	{
+		const pwd = $("#userpwd").val().trim();
+    	//	필수입력 확인
+		if (pwd === "")
+		{
+			alert("모든 항목을 입력해주세요.");
+			return;
+		}
+
+		//	제출
+		$("form[name='mbwithdraw']").submit();
+	});
 });
-
-});
-
-
-    
    
 </script>
 

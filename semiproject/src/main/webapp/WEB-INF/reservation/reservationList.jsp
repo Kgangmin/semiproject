@@ -161,7 +161,7 @@
                                 체크인: ${fn:substring(rvo.checkin_date, 0, 10)} ~
                                 체크아웃: ${fn:substring(rvo.checkout_date, 0, 10)}
                             </div>
-                            <div>총 결제액: <fmt:formatNumber value="${rvo.reserv_payment}" pattern="#,###" />원</div>
+                            <div>총 결제액: <fmt:formatNumber value="${rvo.paid_amount}" pattern="#,###" />원</div>
                         </div>
                     </div>
                 </a>
