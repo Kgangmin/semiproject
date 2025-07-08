@@ -30,16 +30,13 @@ public class Dormant extends AbstractController {
         String user_id = request.getParameter("user_id");
         String login_ip = request.getRemoteAddr();
         
-        if (user_id == null) user_id = "";
-        if (user_name == null) user_name = "";
-        if (mobile == null) mobile = "";
-        
 
         if ("send".equals(action)) {  // 인증번호 발송버튼을 눌렀을 때
 
-            
+     
+        	
             //  입력값 체크
-            if (user_name.trim().isEmpty() || mobile.trim().isEmpty() || user_id.trim().isEmpty()) {
+            if (user_name.isEmpty() || mobile.isEmpty() || user_id.isEmpty()) {
                 request.setAttribute("message", "아이디, 성명, 전화번호를 모두 입력하세요.");
                 request.setAttribute("loc", "javascript:history.back()");
                 session.removeAttribute("certStep");
@@ -64,24 +61,26 @@ public class Dormant extends AbstractController {
             //  인증번호 생성 (5자리 랜덤 숫자)
             String certCode = generateRandomCode(5);
 
-            String apiKey = "NCST6ZPDCKSVOO4N";
-            String apiSecret = "UM0BPBESACWLATRA2A34GGSLLGR8ZISL";
+            String apiKey = "NCSJ6QXRVERU20OJ";
+            String apiSecret = "WMURKQAHWPPBXYA5SKBIJZR7BWEXLSD5";
             
             Message coolsms = new Message(apiKey, apiSecret);
             
             // 보내는 메시지 정보
             HashMap<String, String> params = new HashMap<String, String>();
             params.put("to", mobile); // 수신자 번호
-            params.put("from", "01032453977"); // 등록된 발신번호
+            params.put("from", "01064276213"); // 등록된 발신번호
             params.put("type", "SMS");
             params.put("text", "[HBShop]인증번호는 [" + certCode + "] 입니다.");
             
             try {
-                JSONObject result = (JSONObject) coolsms.send(params);
-            //    System.out.println(result.toString());
+                 coolsms.send(params);
             } catch (CoolsmsException e) {
-            //    System.out.println(e.getMessage());
-            //    System.out.println(e.getCode());
+                request.setAttribute("message", "인증번호 발송에 실패했습니다. 다시 시도해주세요.");
+                request.setAttribute("loc", "javascript:history.back()");
+                super.setRedirect(false);
+                super.setViewPage("/WEB-INF/msg.jsp");
+                return;
             }
 
             //  세션에 인증 상태 저장
@@ -136,9 +135,6 @@ public class Dormant extends AbstractController {
                 super.setRedirect(false);
                 super.setViewPage("/WEB-INF/msg.jsp");
                 return;
-            }
-            else {
-            	
             }
 
             // 세션에서 인증 관련 데이터 삭제

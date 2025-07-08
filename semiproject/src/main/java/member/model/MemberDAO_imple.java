@@ -17,9 +17,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import jakarta.servlet.jsp.tagext.TryCatchFinally;
 import member.domain.MemberVO;
-import myshop.domain.ReservationVO;
 import util.security.AES256;
 import util.security.SecretMyKey;
 import util.security.Sha256;
@@ -186,6 +184,7 @@ public class MemberDAO_imple implements MemberDAO {
           // System.out.println("[DEBUG] VO 최종 is_active 값: " + member.getIs_active());
           return member;
       } // end of public MemberVO login(Map<String, String> paraMap) throws SQLException-----
+
 
 
       
@@ -598,8 +597,8 @@ public class MemberDAO_imple implements MemberDAO {
               
               String sql = " select user_name, mobile, email, fk_grade_no, user_id "
                          + " from tbl_user "
-                         + " where user_id != 'admin' ";
-
+                         + " where access_level != 1 ";
+              				// 회원 목록에 관리자 권한을 가진 사람은 조회되지 않게 변경
               // 검색어가 있으면 조건 추가
               if (searchWord != null && !searchWord.trim().isEmpty()) {
                   if ("user_name".equals(searchType)) {  
@@ -1066,6 +1065,44 @@ public class MemberDAO_imple implements MemberDAO {
 	        close();
 	    }
 	}
+
+
+	// 회원탈퇴유무 알아오기
+	@Override
+	public boolean isWithdrawnUser(String user_id, String user_pwd) throws SQLException {
+		
+		boolean isWithdrawn = false;
+		
+		
+		try {
+            conn = ds.getConnection();
+            
+            String sql = " select is_withdrawn "
+                       + " from tbl_user "
+                       + " where user_id = ? and user_pwd = ? ";
+            
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, user_id);
+            pstmt.setString(2, Sha256.encrypt(user_pwd));
+            
+            rs = pstmt.executeQuery();
+            
+            if(rs.next()) {
+            	int is_withdrawn = rs.getInt("is_withdrawn");
+            	
+            	if(is_withdrawn == 0) {
+            		isWithdrawn = false;
+            	}
+            	else {
+            		isWithdrawn = true;
+            	}
+            }
+          
+       } finally {
+          close();
+       }
+		return isWithdrawn;
+	}// end of public boolean isWithdrawnUser(Map<String, String> paraMap) throws SQLException
 }
 
 

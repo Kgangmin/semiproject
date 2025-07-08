@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import member.domain.MemberVO;
-import myshop.domain.ReservationVO;
 
 public interface MemberDAO {
 
@@ -86,6 +85,9 @@ public interface MemberDAO {
 
 	//	입력한 비밀번호가 해당 유저의 비밀번호와 일치할 경우 탈퇴여부 변경
 	int deletecomple(String user_id) throws SQLException;
+
+	// 회원탈퇴유무 알아오기
+	boolean isWithdrawnUser(String user_id, String user_pwd) throws SQLException;
 }
 
 
