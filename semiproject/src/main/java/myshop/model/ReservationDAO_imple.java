@@ -323,7 +323,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 	               sql.append("AND p.status = 'cancelled' ");
 	           }
 
-	           sql.append("ORDER BY r.checkin_date DESC ")
+	           sql.append("ORDER BY r.checkin_date desc ")
 	              .append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
 	           pstmt = conn.prepareStatement(sql.toString());
