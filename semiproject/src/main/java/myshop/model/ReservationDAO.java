@@ -4,7 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+
 import myshop.domain.PaymentVO;
+import myshop.domain.CategoryStatsVO;
+import myshop.domain.RegionStatsVO;
 import myshop.domain.ReservationVO;
 
 public interface ReservationDAO {
@@ -20,6 +23,7 @@ public interface ReservationDAO {
 
 	// 모든 예약정보와 객실 숙소 정보를 가져오는 메소드
 	ReservationVO getReservationDetail(String reserv_no) throws SQLException;
+
 	//페이징 처리 한 모든 예약보기
 	public List<ReservationVO> getReservationListByPaging(String userid, String status, int offset, int size) throws SQLException;
 	// 모든예약의 개수를 구하는 메소드
@@ -33,5 +37,13 @@ public interface ReservationDAO {
 
 	//	결제내역 상태 'cancelled' 및 취소시간 업데이트
 	int updatePaymentStatusToCancelled(String imp_uid, String cancel_time) throws SQLException;
+
+
+    // 각 카테고리별 예약 건수·총 결제액 집계 
+    List<CategoryStatsVO> getCategoryReservationStats() throws SQLException;
+    
+    // 지역별(서울, 경기, …, 기타) 예약 건수·총 결제액 집계
+    List<RegionStatsVO>   getRegionReservationStats()   throws SQLException;
+	
 
 }
