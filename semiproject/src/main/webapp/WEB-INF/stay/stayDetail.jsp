@@ -209,6 +209,12 @@
       level: 3
     };
     var map = new kakao.maps.Map(container, option);
+    
+    var mapTypeControl = new kakao.maps.MapTypeControl();
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+    
+    var zoomControl = new kakao.maps.ZoomControl();
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
     new kakao.maps.Marker({
       position: map.getCenter(),
