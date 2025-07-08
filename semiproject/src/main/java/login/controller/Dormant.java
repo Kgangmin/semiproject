@@ -30,16 +30,13 @@ public class Dormant extends AbstractController {
         String user_id = request.getParameter("user_id");
         String login_ip = request.getRemoteAddr();
         
-        if (user_id == null) user_id = "";
-        if (user_name == null) user_name = "";
-        if (mobile == null) mobile = "";
-        
 
         if ("send".equals(action)) {  // 인증번호 발송버튼을 눌렀을 때
 
-            
+     
+        	
             //  입력값 체크
-            if (user_name.trim().isEmpty() || mobile.trim().isEmpty() || user_id.trim().isEmpty()) {
+            if (user_name.isEmpty() || mobile.isEmpty() || user_id.isEmpty()) {
                 request.setAttribute("message", "아이디, 성명, 전화번호를 모두 입력하세요.");
                 request.setAttribute("loc", "javascript:history.back()");
                 session.removeAttribute("certStep");

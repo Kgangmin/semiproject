@@ -34,7 +34,23 @@ public class Login extends AbstractController {
             String user_id = request.getParameter("user_id");
             String user_pwd = request.getParameter("user_pwd");
             String login_ip = request.getRemoteAddr();
+            
+            boolean isWithdrawn = mdao.isWithdrawnUser(user_id, user_pwd);
 
+        	if(isWithdrawn) {
+        	    // 탈퇴회원 메시지 출력
+        	    String message = "탈퇴한 회원입니다. 회원가입 후 이용해주세요.";
+        	    String loc = "javascript:history.back()";
+
+        	    request.setAttribute("message", message);
+        	    request.setAttribute("loc", loc);
+
+        	    super.setRedirect(false);
+        	    super.setViewPage("/WEB-INF/msg.jsp");
+        	    return;
+        	}
+            
+            
             // 입력받은 값을 Map 형태로 저장
             Map<String, String> paraMap = new HashMap<>();
             paraMap.put("user_id", user_id);
@@ -47,21 +63,8 @@ public class Login extends AbstractController {
             if (loginUser != null) {
             	
             	loginUser.setAccess_level(access_level);
-           /* 	
-            	if (loginUser.getIs_withdrawn() == 1) {
-                    String message = "탈퇴한 회원은 로그인이 불가합니다.";
-                    String loc = "javascript:history.back();";
-
-                    request.setAttribute("message", message);
-                    request.setAttribute("loc", loc);
-
-                    super.setRedirect(false);
-                    super.setViewPage("/WEB-INF/msg.jsp");
-
-                    return; // 메소드 종료
-                }
-                  
-           */       
+           	
+                               
                 if (1 == loginUser.getIs_active()) {            	    
             		
             	    String message = "로그인을 한지 1년이 지나서 휴면상태로 되었습니다.휴면을 풀어주는 페이지로 이동합니다.";
@@ -96,7 +99,7 @@ public class Login extends AbstractController {
 	                super.setViewPage(request.getContextPath() + "/index.hb");
                 }
             }
-            else {
+            else{
                 // 로그인 실패 시 메시지와 함께 다시 로그인 페이지로 이동
                 String message = "아이디 또는 비밀번호가 틀렸습니다.";
                 String loc = "javascript:history.back()";
