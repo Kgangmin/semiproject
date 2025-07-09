@@ -945,25 +945,53 @@ public class MemberDAO_imple implements MemberDAO {
 
     //	유저 정보 결제전으로 원복
 	@Override
-	public void rollbackUserPointsAndTotalPayment(String user_id, int used_point, int earned_point, int paid_amount, int total_payment_stamp) throws SQLException
+	public void rollbackUserPointsAndTotalPayment(String user_id, int used_point, int earned_point, int paid_amount, int total_payment_stamp, String imp_uid) throws SQLException
 	{
 		try
 		{
 	        conn = ds.getConnection();
 
-	        String sql =	" update	tbl_user " +
-	                		" set		point = point + ? - ?, " +
-	                		" 			total_payment = total_payment - ? " +
-	                		" where		user_id = ? ";
-	        
+	        //	1. processed 여부 확인
+	        String sql = " select processed from tbl_payment where imp_uid = ?";
 	        pstmt = conn.prepareStatement(sql);
-	        
-	        pstmt.setInt(1, used_point);
-	        pstmt.setInt(2, earned_point);
-	        pstmt.setInt(3, paid_amount);
-	        pstmt.setString(4, user_id);
+	        pstmt.setString(1, imp_uid);
+	        rs = pstmt.executeQuery();
 
-	        pstmt.executeUpdate();
+	        boolean isProcessed = false;
+	        if (rs.next())
+	        {
+	            isProcessed = rs.getInt("processed") == 1;
+	        }
+
+	        close();
+	        
+	        //	2. processed 가 true인 경우에만 롤백 수행
+	        if (isProcessed)
+	        {
+	            conn = ds.getConnection();
+	            String updateSql = " update	tbl_user " +
+	                               " set	point = point + ?, " +
+	                               " 		total_payment = total_payment - ? " +
+	                               " where	user_id = ? ";
+	            pstmt = conn.prepareStatement(updateSql);
+	            pstmt.setInt(1, used_point - earned_point);  // 사용 포인트 반환, 적립 포인트 회수
+	            pstmt.setInt(2, paid_amount);
+	            pstmt.setString(3, user_id);
+	            pstmt.executeUpdate();
+	            pstmt.close();
+	        }
+	        else
+	        {//	적립이 아직 안 되었으면 earned_point 회수 없이 사용 포인트만 복원
+	            conn = ds.getConnection();
+	            String updateSql = " update	tbl_user " +
+	                               " set	point = point + ? " +
+	                               " where	user_id = ? ";
+	            pstmt = conn.prepareStatement(updateSql);
+	            pstmt.setInt(1, used_point);
+	            pstmt.setString(2, user_id);
+	            pstmt.executeUpdate();
+	            pstmt.close();
+	        }
 		}
 		finally
 		{
