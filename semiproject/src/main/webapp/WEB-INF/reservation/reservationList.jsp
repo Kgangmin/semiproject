@@ -167,10 +167,18 @@
                 </a>
 
                 <div class="reservation-actions">
+                    <c:if test="${rvo.reserv_status == '진행중'}">
                     <button class="btn-action"
                         onclick="location.href='<%= ctxPath%>/reservationDetail.hb?reserv_no=${rvo.reserv_no}&user_id=${loginUser.user_id}'">
                         예약 확인/취소
                     </button>
+                    </c:if>
+                    <c:if test="${rvo.reserv_status == '완료'}">
+                    <button class="btn-action"
+                        onclick="location.href='<%= ctxPath%>/reservationDetail.hb?reserv_no=${rvo.reserv_no}&user_id=${loginUser.user_id}'">
+                        예약 확인
+                    </button>
+                    </c:if>
                     <c:choose>
                         <c:when test="${rvo.review_written}">
                             <button class="btn-action disabled">✔ 후기 작성 완료</button>
@@ -184,8 +192,11 @@
                                 </form>
                             </c:if>
                             <c:if test="${not rvo.canWriteReview}">
+                                <c:if test="${rvo.reserv_status == '진행중'}">
                                 <button class="btn-action disabled">체크아웃 이후 작성 가능</button>
+                                </c:if>
                             </c:if>
+                          	
                         </c:otherwise>
                     </c:choose>
                 </div>

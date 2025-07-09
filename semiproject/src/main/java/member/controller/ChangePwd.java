@@ -51,7 +51,7 @@ public class ChangePwd extends AbstractController {
 			
 			request.setAttribute("message", message);
 			request.setAttribute("loc", loc);
-			
+			request.setAttribute("popup_close", true);
 			super.setRedirect(false);
 			super.setViewPage("/WEB-INF/msg.jsp");
 		}
