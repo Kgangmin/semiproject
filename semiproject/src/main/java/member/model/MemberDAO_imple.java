@@ -414,7 +414,8 @@ public class MemberDAO_imple implements MemberDAO {
     		  
     		  pstmt = conn.prepareStatement(sql);
     		  pstmt.setString(1, user_id);
-    		  pstmt.setString(2, currentPwd);
+    		  pstmt.setString(2, Sha256.encrypt(currentPwd));
+    		  
     		  
     		  rs = pstmt.executeQuery();
     		  
