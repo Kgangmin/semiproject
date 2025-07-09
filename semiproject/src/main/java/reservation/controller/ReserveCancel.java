@@ -121,7 +121,7 @@ public class ReserveCancel extends AbstractController
                     int total_payment_stamp = pmvo.getTotal_payment_stamp();
                     String user_id = pmvo.getFk_user_id();
 
-                    mdao.rollbackUserPointsAndTotalPayment(user_id, used_point, earned_point, paid_amount, total_payment_stamp);
+                    mdao.rollbackUserPointsAndTotalPayment(user_id, used_point, earned_point, paid_amount, total_payment_stamp, imp_uid);
                     mdao.recalcUserGrade(user_id);
 
                     jsonResponse.put("status", "success");

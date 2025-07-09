@@ -66,7 +66,7 @@ public interface MemberDAO {
    int getCurrentTotalPayment(String user_id) throws SQLException;
 
    //	유저 정보 결제전으로 원복
-   void rollbackUserPointsAndTotalPayment(String user_id, int used_point, int earned_point, int paid_amount, int total_payment_stamp) throws SQLException;
+   void rollbackUserPointsAndTotalPayment(String user_id, int used_point, int earned_point, int paid_amount, int total_payment_stamp, String imp_uid) throws SQLException;
 
    //	유저 등급 원복
    void recalcUserGrade(String user_id) throws SQLException;
