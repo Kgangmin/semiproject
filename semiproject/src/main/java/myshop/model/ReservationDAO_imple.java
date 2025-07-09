@@ -271,7 +271,7 @@ public class ReservationDAO_imple implements ReservationDAO {
 		                svo.setAddress(rs.getString("address"));
 		                svo.setDetailaddres(rs.getString("detailaddress"));
 		                svo.setExtraaddress(rs.getString("extraaddress"));
-		                svo.setStay_score(rs.getInt("stay_score"));
+		                svo.setStay_score(rs.getDouble("stay_score"));
 
 		                rvo.setStayvo(svo);
 

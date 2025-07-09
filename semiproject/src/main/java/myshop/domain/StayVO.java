@@ -10,7 +10,7 @@ public class StayVO {
 	private String stay_tel;				// 숙박업소전화번호
     private double latitude;					// 위도
     private double longitude;					// 경도
-    private int stay_score;					// 평점
+    private double stay_score;					// 평점
     private int views;						// 조회수
     private String postcode;				// 우편번호
     private String address;					// 주소
@@ -82,11 +82,11 @@ public class StayVO {
 		this.longitude = longitude;
 	}
 	
-	public int getStay_score() {
+	public double getStay_score() {
 		return stay_score;
 	}
 	
-	public void setStay_score(int stay_score) {
+	public void setStay_score(double stay_score) {
 		this.stay_score = stay_score;
 	}
 	

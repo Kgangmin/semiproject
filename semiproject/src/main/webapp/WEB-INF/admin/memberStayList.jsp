@@ -131,7 +131,7 @@ $(document).ready(function() {
                     <td>${stay.stay_tel}</td>
                     <td>
 					  <fmt:formatNumber 
-					     value="${stay.stay_score / 10.0}" 
+					     value="${stay.stay_score}" 
 					     pattern="#0.0" />
 					</td>
                 </tr>

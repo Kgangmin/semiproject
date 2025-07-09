@@ -74,7 +74,7 @@ public class StayDAO_imple implements StayDAO {
 	                svo.setStay_name(rs.getString("stay_name"));
 	                svo.setStay_info(rs.getString("stay_info"));
 	                svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
-	                svo.setStay_score(rs.getInt("stay_score"));
+	                svo.setStay_score(rs.getDouble("stay_score"));
 	                svo.setViews(rs.getInt   ("views"));
 	                // 필요 시 latitude, longitude 등 추가 세팅
 	                list.add(svo);
@@ -118,7 +118,7 @@ public class StayDAO_imple implements StayDAO {
 	                svo.setStay_name(rs.getString("stay_name"));
 	                svo.setStay_info(rs.getString("stay_info"));
 	                svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
-	                svo.setStay_score(rs.getInt("stay_score"));
+	                svo.setStay_score(rs.getDouble("stay_score"));
 	                svo.setViews(rs.getInt   ("views"));
 	                // 필요 시 latitude, longitude 등 추가 세팅
 	                list.add(svo);	                
@@ -225,7 +225,7 @@ public class StayDAO_imple implements StayDAO {
 	            	 svo.setStay_tel(rs.getString("stay_tel"));
 	            	 svo.setLatitude((rs.getDouble("latitude")));
 	            	 svo.setLongitude((rs.getDouble("longitude")));
-	            	 svo.setStay_score(rs.getInt("stay_score"));
+	            	 svo.setStay_score(rs.getDouble("stay_score"));
 	            	 svo.setViews(rs.getInt("views"));
 	            	 svo.setPostcode(rs.getString("postcode"));
 	            	 svo.setAddress(rs.getString("address"));
@@ -424,7 +424,7 @@ public class StayDAO_imple implements StayDAO {
 	                svo.setStay_name(rs.getString("stay_name"));
 	                svo.setStay_info(rs.getString("stay_info"));
 	                svo.setStay_thumbnail(rs.getString("stay_thumbnail"));
-	                svo.setStay_score(rs.getInt("stay_score"));
+	                svo.setStay_score(rs.getDouble("stay_score"));
 	                svo.setViews(rs.getInt("views"));
 	                list.add(svo);
 	            }
@@ -536,7 +536,7 @@ public class StayDAO_imple implements StayDAO {
 			    try {
 			        conn = ds.getConnection();
 
-			        String sql = " select stay_no, stay_name, stay_tel, (stay_score * 10 ) as stay_score "
+			        String sql = " select stay_no, stay_name, stay_tel, stay_score "
 			                   + " from tbl_stay ";
 			                   
 
@@ -565,7 +565,7 @@ public class StayDAO_imple implements StayDAO {
 				            stay.setStay_no(rs.getString("stay_no"));
 				            stay.setStay_name(rs.getString("stay_name"));
 				            stay.setStay_tel(rs.getString("stay_tel"));
-				            stay.setStay_score(rs.getInt("stay_score"));                               
+				            stay.setStay_score(rs.getDouble("stay_score"));                               
 
 				            stayList.add(stay);
 				        }
