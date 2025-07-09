@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import member.domain.MemberVO;
+import member.model.MemberDAO;
+import member.model.MemberDAO_imple;
 import myshop.domain.ReviewVO;
 import myshop.model.ReviewDAO;
 import myshop.model.ReviewDAO_imple;
@@ -14,10 +16,12 @@ import myshop.model.ReviewDAO_imple;
 public class ReviewUser extends AbstractController
 {
 	private ReviewDAO rvdao	= null;
+	private	MemberDAO mdao = null;
 	
 	public ReviewUser()
 	{
-		rvdao = new ReviewDAO_imple();
+		rvdao	= new ReviewDAO_imple();
+		mdao	= new MemberDAO_imple();
 	}
 	
 	@Override
@@ -53,11 +57,13 @@ public class ReviewUser extends AbstractController
         else
         {
         	String user_id = user.getUser_id();
+        	String user_grade = mdao.selectuserGrade(user_id);
         	reviewList = rvdao.selectAllReview(null, user_id, offset, sizePerPage);
         	totalReviewCount = rvdao.countAllReview(null, user_id);
         	int totalPage = (int)Math.ceil((double)totalReviewCount / sizePerPage);
         	
             request.setAttribute("user_id", user_id);	//	로그인 중인 user_id 넘겨주기
+            request.setAttribute("user_grade", user_grade);
     		request.setAttribute("currentPage", currentPage);
     		request.setAttribute("totalPage", totalPage);
             request.setAttribute("reviewList", reviewList);

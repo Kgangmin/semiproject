@@ -218,35 +218,47 @@ $(function()
 
 <body>
 
-	<div class="container">
-	<%-- mypage.jsp 상단 컨텐츠 위치를 그대로 사용하고자 컨텐츠를 그대로 가져오고 hidden 처리 --%>
-		<div class="header">
-			<h1>마이페이지</h1>
-			<div>
-				<span>🔔</span>
-				<span>🛒</span>
-			</div>
-		</div>	    
-	   	<h3 class="user-name">${loginUser.user_name} 님</h3>
-	   	
+    <div class="container">
+        <div class="header">
+            <h1>마이페이지</h1>
+        </div>
+
+        <%-- 
+            서블릿에서 다음과 같이 사용자 정보를 request 객체에 담아 전달했다고 가정합니다.
+            UserDTO user = new UserDTO("홍길동", 0);
+            request.setAttribute("user", user);
+        --%>
+        
+	    <h3 class="user-name">
+		    ${loginUser.user_name}님	 
+		   	<img src="<%= ctx_Path%>/images/grade${requestScope.user_grade}.png" alt="VIP 등급" style="height:60px; ">
+		</h3>
+	    
+		
+		
+		
 		<div class="user-links hidden-space">
-			<a href="javascript:goEmailChange('${loginUser.user_id}','<%= ctx_Path%>')">이메일 변경</a>
-				&nbsp;
-			<a href="javascript:goPwdChange('${loginUser.user_id}','${loginUser.user_pwd}','<%= ctx_Path%>')">비밀번호 변경</a>
+		    <a href="javascript:goEmailChange('${loginUser.user_id}','<%= ctx_Path%>')">이메일 변경</a>
+		    &nbsp;
+		    <a href="javascript:goPwdChange('${loginUser.user_id}','${loginUser.user_pwd}','<%= ctx_Path%>')">비밀번호 변경</a>
+		    &nbsp;
+		    <a href="javascript:goMbWithdraw('${loginUser.user_id}','${loginUser.user_pwd}','<%= ctx_Path%>')" style="color: red;">회원 탈퇴</a>
 		</div>
 
-		<div class="points-reviews">
+        <div class="points-reviews">
             <div class="item hidden-space">
-                <span>포인트</span>
-                <span id="point">${loginUser.point}pt &nbsp;&nbsp;></span>
+                <a href="<%= ctx_Path %>/pointDetail.hb?user_id=${loginUser.user_id}&fk_grade_no=${requestScope.user_grade}">
+	                <span>결제내역 및 포인트</span>
+	                <span id="point">${loginUser.point}pt &nbsp;&nbsp;<i class="fas fa-chevron-right arrow-icon"></i></span>
+                </a>
             </div>
             <div class="item">
             	<a href="${pageContext.request.contextPath}/myPage.hb?user_id=${loginUser.user_id}">
             		<span>내 후기</span>
                 	<span><i class="fas fa-chevron-right arrow-icon"></i></span>	
-				</a>
-			</div>
-		</div>
+            	</a>
+            </div>
+        </div>
 		
 		<div>
 			<!-- 5-2. 리뷰 목록 (각 리뷰에 들어가있는 컨텐츠 순서는 나중에 수정/보완) -->
