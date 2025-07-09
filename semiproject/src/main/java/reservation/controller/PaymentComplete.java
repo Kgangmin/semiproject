@@ -32,7 +32,7 @@ public class PaymentComplete extends AbstractController {
             return;
         }
 
-        //   전달된 결제관련 파라미터 추출
+        //	전달된 결제관련 파라미터 추출
         String roomNo   = request.getParameter("room_no");
         String checkin   = request.getParameter("checkin");
         String checkout   = request.getParameter("checkout");
@@ -42,7 +42,7 @@ public class PaymentComplete extends AbstractController {
         String imp_uid   = request.getParameter("imp_uid");
         String pay_method = request.getParameter("pay_method");
 
-        //   예약 테이블에 insert
+        //	예약 테이블에 insert
         ReservationVO rv = new ReservationVO();
         rv.setFk_user_id(user.getUser_id());
         rv.setFk_room_no(roomNo);
@@ -55,13 +55,13 @@ public class PaymentComplete extends AbstractController {
         //   등급 기반으로 적립율 계산
         int earned_point = mdao.getEarnedPoint(user.getUser_id(), finalPay);
         
-        //   유저 총 결제금액·포인트 보정 및 등급 업데이트
-        mdao.processPostPayment(user.getUser_id(), finalPay, used_point, earned_point);
+        //	결제 시 소모한 포인트만 즉시 반영
+        mdao.spentPoint(user.getUser_id(), used_point);
         
         ////////////////////////////////////////////////////////////////
 
         //   결제내역 테이블에 insert
-        PaymentVO pmvo = new PaymentVO();
+        PaymentVO pmvo = new PaymentVO();	
         pmvo.setImp_uid(imp_uid);
         pmvo.setFk_reserv_no(newReservNo);
         pmvo.setFk_user_id(user.getUser_id());

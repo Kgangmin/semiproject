@@ -47,7 +47,7 @@ public class ChangePwd extends AbstractController {
 		else {
 			// 로그인을 안 했으면
 			String message = "내정보를 수정하기 위해서는 로그인을 먼저해야 합니다";
-			String loc = "javascript:history.back()";
+			String loc = request.getContextPath() + "/login/login.hb";
 			
 			request.setAttribute("message", message);
 			request.setAttribute("loc", loc);

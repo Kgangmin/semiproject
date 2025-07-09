@@ -89,7 +89,7 @@ public class PointDetail extends AbstractController {
 		else {
 			// 로그인을 안 했으면
 			String message = "마이페이지를 보기 위해서는 로그인을 먼저해야 합니다";
-			String loc = "javascript:history.back()";
+			String loc = request.getContextPath() + "/login/login.hb";
 			
 			request.setAttribute("message", message);
 			request.setAttribute("loc", loc);

@@ -8,6 +8,8 @@ import member.domain.MemberVO;
 import myshop.domain.RoomVO;
 import myshop.domain.StayVO;
 import myshop.domain.RoomimgVO;
+import member.model.MemberDAO;
+import member.model.MemberDAO_imple;
 import myshop.model.StayDAO;
 import myshop.model.StayDAO_imple;
 import myshop.model.RoomDAO;
@@ -21,6 +23,7 @@ import java.util.List;
 public class ReserveRoom extends AbstractController {
     private StayDAO stayDao = new StayDAO_imple();
     private RoomDAO roomDao = new RoomDAO_imple();
+    private MemberDAO mdao	= new MemberDAO_imple();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -32,7 +35,12 @@ public class ReserveRoom extends AbstractController {
             super.setViewPage(request.getContextPath() + "/login/login.hb");
             return;
         }
-
+        
+        //	보유 포인트 최신화를 위한 현 시점 보유포인트 조회
+        int latestPoint = mdao.getUserPointById(user.getUser_id());
+        user.setPoint(latestPoint);
+        request.setAttribute("loginUser", user);
+        
         // 파라미터
         String stayNo   = request.getParameter("stay_no");
         String roomNo   = request.getParameter("room_no");

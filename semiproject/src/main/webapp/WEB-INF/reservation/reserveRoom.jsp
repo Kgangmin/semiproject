@@ -59,7 +59,7 @@
 
   <!-- 5. 포인트 사용 -->
   <h5>포인트 사용</h5>
-  <p>보유 포인트: <strong id="balancePoint">${sessionScope.loginUser.point}</strong>원</p>
+  <p>보유 포인트: <strong id="balancePoint">${loginUser.point}</strong>원</p>
   <div class="form-inline mb-3">
     <input type="number" id="usePointInput" class="form-control mr-2" min="0"
            placeholder="사용할 포인트">

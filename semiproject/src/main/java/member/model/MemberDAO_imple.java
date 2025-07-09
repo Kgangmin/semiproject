@@ -541,50 +541,6 @@ public class MemberDAO_imple implements MemberDAO {
       }// end of public boolean updateUserIsActive(String sessionuser_name, String sessionMobile) throws SQLException------------
 
 
-
-
-
-
-      @Override
-      public void processPostPayment(String user_id, int finalPay, int used_point, int earned_point) throws Exception {
-         try {
-              // 1) 커넥션 가져오기
-              conn = ds.getConnection();
-
-              // 2) tbl_user 총 결제금액·포인트 업데이트
-              String updateSql	= " update	tbl_user "
-                             	+ " set		total_payment = total_payment + ?, "
-                             	+ " 		point = point - ? + ? "
-                             	+ " where	user_id = ? ";
-              pstmt = conn.prepareStatement(updateSql);
-              pstmt.setInt(1, finalPay);      // 결제금액만큼 total_payment 증가
-              pstmt.setInt(2, used_point);   // 사용 포인트 차감
-              pstmt.setInt(3, earned_point);   // 보너스 포인트 = finalPay * pointrate
-              pstmt.setString(4, user_id);
-              pstmt.executeUpdate();
-              pstmt.close();
-
-              // 3) 등급 커트라인에 따라 fk_grade_no 갱신
-              String gradeSql =
-                  " UPDATE tbl_user u SET fk_grade_no = ( " +
-                  "  SELECT grade_no FROM (" +
-                  "    SELECT grade_no, ROW_NUMBER() OVER (ORDER BY grade_cutoff DESC) rn " +
-                  "    FROM tbl_user_grade " +
-                  "    WHERE grade_cutoff <= u.total_payment " +
-                  "  ) WHERE rn = 1 " +
-                  " ) WHERE user_id = ? ";
-              pstmt = conn.prepareStatement(gradeSql);
-              pstmt.setString(1, user_id);
-              pstmt.executeUpdate();
-
-          } finally {
-              // 사용한 자원 모두 반납
-              close();
-          }
-      }
-      
-
-
       // 회원 목록 조회 메서드
       @Override
       public List<MemberVO> getMemberList(String searchType, String searchWord, int offset, int limit) throws SQLException {
@@ -1103,6 +1059,56 @@ public class MemberDAO_imple implements MemberDAO {
        }
 		return isWithdrawn;
 	}// end of public boolean isWithdrawnUser(Map<String, String> paraMap) throws SQLException
+
+	//	결제 시 소모한 포인트만 즉시 반영
+	@Override
+	public void spentPoint(String user_id, int used_point) throws SQLException
+	{
+	    try
+	    {
+	    	conn = ds.getConnection();
+
+	        String sql = " update tbl_user set point = point - ? WHERE user_id = ? ";
+	        
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setInt(1, used_point);
+	        pstmt.setString(2, user_id);
+	        
+	        pstmt.executeUpdate();
+	    }
+	    finally
+	    {
+	        close();
+	    }
+	}
+
+	//	보유 포인트 최신화를 위한 현 시점 보유포인트 조회
+	@Override
+	public int getUserPointById(String user_id) throws SQLException
+	{
+	    int point = 0;
+	    try
+	    {
+	    	conn = ds.getConnection();
+	    	
+	    	String sql = " select point from tbl_user where user_id = ? ";
+	    	
+	    	pstmt = conn.prepareStatement(sql);
+	    	pstmt.setString(1, user_id);
+	    	rs = pstmt.executeQuery();
+	    	
+	    	if (rs.next())
+	    	{
+	    		point = rs.getInt("point");
+	    	}
+	    }
+	    finally
+	    {
+	    	close();  // 자원 반납 메소드, 기존 코드에 맞게 조정하세요
+	    }
+	    
+	    return point;
+	}
 }
 
 

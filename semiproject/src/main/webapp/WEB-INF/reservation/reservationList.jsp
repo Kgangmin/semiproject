@@ -169,7 +169,7 @@
                 <div class="reservation-actions">
                     <button class="btn-action"
                         onclick="location.href='<%= ctxPath%>/reservationDetail.hb?reserv_no=${rvo.reserv_no}&user_id=${loginUser.user_id}'">
-                        예약 확인/변경하기
+                        예약 확인/취소
                     </button>
                     <c:choose>
                         <c:when test="${rvo.review_written}">
