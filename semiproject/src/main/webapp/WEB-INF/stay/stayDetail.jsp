@@ -99,7 +99,7 @@
     <div class="mt-2">
         <p>${stay.stay_info}</p>
         <p>연락처: ${stay.stay_tel}</p>
-        <p>평점: <strong>${stay.stay_score}</strong> · 조회수: <strong>${stay.views}</strong></p>
+        <p>평점: <strong> <fmt:formatNumber value="${stay.stay_score}" type="number" maxFractionDigits="1" /></strong> · 조회수: <strong>${stay.views}</strong></p>
     </div>
 
     <!-- 3. 지도 영역 -->
