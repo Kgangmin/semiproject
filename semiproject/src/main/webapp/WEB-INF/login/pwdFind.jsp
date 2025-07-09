@@ -128,7 +128,7 @@
 <div id="div_findResult" class="my-3 text-center">
     
     <c:if test="${requestScope.isUserExist == false}">
-       <span style="color: red;">사용자 정보가 없습니다</span>
+       <span style="color: red;">존재하지 않는 회원입니다.</span>
     </c:if>
     
     <c:if test="${requestScope.isUserExist == true && requestScope.sendMailSuccess == true}">

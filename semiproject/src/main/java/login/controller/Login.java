@@ -87,7 +87,7 @@ public class Login extends AbstractController {
 	                
 	                if(loginUser.isRequirePwdChange()) { // 휴면이 아니면서 비밀번호를 변경한지 3개월 이상된 경우
 	                							 
-	                     // JSP에서 모달 띄우라고 flag 전달
+	                    // JSP에서 모달 띄우라고 flag 전달
 	                	session.setAttribute("showPwdModal", true);
 
 	                	super.setRedirect(true);
