@@ -36,7 +36,7 @@ public class Login extends AbstractController {
             String login_ip = request.getRemoteAddr();
             
             boolean isWithdrawn = mdao.isWithdrawnUser(user_id, user_pwd);
-
+            
         	if(isWithdrawn) {
         	    // 탈퇴회원 메시지 출력
         	    String message = "탈퇴한 회원입니다. 회원가입 후 이용해주세요.";
@@ -87,7 +87,7 @@ public class Login extends AbstractController {
 	                
 	                if(loginUser.isRequirePwdChange()) { // 휴면이 아니면서 비밀번호를 변경한지 3개월 이상된 경우
 	                							 
-	                     // JSP에서 모달 띄우라고 flag 전달
+	                    // JSP에서 모달 띄우라고 flag 전달
 	                	session.setAttribute("showPwdModal", true);
 
 	                	super.setRedirect(true);
