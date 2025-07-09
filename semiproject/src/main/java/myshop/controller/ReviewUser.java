@@ -40,7 +40,7 @@ public class ReviewUser extends AbstractController
         }
         catch (Exception e){ }	//	아무값도 안가져오면 기본값 1(페이지)
         
-        int sizePerPage = 2;	//	현재 리뷰데이터가 부족해서 1로 설정해뒀을 뿐 나중에 5로 수정해야 함
+        int sizePerPage = 3;	//	현재 리뷰데이터가 부족해서 1로 설정해뒀을 뿐 나중에 5로 수정해야 함
         int offset = (currentPage - 1) * sizePerPage;
         int totalReviewCount;
 		

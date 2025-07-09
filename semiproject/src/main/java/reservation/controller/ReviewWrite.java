@@ -1,20 +1,10 @@
 package reservation.controller;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import common.controller.AbstractController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import member.domain.MemberVO;
-import myshop.domain.ReservationVO;
-import myshop.domain.RoomVO;
-import myshop.domain.StayVO;
-import myshop.domain.WishVo;
 import myshop.model.ReservationDAO;
 import myshop.model.ReservationDAO_imple;
 import myshop.model.ReviewDAO;
@@ -93,6 +83,8 @@ public class ReviewWrite extends AbstractController {
 				}
 				else {
 					message="리뷰 등록 성공!~~~~";
+					
+					rvdao.updateAvgScore(reserv_no);	//	작성된 리뷰에 해당하는 숙소의 평균평점 업데이트
 				}
 				
 				

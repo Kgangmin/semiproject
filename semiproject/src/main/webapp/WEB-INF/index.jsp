@@ -6,24 +6,18 @@
 
 <%
     String ctxPath = request.getContextPath();
-    boolean showPwdModal = false;
-
-    if (session.getAttribute("showPwdModal") != null) {
-        showPwdModal = true;
-        session.removeAttribute("showPwdModal");  // 여기서만 제거
-    }
-    request.setAttribute("showPwdModal", showPwdModal); // JSTL에서 사용 가능하도록
 %>
 
 <jsp:include page="header1.jsp" />
 
 <script>
-	window.addEventListener('load', function() {
-	var showPwdModal = <%= showPwdModal %>;
-	if (!showPwdModal && (!performance || performance.navigation.type !== 1)) {
-		location.reload(true);
-	}
-})
+	window.addEventListener('load', function()
+	{//	페이지가 강제로 로드됐을 때 한번 새로고침 시도
+		if (!performance || performance.navigation.type !== 1)
+		{
+			location.reload(true);
+		}
+	});
 </script>
 
 <style>
@@ -136,8 +130,8 @@
 <jsp:include page="/WEB-INF/footer1.jsp" />
 
 <!-- 비밀번호 변경 모달 -->
-<c:if test="${showPwdModal}">
-
+<c:if test="${sessionScope.showPwdModal}">
+  <% session.removeAttribute("showPwdModal"); %>
 
   <div class="modal fade" id="pwdChangeModal" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
