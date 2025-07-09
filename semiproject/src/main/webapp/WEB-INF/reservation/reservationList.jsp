@@ -175,7 +175,7 @@
                     </c:if>
                     <c:if test="${rvo.reserv_status == '완료'}">
                     <button class="btn-action"
-                        onclick="location.href='<%= ctxPath%>/reservationDetail.hb?reserv_no=${rvo.reserv_no}&user_id=${loginUser.user_id}'">
+                        onclick="location.href='<%= ctxPath%>/reservationDetail.hb?reserv_no=${rvo.reserv_no}&user_id=${loginUser.user_id}&status=${rvo.reserv_status}'">
                         예약 확인
                     </button>
                     </c:if>

@@ -70,7 +70,9 @@ body { font-family: 'Noto Sans KR', sans-serif; background-color: #f9fafb; line-
     <!-- 하단 버튼 -->
     <div class="section" style="text-align: right;">
         <a href="<%= ctxPath %>/reservationList.hb?user_id=${loginUser.user_id}" class="btn-action">목록으로</a>
-        <a href="javascript:void(0);" class="btn-action" onclick="cancelReserv();">예약 취소</a>
+        <c:if test="${requestScope.status != '완료'}">
+        	<a href="javascript:void(0);" class="btn-action" onclick="cancelReserv();">예약 취소</a>
+        </c:if>
     </div>
 </div>
 
