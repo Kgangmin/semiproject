@@ -67,7 +67,7 @@
         color: #888;
     }
     .font-size-sm {
-        font-size: 12px; 
+        font-size: 11px; 
     }
     
       thead.table-light th {
@@ -104,8 +104,8 @@
                 </a>
             </div>
         </div>
-  <!-- 제목 -->
-	<h2 class="mb-4 pb-2 " >포인트 적립/차감 내역</h2>
+  
+	
 
 		<c:choose>
 		    <c:when test="${not empty pointList}">
@@ -117,7 +117,7 @@
 		                        <th>결제일</th>
 		                        <th class="text-end">결제금액</th>
 		                        <th class="text-end">사용포인트</th>
-		                        <th class="text-end">적립포인트</th>
+		                        <th class="text-end">적립예정포인트</th>
 		                        <th>회원등급</th>
 		                        <th>적립율</th>
 		                        <th>상태</th>
