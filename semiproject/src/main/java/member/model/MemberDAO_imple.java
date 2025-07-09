@@ -38,7 +38,7 @@ public class MemberDAO_imple implements MemberDAO {
       try {
          Context initContext = new InitialContext();
           Context envContext  = (Context)initContext.lookup("java:/comp/env");
-          ds = (DataSource)envContext.lookup("jdbc/semiproject");
+          ds = (DataSource)envContext.lookup("jdbc/local_semiproject");
           
           aes = new AES256(SecretMyKey.KEY);
           // SecretMyKey.KEY 은 우리가 만든 암호화/복호화 키이다.

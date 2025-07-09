@@ -32,7 +32,7 @@ public class WishDAO_imple implements WishDAO {
 			try {
 				Context initContext = new InitialContext();
 			    Context envContext  = (Context)initContext.lookup("java:/comp/env");
-			    ds = (DataSource)envContext.lookup("jdbc/semiproject");
+			    ds = (DataSource)envContext.lookup("jdbc/local_semiproject");
 			    
 			} catch(NamingException e) {
 				e.printStackTrace();

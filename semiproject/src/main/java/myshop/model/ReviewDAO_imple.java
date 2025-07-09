@@ -34,7 +34,7 @@ public class ReviewDAO_imple implements ReviewDAO
 		{
 			Context initContext = new InitialContext();
 		    Context envContext  = (Context)initContext.lookup("java:/comp/env");
-		    ds = (DataSource)envContext.lookup("jdbc/semiproject");
+		    ds = (DataSource)envContext.lookup("jdbc/local_semiproject");
 		}
 		catch(NamingException e)
 		{
